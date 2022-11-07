@@ -89,6 +89,7 @@ theme_dereck_dark <- function(base_size = 12, base_family = "") {
         # dark theme configs
         plot.background = ggplot2::element_rect(fill = "#333333"),
         panel.background = ggplot2::element_rect(fill = "#1E1E1E"),
+        legend.background = ggplot2::element_rect(fill = "#252526"), # 
         text = ggplot2::element_text(colour = "#CFCFCF"),
         axis.text = ggplot2::element_text(colour = "#CFCFCF")
     )
