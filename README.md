@@ -14,6 +14,8 @@ This package is inspired by "bbplot".
     <img src="./.graphics/pop-to-internet-users.jpeg" width="350">
 </p>
 
+<img src="./.graphics/candles-xmr-btc-dark-theme.jpeg" width="100%">
+
 ## Installing ddplot
 
 `ddplot` is not on CRAN, so you will have to install it directly from Github using `devtools`. 
