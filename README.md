@@ -5,13 +5,13 @@ This is an R package containing the functions of `ddplot`, which once installed 
 This package is inspired by "bbplot".
 
 <p align="center">
-    <img src="./.graphics/countries-inequality-line-1.png" width="350">
-    <img src="./.graphics/countries-1-fhos-1.png" width="350">
-    <img src="./.graphics/countries-u5pop-prc-1.png" width="350">
-    <img src="./.graphics/gdp-per-capita-1.png" width="350">
-    <img src="./.graphics/gdp-per-capita-2.png" width="350">
-    <img src="./.graphics/gdp-per-country-1.png" width="350">
-    <img src="./.graphics/pop-to-internet-users.png" width="350">
+    <img src="./.graphics/countries-inequality-line-1.jpeg" width="350">
+    <img src="./.graphics/countries-1-fhos-1.jpeg" width="350">
+    <img src="./.graphics/countries-u5pop-prc-1.jpeg" width="350">
+    <img src="./.graphics/gdp-per-capita-1.jpeg" width="350">
+    <img src="./.graphics/gdp-per-capita-2.jpeg" width="350">
+    <img src="./.graphics/gdp-per-country-1.jpeg" width="350">
+    <img src="./.graphics/pop-to-internet-users.jpeg" width="350">
 </p>
 
 ## Installing ddplot
