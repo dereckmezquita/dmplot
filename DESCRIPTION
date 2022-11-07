@@ -1,6 +1,6 @@
 Package: ddplot
 Title: Dereck's plotting style.
-Version: 1.0.0
+Version: 1.1.0
 Authors@R: person(given = "Dereck", family = "de Mezquita", email = "dereck@demezquita.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9307-6762"))
 Description: Helps create and export ggplot2 charts in a personal style for derecksnotes.com; inspired from "bbplot".
 Depends: R (>= 4.1.0)
