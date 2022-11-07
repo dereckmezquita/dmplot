@@ -10,7 +10,7 @@ This is an R package containing the functions of `ddplot`, which once installed 
     <img src="./.graphics/gdp-per-capita-1.jpeg" width="350">
     <img src="./.graphics/gdp-per-capita-2.jpeg" width="350">
     <img src="./.graphics/gdp-per-country-1.jpeg" width="350">
-    <img src="./.graphics/pop-to-internet-users.jpeg" width="350%">
+    <img src="./.graphics/pop-to-internet-users.jpeg" width="350">
 </p>
 
 <img src="./.graphics/countries-u5pop-prc-1.jpeg" width="100%">
