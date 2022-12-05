@@ -17,7 +17,6 @@ helper functions for plotting in the style of Dereck.
 You can install the development version of `ddplot` using:
 
 ``` r
-# install.packages('devtools')
 # install.packages("remotes")
 remotes::install_github("dereckdemezquita/ddplot")
 ```
@@ -52,7 +51,7 @@ dt
 #>  ---                                                                       
 #> 167: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.54308
 #> 168: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.53075
-#> 169: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16921.6  81.61877
+#> 169: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16922.1  83.21542
 #> 1 variable not shown: [turnover <num>]
 ```
 

@@ -32,7 +32,6 @@ Dereck's library for plotting `financial` and `time series` data as well helper 
 You can install the development version of `ddplot` using:
 
 ```{r, eval=FALSE}
-# install.packages('devtools')
 # install.packages("remotes")
 remotes::install_github("dereckdemezquita/ddplot")
 ```
