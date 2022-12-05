@@ -32,7 +32,6 @@ Dereck's library for plotting `financial` and `time series` data as well helper 
 You can install the development version of `ddplot` using:
 
 ```{r, eval=FALSE}
-# install.packages('devtools')
 # install.packages("remotes")
 remotes::install_github("dereckdemezquita/ddplot")
 ```
@@ -50,8 +49,8 @@ ticker <- "BTC/USDT"
 
 dt <- kucoin::get_market_data(
     symbols = ticker,
-    from = lubridate::now() - lubridate::days(7),
-    to = lubridate::now(),
+    from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
+    to = "2022-12-05 15:29:31 EST",# lubridate::now(),
     frequency = "1 hour"
 )
 
