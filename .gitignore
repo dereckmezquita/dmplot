@@ -1,6 +1,7 @@
 
 deprecated/
 .DS_Store
+*html
 
 # History files
 .Rhistory
