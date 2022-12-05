@@ -53,7 +53,7 @@ dt
 #>  ---                                                                       
 #> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.54308
 #> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.53075
-#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16930.2 16903.4 16929.8  27.26932
+#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16934.6 16903.4 16934.1  32.01389
 #> 1 variable not shown: [turnover <num>]
 ```
 
@@ -118,7 +118,7 @@ p <- dt |>
 print(p)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -130,7 +130,7 @@ p + ddplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ## Gallery
 
