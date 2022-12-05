@@ -5,7 +5,8 @@ Authors@R: person(given = "Dereck", family = "de Mezquita", email = "dereck@deme
 Description: Helps create and export ggplot2 charts in a personal style for derecksnotes.com; inspired from "bbplot".
 Depends: R (>= 4.1.0)
 Imports:
-    ggplot2
+    ggplot2,
+    data.table
 License: All rights reserved.
 Encoding: UTF-8
 LazyData: true
