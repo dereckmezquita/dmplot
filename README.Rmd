@@ -25,7 +25,7 @@ options("datatable.print.topn" = 3, "datatable.print.nrows" = 50, "datatable.pri
 [![Travis build status](https://travis-ci.org/dereckdemezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckdemezquita/kucoin)
 <!-- badges: end -->
 
-Dereck's plotting library; functions for plotting financial and time series data as well helper functions for plotting in the style of Dereck.
+Dereck's library for plotting `financial` and `time series` data as well helper functions for plotting in the style of Dereck.
 
 ## Installation
 

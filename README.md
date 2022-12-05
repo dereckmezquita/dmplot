@@ -9,9 +9,8 @@ experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](h
 status](https://travis-ci.org/dereckdemezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckdemezquita/kucoin)
 <!-- badges: end -->
 
-Dereck’s plotting library; functions for plotting financial and time
-series data as well helper functions for plotting in the style of
-Dereck.
+Dereck’s library for plotting `financial` and `time series` data as well
+helper functions for plotting in the style of Dereck.
 
 ## Installation
 
@@ -45,15 +44,15 @@ dt <- kucoin::get_market_data(
 )
 
 dt
-#>        symbol            datetime    open    high     low   close   volume
-#>        <char>              <POSc>   <num>   <num>   <num>   <num>    <num>
-#>   1: BTC/USDT 2022-11-20 20:00:00 16590.2 16596.8 16465.0 16541.0 305.0816
-#>   2: BTC/USDT 2022-11-20 21:00:00 16540.9 16540.9 16220.0 16284.0 588.7914
-#>   3: BTC/USDT 2022-11-20 22:00:00 16284.0 16361.9 16183.1 16299.5 428.1330
-#>  ---                                                                      
-#> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.5431
-#> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.5308
-#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16943.7  54.8615
+#>        symbol            datetime    open    high     low   close    volume
+#>        <char>              <POSc>   <num>   <num>   <num>   <num>     <num>
+#>   1: BTC/USDT 2022-11-20 20:00:00 16590.2 16596.8 16465.0 16541.0 305.08159
+#>   2: BTC/USDT 2022-11-20 21:00:00 16540.9 16540.9 16220.0 16284.0 588.79144
+#>   3: BTC/USDT 2022-11-20 22:00:00 16284.0 16361.9 16183.1 16299.5 428.13301
+#>  ---                                                                       
+#> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.54308
+#> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.53075
+#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16944.8  58.15775
 #> 1 variable not shown: [turnover <num>]
 ```
 
