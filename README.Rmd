@@ -57,6 +57,8 @@ dt <- kucoin::get_market_data(
 dt
 ```
 
+Note a demonstration dataset is included in the `demo/data/` directory.
+
 ### Plot financial data
 
 Here I demonstrate how to use the stats for plotting financial data along with the theme functions included in this package:
@@ -114,7 +116,7 @@ p <- dt |>
         panel.grid.minor = ggplot2::element_blank()
     )
 
-print(p)
+p
 ```
 
 Now let's do the same plot in a light theme:

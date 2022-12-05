@@ -55,6 +55,8 @@ dt
 #> 1 variable not shown: [turnover <num>]
 ```
 
+Note a demonstration dataset is included in the `demo/data/` directory.
+
 ### Plot financial data
 
 Here I demonstrate how to use the stats for plotting financial data
@@ -113,7 +115,7 @@ p <- dt |>
         panel.grid.minor = ggplot2::element_blank()
     )
 
-print(p)
+p
 ```
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />

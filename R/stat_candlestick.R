@@ -69,6 +69,62 @@ StatWick <- ggplot2::ggproto(
     }
 )
 
+#' @title Candlesticks financial `ggplot2` layer
+#' @author Dereck de Mezquita
+#'
+#' @param mapping A `ggplot2::aes` object (required - default `NULL`).
+#' @param data A `data.table` object (required - default `NULL`).
+#' @param colours A `list` with three elements "up", "down", and "no_change". These are the colours of the candlesticks when a positive change in price action, a negative change and no change respectively.
+#' @param ... Additional arguments passed to `ggplot2::layer`.
+#' 
+#' @details
+#' 
+#' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
+#'
+#' @return A `ggplot2::layer` object.
+#'
+#' @examples
+#' 
+#' # get some financial data
+#' # kucoin is private package - you can use any data source
+#' ticker <- "BTC/USDT"
+#' 
+#' dt <- kucoin::get_market_data(
+#'     symbols = ticker,
+#'     from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
+#'     to = "2022-12-05 15:29:31 EST",# lubridate::now(),
+#'     frequency = "1 hour"
+#' )
+#' 
+#' dt
+#' 
+#' dt |>
+#'     ggplot2::ggplot(ggplot2::aes(
+#'         x = datetime,
+#'         open = open,
+#'         close = close,
+#'         high = high,
+#'         low = low,
+#'         group = symbol
+#'     )) +
+#'     ## ------------------------------------
+#'     ddplot::stat_candlestick() +
+#'     ## ------------------------------------
+#'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+#'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
+#'     }) +
+#'     ggplot2::scale_y_continuous(n.breaks = 25) +
+#'     ggplot2::labs(
+#'         title = ticker,
+#'         x = "Date",
+#'         y = "Price (USD)"
+#'     ) +
+#'     ddplot::theme_dereck_dark() +
+#'     ggplot2::theme(
+#'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+#'         panel.grid.minor = ggplot2::element_blank()
+#'     )
+#' 
 #' @export
 stat_candlestick <- function(
     mapping = NULL,
