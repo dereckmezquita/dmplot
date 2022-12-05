@@ -45,15 +45,15 @@ dt <- kucoin::get_market_data(
 )
 
 dt
-#>        symbol            datetime    open    high     low   close    volume
-#>        <char>              <POSc>   <num>   <num>   <num>   <num>     <num>
-#>   1: BTC/USDT 2022-11-20 20:00:00 16590.2 16596.8 16465.0 16541.0 305.08159
-#>   2: BTC/USDT 2022-11-20 21:00:00 16540.9 16540.9 16220.0 16284.0 588.79144
-#>   3: BTC/USDT 2022-11-20 22:00:00 16284.0 16361.9 16183.1 16299.5 428.13301
-#>  ---                                                                       
-#> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.54308
-#> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.53075
-#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16934.4  43.89671
+#>        symbol            datetime    open    high     low   close   volume
+#>        <char>              <POSc>   <num>   <num>   <num>   <num>    <num>
+#>   1: BTC/USDT 2022-11-20 20:00:00 16590.2 16596.8 16465.0 16541.0 305.0816
+#>   2: BTC/USDT 2022-11-20 21:00:00 16540.9 16540.9 16220.0 16284.0 588.7914
+#>   3: BTC/USDT 2022-11-20 22:00:00 16284.0 16361.9 16183.1 16299.5 428.1330
+#>  ---                                                                      
+#> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.5431
+#> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.5308
+#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16943.7  54.8615
 #> 1 variable not shown: [turnover <num>]
 ```
 
@@ -100,10 +100,9 @@ p <- dt |>
     ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema) +
     ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb) +
     ## ------------------------------------
-    # ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-    #     lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    # }) +
-    ggplot2::scale_x_continuous(n.breaks = 25) +
+    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+        lubridate::floor_date(lubridate::as_datetime(x), "hours")
+    }) +
     ggplot2::scale_y_continuous(n.breaks = 25) +
     ggplot2::labs(
         title = ticker,
@@ -112,14 +111,14 @@ p <- dt |>
     ) +
     ddplot::theme_dereck_dark() +
     ggplot2::theme(
-        # axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
 
 print(p)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -131,7 +130,7 @@ p + ddplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ## Gallery
 
