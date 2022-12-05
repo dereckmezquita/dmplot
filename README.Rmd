@@ -8,8 +8,7 @@ knitr::opts_chunk$set(
     message = FALSE,
     fig.path = "man/figures/README-",
     fig.align = "center",
-    fig.width = 10,
-    fig.height = 15,
+    out.width = "100%",
     dpi = 150,
     collapse = TRUE,
     comment = "#>"
@@ -100,9 +99,10 @@ p <- dt |>
     ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema) +
     ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb) +
     ## ------------------------------------
-    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-        lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    }) +
+    # ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+    #     lubridate::floor_date(lubridate::as_datetime(x), "hours")
+    # }) +
+    ggplot2::scale_x_continuous(n.breaks = 25) +
     ggplot2::scale_y_continuous(n.breaks = 25) +
     ggplot2::labs(
         title = ticker,
@@ -111,7 +111,7 @@ p <- dt |>
     ) +
     ddplot::theme_dereck_dark() +
     ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+        # axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
 
@@ -129,8 +129,6 @@ p + ddplot::theme_dereck_light() +
 ```
 
 ## Gallery
-
-<img src="./.graphics/candles-xmr-btc-dark-theme.jpeg" width="100%">
 
 <p align="center">
     <img src="./.graphics/countries-inequality-line-1.jpeg" width="350">

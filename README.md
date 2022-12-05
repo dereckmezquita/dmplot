@@ -53,7 +53,7 @@ dt
 #>  ---                                                                       
 #> 359: BTC/USDT 2022-12-05 18:00:00 17057.2 17127.0 17035.5 17046.7 215.54308
 #> 360: BTC/USDT 2022-12-05 19:00:00 17046.7 17058.3 16875.9 16925.3 560.53075
-#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16934.6 16903.4 16934.1  32.01389
+#> 361: BTC/USDT 2022-12-05 20:00:00 16925.3 16946.9 16903.4 16934.4  43.89671
 #> 1 variable not shown: [turnover <num>]
 ```
 
@@ -100,9 +100,10 @@ p <- dt |>
     ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema) +
     ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb) +
     ## ------------------------------------
-    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-        lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    }) +
+    # ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+    #     lubridate::floor_date(lubridate::as_datetime(x), "hours")
+    # }) +
+    ggplot2::scale_x_continuous(n.breaks = 25) +
     ggplot2::scale_y_continuous(n.breaks = 25) +
     ggplot2::labs(
         title = ticker,
@@ -111,14 +112,14 @@ p <- dt |>
     ) +
     ddplot::theme_dereck_dark() +
     ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+        # axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
 
 print(p)
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -130,11 +131,9 @@ p + ddplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Gallery
-
-<img src="./.graphics/candles-xmr-btc-dark-theme.jpeg" width="100%">
 
 <p align="center">
 <img src="./.graphics/countries-inequality-line-1.jpeg" width="350">
