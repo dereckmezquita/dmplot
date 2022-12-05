@@ -58,6 +58,78 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
     }
 )
 
+
+#' @title Bollinger bands `ggplot2` layer
+#' @author Dereck de Mezquita
+#'
+#' @param mapping A `ggplot2::aes` object (required - default `NULL`).
+#' @param data A `data.table` object (required - default `NULL`).
+#' @param FUN A `function` to calculate the Bollinger bands; must return a list (required - default `NULL`).
+#' @param n A `vector` of length one; the number of periods to calculate the moving average (required - default `NULL`).
+#' @param sd A `vector` of length one; the number of standard deviations to calculate the upper and lower bands (required - default `NULL`).
+#' @param size A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).
+#' @param alpha A `list` with two elements "ribbon" and "mavg". These are the alpha values for the ribbon and moving average lines (optional - default `list(ribbon = 0.1, mavg = 0.5)`).
+#' @param linetype A `list` with two elements "border" and "mavg". These are the line types for the border and moving average lines (optional - default `list(border = "dotted", mavg = 4)`).
+#' @param colours A `list` with two elements "ribbon", "border", and "mavg". These are the colours for the ribbon, border, and moving average lines (optional - default `list(ribbon = "yellow", border = "magenta", mavg = "magenta")`).
+#' @param ... Additional arguments passed to `ggplot2::layer`.
+#' 
+#' @details
+#' 
+#' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
+#'
+#' @return A `ggplot2` layer.
+#'
+#' @examples
+#' 
+#' # get some financial data
+#' # kucoin is private package - you can use any data source
+#' ticker <- "BTC/USDT"
+#' 
+#' dt <- kucoin::get_market_data(
+#'     symbols = ticker,
+#'     from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
+#'     to = "2022-12-05 15:29:31 EST",# lubridate::now(),
+#'     frequency = "1 hour"
+#' )
+#' 
+#' dt
+#' 
+#' # we need a function that calculates the indicator for us
+#' # typically I like to write my own functions in C++; in this case we will use TTR's
+#' # the stat expects a named list to be returned - we redefine ttr
+#' bb <- function(close, n = 2, sd = 2) {
+#'     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
+#' }
+#' 
+#' dt |>
+#'     ggplot2::ggplot(ggplot2::aes(
+#'         x = datetime,
+#'         open = open,
+#'         close = close,
+#'         high = high,
+#'         low = low,
+#'         group = symbol
+#'     )) +
+#'     ## ------------------------------------
+#'     ddplot::stat_candlestick() +
+#'     ## ------------------------------------
+#'     ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb, alpha = list(mavg = 0.5, ribbon = 0.25)) +
+#'     ## ------------------------------------
+#'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+#'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
+#'     }) +
+#'     ggplot2::scale_y_continuous(n.breaks = 25) +
+#'     ggplot2::labs(
+#'         title = ticker,
+#'         x = "Date",
+#'         y = "Price (USD)"
+#'     ) +
+#'     ddplot::theme_dereck_dark() +
+#'     ggplot2::theme(
+#'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+#'         panel.grid.minor = ggplot2::element_blank()
+#'     )
+#' 
 #' @export
 stat_bollingerbands <- function(
     mapping = NULL,
