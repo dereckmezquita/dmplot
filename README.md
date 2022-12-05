@@ -95,8 +95,8 @@ p <- dt |>
     ddplot::stat_candlestick() +
     ## ------------------------------------
     # moving averages
-    ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema) +
-    ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb) +
+    ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema, n = list(short = 10, long = 75), alpha = 0.65) +
+    ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb, alpha = list(mavg = 0.5, ribbon = 0.25)) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
