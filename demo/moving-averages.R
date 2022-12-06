@@ -52,3 +52,40 @@ dt |>
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
+
+## ------------------------------------
+# you can also provide the column names as aes instead of calculating them by the passing of a function
+
+# calculate the short and long moving averages
+dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
+dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
+
+dt |>
+    ggplot2::ggplot(ggplot2::aes(
+        x = datetime,
+        open = open,
+        close = close,
+        high = high,
+        low = low,
+        group = symbol
+    )) +
+    ## ------------------------------------
+    ddplot::stat_candlestick() +
+    ## ------------------------------------
+    # provide the colnames to the calculated indicators as aes values
+    ddplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
+    ## ------------------------------------
+    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+        lubridate::floor_date(lubridate::as_datetime(x), "hours")
+    }) +
+    ggplot2::scale_y_continuous(n.breaks = 25) +
+    ggplot2::labs(
+        title = ticker,
+        x = "Date",
+        y = "Price (USD)"
+    ) +
+    ddplot::theme_dereck_dark() +
+    ggplot2::theme(
+        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+        panel.grid.minor = ggplot2::element_blank()
+    )
