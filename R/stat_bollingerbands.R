@@ -4,7 +4,7 @@
 StatBollingerRibbon <- ggplot2::ggproto(
     "StatBollingerRibbon",
     ggplot2::Stat,
-    required_aes = c("x", "FUN", "n"),
+    required_aes = "x",
     default_aes = ggplot2::aes(
         y = NULL,
         ymin = NULL,
@@ -20,16 +20,8 @@ StatBollingerRibbon <- ggplot2::ggproto(
         data[, data.table::setorder(.SD, x), by = group]
         return(data)
     },
-    compute_group = \(data, scales, colour, fill, FUN, n, sd) {
+    compute_group = \(data, scales, colour, fill) {
         data.table::setDT(data)
-
-        if (!is.null(FUN)) {
-            FUN <- match.fun(FUN)
-
-            # using cpp bb function
-            # FUN must return list: "bb_lower", "bb_mavg", "bb_upper", "bb_pct"
-            data[, c("ymin", "bb_mavg", "ymax", "bb_pct") := FUN(y, n = n, sd = sd)]
-        }
 
         data[, colour := colour]
         data[, fill := fill]
@@ -41,7 +33,7 @@ StatBollingerRibbon <- ggplot2::ggproto(
 StatBollingerMovingAverage <- ggplot2::ggproto(
     "StatBollingerMovingAverage",
     ggplot2::Stat,
-    required_aes = c("x", "FUN", "n"),
+    required_aes = "x",
     default_aes = ggplot2::aes(
         y = NULL,
         ymin = NULL,
@@ -57,19 +49,10 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
         data[, data.table::setorder(.SD, x), by = group]
         return(data)
     },
-    compute_group = \(data, scales, colour, FUN, n, sd) {
+    compute_group = \(data, scales, colour) {
         data.table::setDT(data)
 
-        if (!is.null(FUN)) {
-            FUN <- match.fun(FUN)
-
-            # using cpp bb function
-            # FUN must return list: "bb_lower", "bb_mavg", "bb_upper", "bb_pct"
-            data[, c("bb_lower", "y", "bb_mavg", "bb_pct") := FUN(y, n = n, sd = sd)]
-        } else if ("mavg" %in% colnames(data)) {
-            data[, y := mavg]
-        }
-
+        data[, y := mavg]
         data[, colour := colour]
 
         return(data)
@@ -92,9 +75,6 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
-#' @param FUN A `function` to calculate the Bollinger bands; must return a list (required - default `NULL`).
-#' @param n A `vector` of length one; the number of periods to calculate the moving average (required - default `NULL`).
-#' @param sd A `vector` of length one; the number of standard deviations to calculate the upper and lower bands (required - default `NULL`).
 #' @param size A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).
 #' @param alpha A `list` with two elements "ribbon" and "mavg". These are the alpha values for the ribbon and moving average lines (optional - default `list(ribbon = 0.1, mavg = 0.5)`).
 #' @param linetype A `list` with two elements "border" and "mavg". These are the line types for the border and moving average lines (optional - default `list(border = "dotted", mavg = 4)`).
@@ -105,10 +85,9 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #' \code{stat_movingaverages} understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
 #'   \item \strong{x} -- datetime (x-axis)
-#'   \item y -- required if using `FUN` to calculate moving averages (y-axis)
-#'   \item ymin -- required if using previously calculated metrics to plot moving averages (y-axis)
-#'   \item ymax -- required if using previously calculated metrics to plot moving averages (y-axis)
-#'   \item mavg -- required if using previously calculated metrics to plot moving averages (y-axis)
+#'   \item ymin -- required lower bounds of band (y-axis)
+#'   \item ymax -- required upper bounds of band (y-axis)
+#'   \item mavg -- required center line of band (y-axis)
 #' }
 #' 
 #' @details
@@ -139,38 +118,6 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
 #' }
 #' 
-#' dt |>
-#'     ggplot2::ggplot(ggplot2::aes(
-#'         x = datetime,
-#'         open = open,
-#'         close = close,
-#'         high = high,
-#'         low = low,
-#'         group = symbol
-#'     )) +
-#'     ## ------------------------------------
-#'     ddplot::stat_candlestick() +
-#'     ## ------------------------------------
-#'     ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb, n = 10) +
-#'     ## ------------------------------------
-#'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-#'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
-#'     }) +
-#'     ggplot2::scale_y_continuous(n.breaks = 25) +
-#'     ggplot2::labs(
-#'         title = ticker,
-#'         x = "Date",
-#'         y = "Price (USD)"
-#'     ) +
-#'     ddplot::theme_dereck_dark() +
-#'     ggplot2::theme(
-#'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
-#'         panel.grid.minor = ggplot2::element_blank()
-#'     )
-#' 
-#' ## ------------------------------------
-#' # you can also provide the column names as aes instead of calculating them by the passing of a function
-#' 
 #' # calculate the short and long moving averages
 #' dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
 #' 
@@ -187,7 +134,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'     ddplot::stat_candlestick() +
 #'     ## ------------------------------------
 #'     # provide the colnames to the calculated indicators as aes values
-#'     ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, y = bb_mavg, ymax = bb_upper)) +
+#'     ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
 #'     ## ------------------------------------
 #'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
 #'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -213,9 +160,6 @@ stat_bollingerbands <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    FUN = NULL,
-    n = 20L,
-    sd = 2L,
     size = list(
         border = 1,
         mavg = 1
@@ -228,7 +172,7 @@ stat_bollingerbands <- function(
         border = "dotted",
         mavg = 4
     ),
-    colours = list(
+    colour = list(
         ribbon = "yellow",
         border = "magenta",
         mavg = "magenta"
@@ -246,14 +190,11 @@ stat_bollingerbands <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                FUN = FUN,
-                n = n,
-                sd = sd,
-                size = size$border,
-                alpha = alpha$ribbon,
-                linetype = linetype$border,
-                fill = colours$ribbon,
-                colour = colours$border,
+                size = size[[1]],
+                alpha = alpha[[1]],
+                linetype = linetype[[1]],
+                fill = colour[[1]],
+                colour = colour[[2]],
                 ...
             )
         ),
@@ -267,13 +208,10 @@ stat_bollingerbands <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                FUN = FUN,
-                n = n,
-                sd = sd,
-                size = size$mavg,
-                alpha = alpha$mavg,
-                linetype = linetype$mavg,
-                colour = colours$mavg,
+                size = size[[2]],
+                alpha = alpha[[2]],
+                linetype = linetype[[2]],
+                colour = colour[[3]],
                 ...
             )
         )

@@ -15,27 +15,17 @@ dt
 # we need a function that calculates the indicator for us
 # typically I like to write my own functions in C++; in this case we will use TTR's
 # the stat expects a named list to be returned - we redefine ttr
-bb <- function(close, n = 10, sd = 2) {
-    return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
-}
+macd <- function(x, s = 12, l = 26, k = 9) {as.list(as.data.frame(TTR::MACD(x, s, l, k)))}
 
-# calculate the short and long moving averages
-dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
+# macd(dt$close)
+dt[, c("macd", "macd_signal") := macd(close, s = 12, l = 26, k = 9)]
+dt[, macd_diff := macd - macd_signal]
 
-dt |>
-    ggplot2::ggplot(ggplot2::aes(
-        x = datetime,
-        open = open,
-        close = close,
-        high = high,
-        low = low,
-        group = symbol
-    )) +
-    ## ------------------------------------
-    ddplot::stat_candlestick() +
+na.omit(dt) |>
+    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
+    ddplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
-    ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -51,3 +41,4 @@ dt |>
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
+
