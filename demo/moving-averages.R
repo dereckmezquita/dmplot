@@ -15,46 +15,9 @@ dt
 # we need a function that calculates the indicator for us
 # typically I like to write my own functions in C++; in this case we will use TTR's
 # the stat expects a named list to be returned - we redefine ttr
-bb <- function(close, n = 2, sd = 2) {
-    return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
-}
-
 ema <- function(close, n = 2, wilder = TRUE) {
     return(as.list(as.data.frame(TTR::EMA(close, n = n, wilder = wilder))))
 }
-
-dt |>
-    ggplot2::ggplot(ggplot2::aes(
-        x = datetime,
-        open = open,
-        close = close,
-        high = high,
-        low = low,
-        group = symbol
-    )) +
-    ## ------------------------------------
-    ddplot::stat_candlestick() +
-    ## ------------------------------------
-    # ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb, alpha = list(mavg = 0.5, ribbon = 0.25)) +
-    ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema, n = list(short = 10, long = 50), alpha = list(mavg = 0.5)) +
-    ## ------------------------------------
-    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-        lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    }) +
-    ggplot2::scale_y_continuous(n.breaks = 25) +
-    ggplot2::labs(
-        title = ticker,
-        x = "Date",
-        y = "Price (USD)"
-    ) +
-    ddplot::theme_dereck_dark() +
-    ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
-        panel.grid.minor = ggplot2::element_blank()
-    )
-
-## ------------------------------------
-# you can also provide the column names as aes instead of calculating them by the passing of a function
 
 # calculate the short and long moving averages
 dt[, ema_short := ema(close, n = 10, wilder = TRUE)]

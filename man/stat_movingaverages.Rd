@@ -14,10 +14,8 @@ stat_movingaverages(
   inherit.aes = TRUE,
   size = 1.75,
   alpha = 0.75,
-  FUN = NULL,
   n = list(short = 20L, long = 200L),
-  colours = list(short = "yellow", long = "purple"),
-  wilder = NA,
+  colour = list(short = "yellow", long = "purple"),
   ...
 )
 }
@@ -30,25 +28,17 @@ stat_movingaverages(
 
 \item{alpha}{A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).}
 
-\item{FUN}{A `function` to calculate the moving average (can be simple/exponential or any algorithm). The only requirement is that the function a `numeric` vector as a result. The interval value is defined as a secondary argument to this stat see argument `n` (required - default `NULL`).}
-
-\item{n}{A `list` with two elements "short" and "long". These are the intervals for the short and long moving averages (note if these are longer than data points provided you see an error) (required - default `list(short = 20L, long = 200L)`).}
-
-\item{colours}{A `list` with three elements "short" and "long". These are the colours for the short and long moving averages (optional - default `list(short = "red", long = "blue")`).}
-
-\item{wilder}{A `logical` of length one; if set this argument is passed on to the `FUN` which should be able to accept it - for choosing between a classic EMA or a Wilder's EMA (optional - default `NA`).}
+\item{colour}{A named or unnamed `list` with three elements "short" and "long". These are the colours for the short and long moving averages (optional - default `list(short = "red", long = "blue")`).}
 }
 \value{
 A `ggplot2::layer` object.
 }
 \description{
-`stat_movingaverages` is a `ggplot2` layer that allows you to plot moving averages on a `ggplot2` plot either by providing a function to calculate the moving averages or by providing the column names `ggplot2::aes` of the previously calculated moving averages.
+`stat_movingaverages` is a `ggplot2` layer that allows you to plot moving averages on a `ggplot2` plot either by providing the column names `ggplot2::aes` of the previously calculated metrics.
 
-You are free to use whatever algorithm you desire, as long as:
+You are free to use whatever algorithm you desire; the result will be two line plots one for a short moving average and one for a long moving average.
 
-1. If using a function it must return a `numeric` vector of the same length as the input vector and accept the arguments `x` (`numeric` vector of value) `n` (`numeric` interval of time used to calculate the moving average); an optional `wilder` argument applicable to `ema` type functions who use the wilder smoothing method.
-
-2. If using previously calculated moving averages, you must provide them as `ggplot2::aes` values; the `aes` must be `short` and `long`.
+To use this layer provide `ggplot2::aes` values for `x` (datetime x-axis) and `short` and `long` (y-axis).
 
 See examples for more details.
 }
@@ -60,9 +50,8 @@ This is a `ggplot2` extension; it is used with the `+` operator for adding a lay
 \code{stat_movingaverages} understands the following aesthetics (required aesthetics are in bold):
 \itemize{
   \item \strong{x} -- datetime (x-axis)
-  \item y -- required if using `FUN` to calculate moving averages (y-axis)
-  \item short -- required if not using `FUN` to calculate moving averages (y-axis)
-  \item long -- required if not using `FUN` to calculate moving averages (y-axis)
+  \item \strong{short} -- the values for the short moving average (y-axis).
+  \item \strong{long} -- the values for the long moving average (y-axis)
 }
 }
 

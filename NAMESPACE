@@ -2,6 +2,7 @@
 
 export(stat_bollingerbands)
 export(stat_candlestick)
+export(stat_macd)
 export(stat_movingaverages)
 export(theme_dereck_dark)
 export(theme_dereck_light)
