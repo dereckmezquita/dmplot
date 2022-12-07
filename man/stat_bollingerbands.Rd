@@ -12,13 +12,10 @@ stat_bollingerbands(
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE,
-  FUN = NULL,
-  n = 20L,
-  sd = 2L,
   size = list(border = 1, mavg = 1),
   alpha = list(ribbon = 0.1, mavg = 0.5),
   linetype = list(border = "dotted", mavg = 4),
-  colours = list(ribbon = "yellow", border = "magenta", mavg = "magenta"),
+  colour = list(ribbon = "yellow", border = "magenta", mavg = "magenta"),
   ...
 )
 }
@@ -27,21 +24,15 @@ stat_bollingerbands(
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
-\item{FUN}{A `function` to calculate the Bollinger bands; must return a list (required - default `NULL`).}
-
-\item{n}{A `vector` of length one; the number of periods to calculate the moving average (required - default `NULL`).}
-
-\item{sd}{A `vector` of length one; the number of standard deviations to calculate the upper and lower bands (required - default `NULL`).}
-
 \item{size}{A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).}
 
 \item{alpha}{A `list` with two elements "ribbon" and "mavg". These are the alpha values for the ribbon and moving average lines (optional - default `list(ribbon = 0.1, mavg = 0.5)`).}
 
 \item{linetype}{A `list` with two elements "border" and "mavg". These are the line types for the border and moving average lines (optional - default `list(border = "dotted", mavg = 4)`).}
 
-\item{colours}{A `list` with two elements "ribbon", "border", and "mavg". These are the colours for the ribbon, border, and moving average lines (optional - default `list(ribbon = "yellow", border = "magenta", mavg = "magenta")`).}
-
 \item{...}{Additional arguments passed to `ggplot2::layer`.}
+
+\item{colours}{A `list` with two elements "ribbon", "border", and "mavg". These are the colours for the ribbon, border, and moving average lines (optional - default `list(ribbon = "yellow", border = "magenta", mavg = "magenta")`).}
 }
 \value{
 A `ggplot2` layer.
@@ -65,10 +56,9 @@ This is a `ggplot2` extension; it is used with the `+` operator for adding a lay
 \code{stat_movingaverages} understands the following aesthetics (required aesthetics are in bold):
 \itemize{
   \item \strong{x} -- datetime (x-axis)
-  \item y -- required if using `FUN` to calculate moving averages (y-axis)
-  \item ymin -- required if using previously calculated metrics to plot moving averages (y-axis)
-  \item ymax -- required if using previously calculated metrics to plot moving averages (y-axis)
-  \item mavg -- required if using previously calculated metrics to plot moving averages (y-axis)
+  \item ymin -- required lower bounds of band (y-axis)
+  \item ymax -- required upper bounds of band (y-axis)
+  \item mavg -- required center line of band (y-axis)
 }
 }
 
