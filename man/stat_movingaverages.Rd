@@ -14,7 +14,6 @@ stat_movingaverages(
   inherit.aes = TRUE,
   size = 1.75,
   alpha = 0.75,
-  n = list(short = 20L, long = 200L),
   colour = list(short = "yellow", long = "purple"),
   ...
 )
