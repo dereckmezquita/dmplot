@@ -130,10 +130,6 @@ stat_movingaverages <- function(
     inherit.aes = TRUE,
     size = 1.75,
     alpha = 0.75,
-    n = list(
-        short = 20L,
-        long = 200L
-    ),
     colour = list(
         short = "yellow",
         long = "purple"
@@ -152,7 +148,7 @@ stat_movingaverages <- function(
             params = list(
                 na.rm = na.rm,
                 size = size,
-                colour = colour$short,
+                colour = colour[[1]], # $short,
                 interval = "short",
                 ...
             )
@@ -168,7 +164,7 @@ stat_movingaverages <- function(
             params = list(
                 na.rm = na.rm,
                 size = size,
-                colour = colour$long,
+                colour = colour[[2]], # $long,
                 interval = "long",
                 ...
             )
