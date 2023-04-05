@@ -69,6 +69,11 @@ StatShadedDateRange <- ggplot2::ggproto(
 #' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
 #'
 #' @return A `ggplot2::layer` object.
+#' 
+#' @examples
+#' dt |>
+#'    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
+#'    stat_shade_ranges(ggplot2::aes(group = call), alpha = 0.5)
 #'
 #' @export
 stat_shade_ranges <- function(
