@@ -60,7 +60,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 )
 
 #' @title Bollinger bands `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_bollingerbands` is a `ggplot2` layer that allows you to plot Bollinger bands on a `ggplot2` plot either by providing a function to calculate the bands or by providing the column names of the required metrics as a `ggplot2::aes` argument previously calculated.

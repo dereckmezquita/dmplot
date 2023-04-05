@@ -31,7 +31,7 @@ StatMovingAverage <- ggplot2::ggproto(
 )
 
 #' @title Moving averages `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_movingaverages` is a `ggplot2` layer that allows you to plot moving averages on a `ggplot2` plot either by providing the column names `ggplot2::aes` of the previously calculated metrics.

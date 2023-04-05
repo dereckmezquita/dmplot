@@ -1,5 +1,5 @@
 #' @title Dereck's ggplot theme (light)
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' This function allows you to add the derecksnotes theme to your ggplot graphics.
 #' @keywords theme_dereck_light
@@ -44,7 +44,7 @@ theme_dereck_light <- function(base_size = 11, base_family = "") {
 }
 
 #' @title Dereck's ggplot theme (dark)
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' This function allows you to add the derecksnotes theme to your ggplot graphics.
 #' @keywords theme_dereck_dark

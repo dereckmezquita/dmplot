@@ -68,7 +68,7 @@ StatMacdHistogram <- ggplot2::ggproto(
 )
 
 #' @title Moving average convergence divergence (macd) `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_macd` is a `ggplot2` layer that allows you to plot a `ggplot2` layer of moving average convergence divergence (macd) by providing the column names `ggplot2::aes` of the previously calculated metrics.

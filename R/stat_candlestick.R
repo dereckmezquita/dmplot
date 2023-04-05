@@ -71,7 +71,7 @@ StatWick <- ggplot2::ggproto(
 )
 
 #' @title Candlesticks financial `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
