@@ -71,9 +71,11 @@ StatShadedDateRange <- ggplot2::ggproto(
 #' @return A `ggplot2::layer` object.
 #' 
 #' @examples
+#' \dontrun{
 #' dt |>
 #'    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
 #'    stat_shade_ranges(ggplot2::aes(group = call), alpha = 0.5)
+#' }
 #'
 #' @export
 stat_shade_ranges <- function(
