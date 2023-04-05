@@ -13,10 +13,14 @@ StatShadedDateRange <- ggplot2::ggproto(
         data[, data.table::setorder(.SD, x), by = group]
         return(data)
     },
-    compute_panel = \(data, scales) {
+    compute_group = \(data, fill) {
+        data.table::setDT(data)
+        data[, fill := fill]
+        return(data)
+    },
+    compute_panel = \(data, scales, fill = "white") {
         # https://bookdown.dongzhuoer.com/hadley/ggplot2-book/new-stats.html
         # setting compute panel; don't split by group
-
         data.table::setDT(data)
 
         # https://stackoverflow.com/questions/73308307/how-to-break-up-a-vector-into-contiguous-groups-in-r
@@ -49,13 +53,18 @@ StatShadedDateRange <- ggplot2::ggproto(
             xmax = end,
             ymin = -Inf,
             ymax = Inf,
-            group = call,
-            fill = call
+            group = call
         )]
 
-        return(date_ranges)
+        # merge data that has the fill column with date_ranges by group
+        return(merge(
+            unique(data[, .(group, fill)]),
+            date_ranges,
+            by = "group"
+        ))
     }
 )
+
 
 #' @title Shaded Date Ranges `ggplot2` layer
 #' @author Dereck Mezquita
@@ -67,6 +76,8 @@ StatShadedDateRange <- ggplot2::ggproto(
 #' @details
 #'
 #' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
+#' 
+#' You can set the colour by fill aesthetic with a column.
 #'
 #' @return A `ggplot2::layer` object.
 #' 

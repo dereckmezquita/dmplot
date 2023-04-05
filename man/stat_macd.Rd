@@ -111,5 +111,5 @@ na.omit(dt) |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 }

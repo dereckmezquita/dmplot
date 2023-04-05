@@ -78,5 +78,5 @@ dt |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 }

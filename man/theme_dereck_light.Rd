@@ -26,7 +26,7 @@ data.frame(year = time(nhtemp), tmps = as.matrix(nhtemp)) |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 
 This function allows you to add the derecksnotes theme to your ggplot graphics.
 }
