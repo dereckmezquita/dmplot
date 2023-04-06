@@ -44,7 +44,7 @@ StatMovingAverage <- ggplot2::ggproto(
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
-#' @param size A `numeric` vector of length one; the size of the line (optional - default `1.75`).
+#' @param linewidth A `numeric` vector of length one; the width of the line (optional - default `1.75`).
 #' @param alpha A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).
 #' @param colour A named or unnamed `list` with three elements "short" and "long". These are the colours for the short and long moving averages (optional - default `list(short = "red", long = "blue")`).
 #' 
@@ -128,7 +128,7 @@ stat_movingaverages <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    size = 1.75,
+    linewidth = 1.75,
     alpha = 0.75,
     colour = list(
         short = "yellow",
@@ -147,7 +147,7 @@ stat_movingaverages <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                linewidth = linewidth,
                 colour = colour[[1]], # $short,
                 interval = "short",
                 ...
@@ -163,7 +163,7 @@ stat_movingaverages <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                linewidth = linewidth,
                 colour = colour[[2]], # $long,
                 interval = "long",
                 ...
