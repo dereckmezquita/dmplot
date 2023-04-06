@@ -12,7 +12,7 @@ stat_movingaverages(
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE,
-  size = 1.75,
+  linewidth = 1.75,
   alpha = 0.75,
   colour = list(short = "yellow", long = "purple"),
   ...
@@ -23,7 +23,7 @@ stat_movingaverages(
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
-\item{size}{A `numeric` vector of length one; the size of the line (optional - default `1.75`).}
+\item{linewidth}{A `numeric` vector of length one; the width of the line (optional - default `1.75`).}
 
 \item{alpha}{A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).}
 
