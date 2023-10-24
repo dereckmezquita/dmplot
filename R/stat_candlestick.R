@@ -71,7 +71,7 @@ StatWick <- ggplot2::ggproto(
 )
 
 #' @title Candlesticks financial `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
@@ -109,7 +109,7 @@ StatWick <- ggplot2::ggproto(
 #'         group = symbol
 #'     )) +
 #'     ## ------------------------------------
-#'     ddplot::stat_candlestick() +
+#'     dmplot::stat_candlestick() +
 #'     ## ------------------------------------
 #'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
 #'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -120,7 +120,7 @@ StatWick <- ggplot2::ggproto(
 #'         x = "Date",
 #'         y = "Price (USD)"
 #'     ) +
-#'     ddplot::theme_dereck_dark() +
+#'     dmplot::theme_dereck_dark() +
 #'     ggplot2::theme(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()

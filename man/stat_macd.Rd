@@ -12,7 +12,6 @@ stat_macd(
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE,
-  size = 1,
   alpha_lines = 0.75,
   alpha_histogram = 0.5,
   colour_lines = list(macd = "blue", macd_signal = "red"),
@@ -26,8 +25,6 @@ stat_macd(
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
-\item{size}{A `numeric` vector of length one; the size of the line (optional - default `1.75`).}
-
 \item{alpha_lines}{A `numeric` vector of length one; the alpha of the lines (optional - default `0.75`).}
 
 \item{alpha_histogram}{A `numeric` vector of length one; the alpha of the histogram (optional - default `0.5`).}
@@ -37,6 +34,8 @@ stat_macd(
 \item{colour_histogram}{A named or unnamed `list` of two elements "positive" and "negative" (optional - default `list(positive = NA_character_, negative = NA_character_)`).}
 
 \item{fill_histogram}{A named or unnamed `list` of two elements "positive" and "negative" (optional - default `list(positive = "green", negative = "red")`).}
+
+\item{linewidth}{A `numeric` vector of length one; the linewidth of the line (optional - default `1.75`).}
 }
 \value{
 A `ggplot2::layer` object.
@@ -90,7 +89,7 @@ dt[, macd_diff := macd - macd_signal]
 
 na.omit(dt) |>
     ggplot2::ggplot(ggplot2::aes(x = datetime)) +
-    ddplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
+    dmplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
     ## ------------------------------------
@@ -103,7 +102,7 @@ na.omit(dt) |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
@@ -111,5 +110,5 @@ na.omit(dt) |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 }

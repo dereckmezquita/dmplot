@@ -1,8 +1,8 @@
-Package: ddplot
-Title: Dereck's plotting style.
+Package: dmplot
+Title: Dereck's plotting tool kit for financial and time series data.
 Version: 1.1.0
 Authors@R: person(given = "Dereck", family = "de Mezquita", email = "dereck@demezquita.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9307-6762"))
-Description: Helps create and export ggplot2 charts in a personal style for derecksnotes.com; inspired from "bbplot".
+Description: A toolkit for plotting financial and time series datasets using ggplot.
 Depends: R (>= 4.1.0)
 Imports:
     ggplot2 (>= 3.4.0),

@@ -1,12 +1,12 @@
 
-## ddplot
+## dmplot
 
 <!-- badges: start -->
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
 [![Travis build
-status](https://travis-ci.org/dereckdemezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckdemezquita/kucoin)
+status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
 Dereck’s library for plotting `financial` and `time series` data as well
@@ -14,11 +14,11 @@ helper functions for plotting in the style of Dereck.
 
 ## Installation
 
-You can install the development version of `ddplot` using:
+You can install the development version of `dmplot` using:
 
 ``` r
 # install.packages("remotes")
-remotes::install_github("dereckdemezquita/ddplot")
+remotes::install_github("dereckmezquita/dmplot")
 ```
 
 ## Financial data
@@ -62,14 +62,15 @@ Note a demonstration dataset is included in the `demo/data/` directory.
 Here I demonstrate how to use the stats for plotting financial data
 along with the theme functions included in this package:
 
-1.  `ddplot::stat_bollingerbands()`
-2.  `ddplot::stat_candlesticks()`
-3.  `ddplot::stat_movingaverages()`
+1.  `dmplot::stat_candlesticks()`
+2.  `dmplot::stat_bollingerbands()`
+3.  `dmplot::stat_movingaverages()`
+4.  `dmplot::stat_macd()`
 
 And the theme functions for styling:
 
-1.  `ddplot::theme_dereck_dark()`
-2.  `ddplot::theme_dereck_light()`
+1.  `dmplot::theme_dereck_dark()`
+2.  `dmplot::theme_dereck_light()`
 
 ``` r
 ## ------
@@ -81,6 +82,13 @@ ema <- function(x, n, wilder = TRUE) {
 bb <- function(close, n = 2, sd = 2) {
     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
 }
+
+# calculate the short and long moving averages
+dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
+dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
+
+# calculate the bollinger bands
+dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
 
 ## ------
 # plot
@@ -94,11 +102,18 @@ p <- dt |>
         group = symbol
     )) +
     ## ------------------------------------
-    ddplot::stat_candlestick() +
+    dmplot::stat_candlestick() +
     ## ------------------------------------
     # moving averages
-    ddplot::stat_movingaverages(ggplot2::aes(y = close), FUN = ema, n = list(short = 10, long = 75), alpha = 0.65) +
-    ddplot::stat_bollingerbands(ggplot2::aes(y = close), FUN = bb, alpha = list(mavg = 0.5, ribbon = 0.25)) +
+    dmplot::stat_movingaverages(ggplot2::aes(
+        short = ema_short,
+        long = ema_long
+    ), alpha = list(mavg = 0.5)) +
+    dmplot::stat_bollingerbands(ggplot2::aes(
+        ymin = bb_lower,
+        mavg = bb_mavg,
+        ymax = bb_upper
+    ), colour = list("pink", "cyan", "cyan")) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -109,7 +124,7 @@ p <- dt |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
@@ -120,10 +135,32 @@ p
 
 <img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
-Now let’s do the same plot in a light theme:
+Plotting the MACD (moving average convergence divergence) indicator:
 
 ``` r
-p + ddplot::theme_dereck_light() +
+macd <- function(x, s = 12, l = 26, k = 9) {
+    return(as.list(as.data.frame(TTR::MACD(x, s, l, k))))
+}
+
+# calculate the macd
+dt[, c("macd", "macd_signal") := macd(close, s = 12, l = 26, k = 9)]
+dt[, macd_diff := macd - macd_signal]
+
+na.omit(dt) |>
+    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
+    ## ------------------------------------
+    dmplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
+    ## ------------------------------------
+    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
+        lubridate::floor_date(lubridate::as_datetime(x), "hours")
+    }) +
+    ggplot2::scale_y_continuous(n.breaks = 25) +
+    ggplot2::labs(
+        title = ticker,
+        x = "Date",
+        y = "Price (USD)"
+    ) +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
@@ -131,6 +168,18 @@ p + ddplot::theme_dereck_light() +
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+
+Now let’s do the same plot in a light theme:
+
+``` r
+p + dmplot::theme_dereck_light() +
+    ggplot2::theme(
+        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+        panel.grid.minor = ggplot2::element_blank()
+    )
+```
+
+<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
 
 ## Gallery
 

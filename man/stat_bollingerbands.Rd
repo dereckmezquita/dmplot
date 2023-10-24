@@ -12,7 +12,6 @@ stat_bollingerbands(
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE,
-  size = list(border = 1, mavg = 1),
   alpha = list(ribbon = 0.1, mavg = 0.5),
   linetype = list(border = "dotted", mavg = 4),
   colour = list(ribbon = "yellow", border = "magenta", mavg = "magenta"),
@@ -24,13 +23,13 @@ stat_bollingerbands(
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
-\item{size}{A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).}
-
 \item{alpha}{A `list` with two elements "ribbon" and "mavg". These are the alpha values for the ribbon and moving average lines (optional - default `list(ribbon = 0.1, mavg = 0.5)`).}
 
 \item{linetype}{A `list` with two elements "border" and "mavg". These are the line types for the border and moving average lines (optional - default `list(border = "dotted", mavg = 4)`).}
 
 \item{...}{Additional arguments passed to `ggplot2::layer`.}
+
+\item{linewidth}{A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).}
 
 \item{colours}{A `list` with two elements "ribbon", "border", and "mavg". These are the colours for the ribbon, border, and moving average lines (optional - default `list(ribbon = "yellow", border = "magenta", mavg = "magenta")`).}
 }
@@ -97,10 +96,10 @@ dt |>
         group = symbol
     )) +
     ## ------------------------------------
-    ddplot::stat_candlestick() +
+    dmplot::stat_candlestick() +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
-    ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
+    dmplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -111,7 +110,7 @@ dt |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
@@ -119,5 +118,5 @@ dt |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 }

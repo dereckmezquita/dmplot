@@ -19,7 +19,7 @@ bb <- function(close, n = 10, sd = 2) {
     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
 }
 
-# calculate the short and long moving averages
+# calculate the bolinger bands
 dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
 
 dt |>
@@ -32,10 +32,10 @@ dt |>
         group = symbol
     )) +
     ## ------------------------------------
-    ddplot::stat_candlestick() +
+    dmplot::stat_candlestick() +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
-    ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
+    dmplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -46,7 +46,7 @@ dt |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()

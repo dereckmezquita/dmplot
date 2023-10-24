@@ -31,7 +31,7 @@ StatMovingAverage <- ggplot2::ggproto(
 )
 
 #' @title Moving averages `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_movingaverages` is a `ggplot2` layer that allows you to plot moving averages on a `ggplot2` plot either by providing the column names `ggplot2::aes` of the previously calculated metrics.
@@ -44,7 +44,7 @@ StatMovingAverage <- ggplot2::ggproto(
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
-#' @param size A `numeric` vector of length one; the size of the line (optional - default `1.75`).
+#' @param linewidth A `numeric` vector of length one; the width of the line (optional - default `1.75`).
 #' @param alpha A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).
 #' @param colour A named or unnamed `list` with three elements "short" and "long". These are the colours for the short and long moving averages (optional - default `list(short = "red", long = "blue")`).
 #' 
@@ -98,10 +98,10 @@ StatMovingAverage <- ggplot2::ggproto(
 #'         group = symbol
 #'     )) +
 #'     ## ------------------------------------
-#'     ddplot::stat_candlestick() +
+#'     dmplot::stat_candlestick() +
 #'     ## ------------------------------------
 #'     # provide the colnames to the calculated indicators as aes values
-#'     ddplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
+#'     dmplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
 #'     ## ------------------------------------
 #'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
 #'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -112,7 +112,7 @@ StatMovingAverage <- ggplot2::ggproto(
 #'         x = "Date",
 #'         y = "Price (USD)"
 #'     ) +
-#'     ddplot::theme_dereck_dark() +
+#'     dmplot::theme_dereck_dark() +
 #'     ggplot2::theme(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()
@@ -128,7 +128,7 @@ stat_movingaverages <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    size = 1.75,
+    linewidth = 1.75,
     alpha = 0.75,
     colour = list(
         short = "yellow",
@@ -147,7 +147,7 @@ stat_movingaverages <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                linewidth = linewidth,
                 colour = colour[[1]], # $short,
                 interval = "short",
                 ...
@@ -163,7 +163,7 @@ stat_movingaverages <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                linewidth = linewidth,
                 colour = colour[[2]], # $long,
                 interval = "long",
                 ...

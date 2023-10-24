@@ -23,7 +23,7 @@ dt[, macd_diff := macd - macd_signal]
 
 na.omit(dt) |>
     ggplot2::ggplot(ggplot2::aes(x = datetime)) +
-    ddplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
+    dmplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
     ## ------------------------------------
@@ -36,7 +36,7 @@ na.omit(dt) |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()

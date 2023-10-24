@@ -33,10 +33,10 @@ dt |>
         group = symbol
     )) +
     ## ------------------------------------
-    ddplot::stat_candlestick() +
+    dmplot::stat_candlestick() +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
-    ddplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
+    dmplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -47,7 +47,7 @@ dt |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()

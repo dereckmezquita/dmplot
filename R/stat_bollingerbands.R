@@ -60,7 +60,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 )
 
 #' @title Bollinger bands `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_bollingerbands` is a `ggplot2` layer that allows you to plot Bollinger bands on a `ggplot2` plot either by providing a function to calculate the bands or by providing the column names of the required metrics as a `ggplot2::aes` argument previously calculated.
@@ -75,7 +75,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
-#' @param size A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).
+#' @param linewidth A `list` with two elements "border" and "mavg". These are the line widths for the border and moving average lines (optional - default `list(border = 1, mavg = 1)`).
 #' @param alpha A `list` with two elements "ribbon" and "mavg". These are the alpha values for the ribbon and moving average lines (optional - default `list(ribbon = 0.1, mavg = 0.5)`).
 #' @param linetype A `list` with two elements "border" and "mavg". These are the line types for the border and moving average lines (optional - default `list(border = "dotted", mavg = 4)`).
 #' @param colours A `list` with two elements "ribbon", "border", and "mavg". These are the colours for the ribbon, border, and moving average lines (optional - default `list(ribbon = "yellow", border = "magenta", mavg = "magenta")`).
@@ -131,10 +131,10 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'         group = symbol
 #'     )) +
 #'     ## ------------------------------------
-#'     ddplot::stat_candlestick() +
+#'     dmplot::stat_candlestick() +
 #'     ## ------------------------------------
 #'     # provide the colnames to the calculated indicators as aes values
-#'     ddplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
+#'     dmplot::stat_bollingerbands(ggplot2::aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), colour = list("pink", "cyan", "cyan")) +
 #'     ## ------------------------------------
 #'     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
 #'         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -145,7 +145,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'         x = "Date",
 #'         y = "Price (USD)"
 #'     ) +
-#'     ddplot::theme_dereck_dark() +
+#'     dmplot::theme_dereck_dark() +
 #'     ggplot2::theme(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()
@@ -160,10 +160,10 @@ stat_bollingerbands <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    size = list(
-        border = 1,
-        mavg = 1
-    ),
+    # linewidth = list(
+    #     border = 1,
+    #     mavg = 1
+    # ),
     alpha = list(
         ribbon = 0.1,
         mavg = 0.5
@@ -190,7 +190,7 @@ stat_bollingerbands <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size[[1]],
+                # linewidth = linewidth[[1]],
                 alpha = alpha[[1]],
                 linetype = linetype[[1]],
                 fill = colour[[1]],
@@ -208,7 +208,7 @@ stat_bollingerbands <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size[[2]],
+                # linewidth = linewidth[[2]],
                 alpha = alpha[[2]],
                 linetype = linetype[[2]],
                 colour = colour[[3]],

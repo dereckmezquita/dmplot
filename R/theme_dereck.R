@@ -1,5 +1,5 @@
 #' @title Dereck's ggplot theme (light)
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' This function allows you to add the derecksnotes theme to your ggplot graphics.
 #' @keywords theme_dereck_light
@@ -11,14 +11,14 @@
 #'     ggplot2::geom_point(ggplot2::aes(color = Species, shape = Species)) +
 #'     ggplot2::labs(title = "Iris data", subtitle = "Classic data", x = "Sepal Length", y = "Sepal Width") +
 #'     ggplot2::facet_grid(~ Species) +
-#'     ddplot::theme_dereck_light()
+#'     dmplot::theme_dereck_light()
 #'
 #' data.frame(year = time(nhtemp), tmps = as.matrix(nhtemp)) |>
 #'     ggplot2::ggplot(ggplot2::aes(x = year, y = tmps)) +
 #'     ggplot2::geom_line() +
 #'     # geom_hline(yintercept = 0, size = 1, colour = "#333333") +
 #'     ggplot2::labs(title = "New Hampshire yearly temperatures", subtitle = "Collected between 1912 and 1971", x = "Year", y = "Average temperature") +
-#'     ddplot::theme_dereck_light()
+#'     dmplot::theme_dereck_light()
 #'
 theme_dereck_light <- function(base_size = 11, base_family = "") {
     ggplot2::theme_bw(base_size = base_size, base_family = base_family) %+replace% ggplot2::theme(
@@ -44,7 +44,7 @@ theme_dereck_light <- function(base_size = 11, base_family = "") {
 }
 
 #' @title Dereck's ggplot theme (dark)
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #'
 #' This function allows you to add the derecksnotes theme to your ggplot graphics.
 #' @keywords theme_dereck_dark
@@ -56,14 +56,14 @@ theme_dereck_light <- function(base_size = 11, base_family = "") {
 #'     ggplot2::geom_point(ggplot2::aes(color = Species, shape = Species)) +
 #'     ggplot2::labs(title = "Iris data", subtitle = "Classic data", x = "Sepal Length", y = "Sepal Width") +
 #'     ggplot2::facet_grid(~ Species) +
-#'     ddplot::theme_dereck_dark()
+#'     dmplot::theme_dereck_dark()
 #'
 #' data.frame(year = time(nhtemp), tmps = as.matrix(nhtemp)) |>
 #'     ggplot2::ggplot(ggplot2::aes(x = year, y = tmps)) +
 #'     ggplot2::geom_line() +
 #'     # geom_hline(yintercept = 0, size = 1, colour = "#333333") +
 #'     ggplot2::labs(title = "New Hampshire yearly temperatures", subtitle = "Collected between 1912 and 1971", x = "Year", y = "Average temperature") +
-#'     ddplot::theme_dereck_dark()
+#'     dmplot::theme_dereck_dark()
 #'
 theme_dereck_dark <- function(base_size = 12, base_family = "") {
     ggplot2::theme_gray(base_size = base_size, base_family = base_family) %+replace% ggplot2::theme(

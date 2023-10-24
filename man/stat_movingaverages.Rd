@@ -12,7 +12,7 @@ stat_movingaverages(
   na.rm = TRUE,
   show.legend = NA,
   inherit.aes = TRUE,
-  size = 1.75,
+  linewidth = 1.75,
   alpha = 0.75,
   colour = list(short = "yellow", long = "purple"),
   ...
@@ -23,7 +23,7 @@ stat_movingaverages(
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
-\item{size}{A `numeric` vector of length one; the size of the line (optional - default `1.75`).}
+\item{linewidth}{A `numeric` vector of length one; the width of the line (optional - default `1.75`).}
 
 \item{alpha}{A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).}
 
@@ -90,10 +90,10 @@ dt |>
         group = symbol
     )) +
     ## ------------------------------------
-    ddplot::stat_candlestick() +
+    dmplot::stat_candlestick() +
     ## ------------------------------------
     # provide the colnames to the calculated indicators as aes values
-    ddplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
+    dmplot::stat_movingaverages(ggplot2::aes(short = ema_short, long = ema_long), alpha = list(mavg = 0.5)) +
     ## ------------------------------------
     ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
         lubridate::floor_date(lubridate::as_datetime(x), "hours")
@@ -104,7 +104,7 @@ dt |>
         x = "Date",
         y = "Price (USD)"
     ) +
-    ddplot::theme_dereck_dark() +
+    dmplot::theme_dereck_dark() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
@@ -112,5 +112,5 @@ dt |>
 
 }
 \author{
-Dereck de Mezquita
+Dereck Mezquita
 }

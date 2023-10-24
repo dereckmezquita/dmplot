@@ -68,7 +68,7 @@ StatMacdHistogram <- ggplot2::ggproto(
 )
 
 #' @title Moving average convergence divergence (macd) `ggplot2` layer
-#' @author Dereck de Mezquita
+#' @author Dereck Mezquita
 #' 
 #' @description 
 #' `stat_macd` is a `ggplot2` layer that allows you to plot a `ggplot2` layer of moving average convergence divergence (macd) by providing the column names `ggplot2::aes` of the previously calculated metrics.
@@ -81,7 +81,7 @@ StatMacdHistogram <- ggplot2::ggproto(
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
 #' @param data A `data.table` object (required - default `NULL`).
-#' @param size A `numeric` vector of length one; the size of the line (optional - default `1.75`).
+#' @param linewidth A `numeric` vector of length one; the linewidth of the line (optional - default `1.75`).
 #' @param alpha_lines A `numeric` vector of length one; the alpha of the lines (optional - default `0.75`).
 #' @param alpha_histogram A `numeric` vector of length one; the alpha of the histogram (optional - default `0.5`).
 #' @param colour_lines A named or unnamed `list` of two elements "macd" and "macd_signal" (optional - default `list(macd = "blue", macd_signal = "red")`).
@@ -129,7 +129,7 @@ StatMacdHistogram <- ggplot2::ggproto(
 #' 
 #' na.omit(dt) |>
 #'     ggplot2::ggplot(ggplot2::aes(x = datetime)) +
-#'     ddplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
+#'     dmplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
 #'     ## ------------------------------------
 #'     # provide the colnames to the calculated indicators as aes values
 #'     ## ------------------------------------
@@ -142,7 +142,7 @@ StatMacdHistogram <- ggplot2::ggproto(
 #'         x = "Date",
 #'         y = "Price (USD)"
 #'     ) +
-#'     ddplot::theme_dereck_dark() +
+#'     dmplot::theme_dereck_dark() +
 #'     ggplot2::theme(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()
@@ -157,7 +157,7 @@ stat_macd <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    size = 1,
+    # linewidth = 1,
     alpha_lines = 0.75,
     alpha_histogram = 0.5,
     colour_lines = list( # we get colours by using [[]] allows for passing unnamed list
@@ -201,7 +201,7 @@ stat_macd <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                # linewidth = linewidth,
                 colour = colour_lines[[1]], # taking macd element
                 alpha = alpha_lines,
                 macd_line_name = "macd",
@@ -218,7 +218,7 @@ stat_macd <- function(
             inherit.aes = inherit.aes,
             params = list(
                 na.rm = na.rm,
-                size = size,
+                # linewidth = linewidth,
                 colour = colour_lines[[2]], # taking macd_signal element
                 alpha = alpha_lines,
                 macd_line_name = "macd_signal",
