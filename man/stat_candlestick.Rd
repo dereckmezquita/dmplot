@@ -17,7 +17,15 @@ stat_candlestick(
 )
 }
 \arguments{
-\item{mapping}{A `ggplot2::aes` object (required - default `NULL`).}
+\item{mapping}{A `ggplot2::aes` object (required - default `NULL`).
+\itemize{
+  \item{`x`: The x-axis value, usually representing time.}
+  \item{`open`: The opening price.}
+  \item{`close`: The closing price.}
+  \item{`high`: The highest price in the time range.}
+  \item{`low`: The lowest price in the time range.}
+  \item{`group`: (optional) The grouping variable.}
+}}
 
 \item{data}{A `data.table` object (required - default `NULL`).}
 
@@ -37,7 +45,7 @@ This is a `ggplot2` extension; it is used with the `+` operator for adding a lay
 \examples{
 
 # get some financial data
-# kucoin is private package - you can use any data source
+# kucoin is a private package - you can use any data source
 ticker <- "BTC/USDT"
 
 dt <- kucoin::get_market_data(
