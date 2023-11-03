@@ -5,7 +5,7 @@
 StatCandleBarrel <- ggplot2::ggproto(
     "StatCandleBarrel",
     ggplot2::Stat,
-    required_aes = c("x", "open", "close"),
+    required_aes = c("x", "open", "close", "high", "low"), # fix for #13
     dropped_aes = c("x", "open", "close", "high", "low", "gain_loss"), # fix for #11
     setup_params = \(data, params) {
         params <- params
@@ -43,7 +43,7 @@ StatCandleBarrel <- ggplot2::ggproto(
 StatWick <- ggplot2::ggproto(
     "StatWick",
     ggplot2::Stat,
-    required_aes = c("x", "high", "low"),
+    required_aes = c("x", "high", "low", "open", "close"), # fix for #13
     setup_params = \(data, params) {
         params <- params
         return(params)
