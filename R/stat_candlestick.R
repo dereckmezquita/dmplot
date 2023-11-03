@@ -74,12 +74,14 @@ StatWick <- ggplot2::ggproto(
 #' @author Dereck Mezquita
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
-#'   - `x`: The x-axis value, usually representing time.
-#'   - `open`: The opening price.
-#'   - `close`: The closing price.
-#'   - `high`: The highest price in the time range.
-#'   - `low`: The lowest price in the time range.
-#'   - `group`: (optional) The grouping variable.
+#' \itemize{
+#'   \item{`x`: The x-axis value, usually representing time.}
+#'   \item{`open`: The opening price.}
+#'   \item{`close`: The closing price.}
+#'   \item{`high`: The highest price in the time range.}
+#'   \item{`low`: The lowest price in the time range.}
+#'   \item{`group`: (optional) The grouping variable.}
+#' }
 #' @param data A `data.table` object (required - default `NULL`).
 #' @param colours A `list` with three elements "up", "down", and "no_change". These are the colours of the candlesticks when a positive change in price action, a negative change and no change respectively.
 #' @param ... Additional arguments passed to `ggplot2::layer`.
@@ -87,14 +89,6 @@ StatWick <- ggplot2::ggproto(
 #' @details
 #'
 #' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
-#'
-#' Aesthetics:
-#' - `x`: x-axis value, usually representing time.
-#' - `open`: opening price.
-#' - `close`: closing price.
-#' - `high`: highest price in the time range.
-#' - `low`: lowest price in the time range.
-#' - `group`: (optional) grouping variable.
 #'
 #' @return A `ggplot2::layer` object.
 #'
