@@ -28,9 +28,9 @@ returns a list which can then be plotted.
 
 ### Get financial data
 
-Shown here `kucoin` is a private package by myself for interacting with
-the `KuCoin` api. You can use any source of financial data as long as
-you pass the variables to the stat correctly.
+Shown here [`kucoin`](https://github.com/dereckmezquita/kucoin) is a
+package for interacting with the `KuCoin` api. You can use any source of
+financial data as long as you pass the variables to the stat correctly.
 
 ``` r
 ticker <- "BTC/USDT"
@@ -182,6 +182,9 @@ p + dmplot::theme_dereck_light() +
 <img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
 
 ## Gallery
+
+The `theme_dereck_dark()` and `theme_dereck_light()` functions are used
+to style the plots in the gallery below.
 
 <p align="center">
 <img src="./.graphics/countries-inequality-line-1.jpeg" width="350">
