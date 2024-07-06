@@ -28,6 +28,7 @@ kucoin
 LazyData
 lfs
 Lifecycle
+linerange
 linewidth
 LinkingTo
 macd
@@ -41,6 +42,7 @@ png
 rcmdcheck
 rmarkdown
 RoxygenNote
+StatShadedDateRange
 todo
 USDT
 vcs

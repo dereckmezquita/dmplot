@@ -52,7 +52,7 @@ dt
 #> 167: BTC/USDT 2022-12-05 13:00:00 17254.5 17282.5 17208.1 17229.7 105.2655
 #> 168: BTC/USDT 2022-12-05 14:00:00 17229.8 17241.4 17175.1 17205.2 140.4375
 #> 169: BTC/USDT 2022-12-05 15:00:00 17205.1 17205.1 17021.6 17083.0 504.9158
-#> 1 variable not shown: [turnover <num>]
+#> 1 variable(s) not shown: [turnover <num>]
 ```
 
 Note a demonstration dataset is included in the `demo/data/` directory.
@@ -133,7 +133,7 @@ p <- dt |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" width="100%" style="display: block; margin: auto;" />
 
 Plotting the MACD (moving average convergence divergence) indicator:
 
@@ -167,7 +167,7 @@ na.omit(dt) |>
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" width="100%" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -179,7 +179,7 @@ p + dmplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-5-1.png" width="100%" style="display: block; margin: auto;" />
 
 ## Gallery
 

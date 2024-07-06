@@ -14,7 +14,7 @@ iris |>
     ggplot2::ggplot(ggplot2::aes(x = Sepal.Length, y = Sepal.Width)) +
     ggplot2::geom_point(ggplot2::aes(color = Species, shape = Species)) +
     ggplot2::labs(title = "Iris data", subtitle = "Classic data", x = "Sepal Length", y = "Sepal Width") +
-    ggplot2::facet_grid(~ Species) +
+    ggplot2::facet_grid(~Species) +
     dmplot::theme_dereck_light()
 
 data.frame(year = time(nhtemp), tmps = as.matrix(nhtemp)) |>
