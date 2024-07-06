@@ -1,0 +1,27 @@
+template:
+  bootstrap: 5
+  bslib:
+    pkgdown-nav-height: 100px
+
+url: https://dereckmezquita.github.io/dmplot/
+
+navbar:
+  bg: primary
+  structure:
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/dereckmezquita/dmplot
+    twitter:
+      icon: fa-twitter fa-lg
+      href: https://twitter.com/dereckmezquita
+
+home:
+  sidebar:
+    structure: [star, links, license, community, citation, authors, dev]
+    components:
+      star:
+        title: GitHub
+        text: |
+          <a class="github-button" href="https://github.com/dereckmezquita/dmplot" data-size="large" data-show-count="true" aria-label="Star dereckmezquita/dmplot on GitHub">Star</a>
