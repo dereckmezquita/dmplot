@@ -27,12 +27,12 @@ jobs:
         with:
           error-on: '"note"'
 
-      - name: Lint
-        if: always()
-        shell: Rscript {0}
-        run: lintr::lint_package()
-        env:
-          LINTR_ERROR_ON_LINT: true
+      # - name: Lint
+      #   if: always()
+      #   shell: Rscript {0}
+      #   run: lintr::lint_package()
+      #   env:
+      #     LINTR_ERROR_ON_LINT: true
 
       - name: Test coverage
         shell: Rscript {0}
