@@ -180,19 +180,3 @@ p + dmplot::theme_dereck_light() +
 ```
 
 <img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
-
-## Gallery
-
-The `theme_dereck_dark()` and `theme_dereck_light()` functions are used
-to style the plots in the gallery below.
-
-<p align="center">
-<img src="./.graphics/countries-inequality-line-1.jpeg" width="350">
-<img src="./.graphics/countries-1-fhos-1.jpeg" width="350">
-<img src="./.graphics/gdp-per-capita-1.jpeg" width="350">
-<img src="./.graphics/gdp-per-capita-2.jpeg" width="350">
-<img src="./.graphics/gdp-per-country-1.jpeg" width="350">
-<img src="./.graphics/pop-to-internet-users.jpeg" width="350">
-</p>
-
-<img src="./.graphics/countries-u5pop-prc-1.jpeg" width="100%">
