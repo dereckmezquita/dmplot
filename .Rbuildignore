@@ -1,7 +1,8 @@
+.graphics
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-.graphics
-
+^\.pre-commit-config\.yaml$
+^renv$
+^renv\.lock$
 demo/
 dev/
