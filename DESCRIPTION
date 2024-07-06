@@ -22,4 +22,5 @@ Suggests:
     knitr,
     rmarkdown,
     box,
-    rcmdcheck
+    rcmdcheck,
+    dereckmezquita/kucoin
