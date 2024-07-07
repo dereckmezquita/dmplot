@@ -1,0 +1,9 @@
+pandoc: 2.14.0.3
+pkgdown: 2.0.9
+pkgdown_sha: ~
+articles: {}
+last_built: 2024-07-07T03:26Z
+urls:
+  reference: https://dereckmezquita.github.io/dmplot/reference
+  article: https://dereckmezquita.github.io/dmplot/articles
+
