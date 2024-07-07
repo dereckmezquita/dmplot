@@ -19,7 +19,7 @@ jobs:
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: local::. # Necessary to avoid object usage linter errors.
+          extra-packages: github::dereckmezquita/kucoin, local::.
 
       - name: R CMD check
         if: always()
