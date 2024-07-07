@@ -24,5 +24,6 @@ Suggests:
     rmarkdown,
     box,
     rcmdcheck,
+    TTR
 Remotes:
     dereckmezquita/kucoin
