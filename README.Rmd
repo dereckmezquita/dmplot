@@ -6,7 +6,7 @@ output: github_document
 knitr::opts_chunk$set(
     warning = FALSE,
     message = FALSE,
-    fig.path = "man/figures/README-",
+    fig.path = "/man/figures/README-",
     fig.align = "center",
     fig.width = 12,
     fig.height = 10,
