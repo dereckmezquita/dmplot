@@ -65,9 +65,7 @@ The EMA gives more weight to recent prices, making it more responsive to new inf
 **Mathematics:**
 For a series Y, the EMA at time t is calculated as:
 
-$$
-    EMA(t) = α * Y(t) + (1 - α) * EMA(t-1)
-$$
+$$EMA(t) = α * Y(t) + (1 - α) * EMA(t-1)$$
 
 where α = 2 / (N + 1), and N is the number of periods.
 
