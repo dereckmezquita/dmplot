@@ -26,7 +26,8 @@ See examples for more details.'></head><body>
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
-  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/working-with-financial-data.html">Understanding and Calculating Financial Indicators with dmplot</a></li>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/getting-started-with-the-dmplot-framwork.html">Getting started with the dmplot framework</a></li>
+    <li><a class="dropdown-item" href="../articles/intro-to-financial-indicators-with-dmplot.html">Introduction to financial indicators with dmplot</a></li>
   </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
@@ -131,23 +132,40 @@ See examples for more details.'></head><body>
 <span class="r-in"><span><span class="co"># kucoin is private package - you can use any data source</span></span></span>
 <span class="r-in"><span><span class="va">ticker</span> <span class="op">&lt;-</span> <span class="st">"BTC/USDT"</span></span></span>
 <span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">kucoin</span><span class="fu">::</span><span class="fu">get_market_data</span><span class="op">(</span></span></span>
+<span class="r-in"><span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="fu">kucoin</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/kucoin/man/get_market_data.html" class="external-link">get_market_data</a></span><span class="op">(</span></span></span>
 <span class="r-in"><span>    symbols <span class="op">=</span> <span class="va">ticker</span>,</span></span>
 <span class="r-in"><span>    from <span class="op">=</span> <span class="st">"2022-11-28 15:29:43 EST"</span>, <span class="co"># lubridate::now() - lubridate::days(7),</span></span></span>
 <span class="r-in"><span>    to <span class="op">=</span> <span class="st">"2022-12-05 15:29:31 EST"</span>,<span class="co"># lubridate::now(),</span></span></span>
 <span class="r-in"><span>    frequency <span class="op">=</span> <span class="st">"1 hour"</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in loadNamespace(x):</span> there is no package called ‘kucoin’</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dt</span></span></span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> function (x, df, ncp, log = FALSE) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> {</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     if (missing(ncp)) </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dt, x, df, log)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnt, x, df, ncp, log)</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x564ad50661c0&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        symbol            datetime    open    high     low   close   volume</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;              &lt;POSc&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: BTC/USDT 2022-11-28 15:00:00 16215.3 16233.6 16126.0 16144.1 327.8979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: BTC/USDT 2022-11-28 16:00:00 16144.1 16382.6 16000.0 16305.9 837.5801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: BTC/USDT 2022-11-28 17:00:00 16305.9 16382.0 16195.4 16205.4 507.8351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: BTC/USDT 2022-11-28 18:00:00 16206.1 16230.7 16146.5 16162.6 252.3387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: BTC/USDT 2022-11-28 19:00:00 16161.7 16253.3 16150.1 16220.9 225.4121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165: BTC/USDT 2022-12-05 11:00:00 17295.2 17314.3 17283.8 17312.0 176.8633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166: BTC/USDT 2022-12-05 12:00:00 17312.0 17318.6 17230.5 17254.5 199.6922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167: BTC/USDT 2022-12-05 13:00:00 17254.5 17282.5 17208.1 17229.7 105.2655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168: BTC/USDT 2022-12-05 14:00:00 17229.8 17241.4 17175.1 17205.2 140.4375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169: BTC/USDT 2022-12-05 15:00:00 17205.1 17205.1 17021.6 17083.0 504.9158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      turnover</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  5301836</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 13557348</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  8270203</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  4082464</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  3653147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---         </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165:  3058929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166:  3447960</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167:  1815447</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168:  2416907</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169:  8630174</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># we need a function that calculates the indicator for us</span></span></span>
 <span class="r-in"><span><span class="co"># typically I like to write my own functions in C++; in this case we will use TTR's</span></span></span>
@@ -158,7 +176,32 @@ See examples for more details.'></head><body>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># calculate the short and long moving averages</span></span></span>
 <span class="r-in"><span><span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bb_lower"</span>, <span class="st">"bb_mavg"</span>, <span class="st">"bb_upper"</span>, <span class="st">"bb_pct"</span><span class="op">)</span> <span class="op">:=</span> <span class="fu">bb</span><span class="op">(</span><span class="va">close</span>, n <span class="op">=</span> <span class="fl">10</span>, sd <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">]</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in `:=`(c("bb_lower", "bb_mavg", "bb_upper", "bb_pct"), bb(close,     n = 10, sd = 2)):</span> could not find function ":="</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        symbol            datetime    open    high     low   close   volume</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>        &lt;char&gt;              &lt;POSc&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1: BTC/USDT 2022-11-28 15:00:00 16215.3 16233.6 16126.0 16144.1 327.8979</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: BTC/USDT 2022-11-28 16:00:00 16144.1 16382.6 16000.0 16305.9 837.5801</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3: BTC/USDT 2022-11-28 17:00:00 16305.9 16382.0 16195.4 16205.4 507.8351</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4: BTC/USDT 2022-11-28 18:00:00 16206.1 16230.7 16146.5 16162.6 252.3387</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5: BTC/USDT 2022-11-28 19:00:00 16161.7 16253.3 16150.1 16220.9 225.4121</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                                      </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165: BTC/USDT 2022-12-05 11:00:00 17295.2 17314.3 17283.8 17312.0 176.8633</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166: BTC/USDT 2022-12-05 12:00:00 17312.0 17318.6 17230.5 17254.5 199.6922</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167: BTC/USDT 2022-12-05 13:00:00 17254.5 17282.5 17208.1 17229.7 105.2655</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168: BTC/USDT 2022-12-05 14:00:00 17229.8 17241.4 17175.1 17205.2 140.4375</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169: BTC/USDT 2022-12-05 15:00:00 17205.1 17205.1 17021.6 17083.0 504.9158</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>      turnover bb_lower  bb_mavg bb_upper        bb_pct</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>         &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;         &lt;num&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   1:  5301836       NA       NA       NA            NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   2: 13557348       NA       NA       NA            NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   3:  8270203       NA       NA       NA            NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   4:  4082464       NA       NA       NA            NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   5:  3653147       NA       NA       NA            NA</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>  ---                                                  </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 165:  3058929 17207.96 17301.26 17394.56  0.5575587312</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 166:  3447960 17212.50 17302.61 17392.72  0.2330342843</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 167:  1815447 17229.77 17305.83 17381.89 -0.0004838333</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 168:  2416907 17201.48 17290.90 17380.32  0.0208028612</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 169:  8630174 17117.69 17265.48 17413.27 -0.1173496659</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="va">dt</span> <span class="op">|&gt;</span></span></span>
 <span class="r-in"><span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span></span></span>
@@ -176,7 +219,7 @@ See examples for more details.'></head><body>
 <span class="r-in"><span>    <span class="fu">dmplot</span><span class="fu">::</span><span class="fu">stat_bollingerbands</span><span class="op">(</span><span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span>ymin <span class="op">=</span> <span class="va">bb_lower</span>, mavg <span class="op">=</span> <span class="va">bb_mavg</span>, ymax <span class="op">=</span> <span class="va">bb_upper</span><span class="op">)</span>, colour <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="st">"pink"</span>, <span class="st">"cyan"</span>, <span class="st">"cyan"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="co">## ------------------------------------</span></span></span>
 <span class="r-in"><span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_x_continuous</a></span><span class="op">(</span>n.breaks <span class="op">=</span> <span class="fl">25</span>, labels <span class="op">=</span> \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span></span></span>
-<span class="r-in"><span>        <span class="fu">lubridate</span><span class="fu">::</span><span class="fu">floor_date</span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu">as_datetime</span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"hours"</span><span class="op">)</span></span></span>
+<span class="r-in"><span>        <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/round_date.html" class="external-link">floor_date</a></span><span class="op">(</span><span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/as_date.html" class="external-link">as_datetime</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="st">"hours"</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">}</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>n.breaks <span class="op">=</span> <span class="fl">25</span><span class="op">)</span> <span class="op">+</span></span></span>
 <span class="r-in"><span>    <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span></span></span>
@@ -189,8 +232,7 @@ See examples for more details.'></head><body>
 <span class="r-in"><span>        axis.text.x <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_text</a></span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">75</span>, vjust <span class="op">=</span> <span class="fl">0.925</span>, hjust <span class="op">=</span> <span class="fl">0.975</span><span class="op">)</span>,</span></span>
 <span class="r-in"><span>        panel.grid.minor <span class="op">=</span> <span class="fu">ggplot2</span><span class="fu">::</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html" class="external-link">element_blank</a></span><span class="op">(</span><span class="op">)</span></span></span>
 <span class="r-in"><span>    <span class="op">)</span></span></span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span class="error">Error in ggplot2::ggplot(dt, ggplot2::aes(x = datetime, open = open, close = close,     high = high, low = low, group = symbol)):</span> `data` cannot be a function.</span>
-<span class="r-err co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> Have you misspelled the `data` argument in `ggplot()`</span>
+<span class="r-plt img"><img src="stat_bollingerbands-1.png" alt="" width="700" height="433"></span>
 <span class="r-in"><span><span class="co"># }</span></span></span>
 </code></pre></div>
     </div>
