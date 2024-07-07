@@ -9,7 +9,7 @@ box::use(kucoin)
 box::use(dt = data.table)
 box::use(ggplot2)
 box::use(dmplot)
-box::use(./stat_movingaverages[ StatMovingAverage, stat_movingaverages ])
+box::use(./stat_movingaverages[ stat_movingaverages, stat_candlestick ])
 
 ticker <- "BTC/USDT"
 
