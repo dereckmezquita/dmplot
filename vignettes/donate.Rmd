@@ -10,6 +10,20 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+<script>
+    function copyToClipboard(elementId) {
+      var element = document.getElementById(elementId);
+      var text = element.innerText;
+      navigator.clipboard.writeText(text).then(function() {
+        console.log('Copying to clipboard was successful!');
+        alert("Copied to clipboard!");
+      }, function(err) {
+        console.error('Could not copy text: ', err);
+      });
+    }
+</script>
+
+
 ## Support my work
 
 If you find this package useful, please consider supporting my work with a cryptocurrency donation.
