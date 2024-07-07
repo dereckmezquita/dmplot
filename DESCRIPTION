@@ -14,7 +14,7 @@ Depends: R (>= 4.1.0)
 Imports:
     ggplot2 (>= 3.4.0),
     data.table
-License: All rights reserved.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 VignetteBuilder: knitr
