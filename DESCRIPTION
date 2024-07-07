@@ -25,6 +25,7 @@ Suggests:
     box,
     rcmdcheck,
     TTR,
-    remotes
+    remotes,
+    gridExtra
 Remotes:
     dereckmezquita/kucoin
