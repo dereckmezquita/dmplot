@@ -13,7 +13,7 @@ See examples for more details."></head><body>
 
     <a class="navbar-brand me-2" href="../index.html">dmplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.2.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -22,6 +22,10 @@ See examples for more details."></head><body>
 
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-articles"><li><a class="dropdown-item" href="../articles/working-with-financial-data.html">Understanding and Calculating Financial Indicators with dmplot</a></li>
+  </ul></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/dereckmezquita/dmplot"><span class="fa fa-github fa-lg"></span></a></li>
@@ -34,7 +38,7 @@ See examples for more details."></head><body>
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Moving average convergence divergence (macd) `ggplot2` layer</h1>
-      <small class="dont-index">Source: <a href="https://github.com/dereckmezquita/dmplot/blob/master/R/stat_macd.R" class="external-link"><code>R/stat_macd.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/dereckmezquita/dmplot/blob/MISC-5-R-pkg-dmplot-working-with-financial-data-vignette/R/stat_macd.R" class="external-link"><code>R/stat_macd.R</code></a></small>
       <div class="d-none name"><code>stat_macd.Rd</code></div>
     </div>
 
@@ -144,13 +148,13 @@ See examples for more details."></head><body>
 <span class="r-out co"><span class="r-pr">#&gt;</span>         .Call(C_dt, x, df, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span>     else .Call(C_dnt, x, df, ncp, log)</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> }</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5622dd4de9a0&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;bytecode: 0x5641489cc698&gt;</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> &lt;environment: namespace:stats&gt;</span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># we need a function that calculates the indicator for us</span></span></span>
 <span class="r-in"><span><span class="co"># typically I like to write my own functions in C++; in this case we will use TTR's</span></span></span>
 <span class="r-in"><span><span class="co"># the stat expects a named list to be returned - we redefine ttr</span></span></span>
-<span class="r-in"><span><span class="va">macd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">12</span>, <span class="va">l</span> <span class="op">=</span> <span class="fl">26</span>, <span class="va">k</span> <span class="op">=</span> <span class="fl">9</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">TTR</span><span class="fu">::</span><span class="fu">MACD</span><span class="op">(</span><span class="va">x</span>, <span class="va">s</span>, <span class="va">l</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span></span>
+<span class="r-in"><span><span class="va">macd</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span>, <span class="va">s</span> <span class="op">=</span> <span class="fl">12</span>, <span class="va">l</span> <span class="op">=</span> <span class="fl">26</span>, <span class="va">k</span> <span class="op">=</span> <span class="fl">9</span><span class="op">)</span> <span class="op">{</span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">as.list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="fu">TTR</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/TTR/man/MACD.html" class="external-link">MACD</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">s</span>, <span class="va">l</span>, <span class="va">k</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">}</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co"># macd(dt$close)</span></span></span>
 <span class="r-in"><span><span class="va">dt</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"macd"</span>, <span class="st">"macd_signal"</span><span class="op">)</span> <span class="op">:=</span> <span class="fu">macd</span><span class="op">(</span><span class="va">close</span>, s <span class="op">=</span> <span class="fl">12</span>, l <span class="op">=</span> <span class="fl">26</span>, k <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">]</span></span></span>
