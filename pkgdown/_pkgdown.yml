@@ -9,11 +9,28 @@ authors:
 
 navbar:
   structure:
-    right: [search, github]
+    left: [intro, reference, articles, tutorials, news, donate]
+    right: [search, github, twitter, website]
   components:
     github:
       icon: fa-github fa-lg
       href: https://github.com/dereckmezquita/dmplot
+      target: _blank
     twitter:
       icon: fa-twitter fa-lg
       href: https://twitter.com/dereckmezquita
+      target: _blank
+    website:
+      text: Website
+      href: https://derecksnotes.com
+      target: _blank
+    donate:
+      text: Donate
+      href: articles/donate.html
+
+articles:
+- title: All articles
+  contents:
+  - getting-started-with-the-dmplot-framwork
+  - intro-to-financial-indicators-with-dmplot
+  - donate
