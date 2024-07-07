@@ -2,8 +2,6 @@
 title: "Donate"
 output: 
   rmarkdown::html_vignette:
-    includes:
-      in_header: clipboard_script.html
 vignette: >
   %\VignetteIndexEntry{Donate}
   %\VignetteEngine{knitr::rmarkdown}
