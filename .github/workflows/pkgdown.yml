@@ -27,7 +27,7 @@ jobs:
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
-          extra-packages: any::pkgdown, local::.
+          extra-packages: any::pkgdown, github::dereckmezquita/kucoin, local::.
 
       - name: Configure git
         run: |
