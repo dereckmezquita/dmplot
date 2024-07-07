@@ -149,7 +149,7 @@ open, high, low, and close prices for a specific period.</p>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">candle_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/candlestick-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/candlestick-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="line-chart">Line Chart<a class="anchor" aria-label="anchor" href="#line-chart"></a>
@@ -179,7 +179,7 @@ this.</p>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">line_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/line-chart-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/line-chart-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level4">
 <h4 id="volume">Volume<a class="anchor" aria-label="anchor" href="#volume"></a>
@@ -218,7 +218,7 @@ price trends.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">volume_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-volume-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-volume-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level3">
@@ -261,7 +261,7 @@ layer to visualise the moving averages.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">candle_plot</span> <span class="op">+</span> <span class="va">sma_layer</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-sma-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-sma-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="candlestick-chart-with-ema-and-bollinger-bands">Candlestick Chart with EMA and Bollinger Bands<a class="anchor" aria-label="anchor" href="#candlestick-chart-with-ema-and-bollinger-bands"></a>
@@ -308,7 +308,7 @@ EMA(t) = α * Y(t) + (1 - α) * EMA(t-1)
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">candle_plot</span> <span class="op">+</span> <span class="va">ema_layer</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-ema-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-ema-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="bollinger-bands">2. Bollinger Bands<a class="anchor" aria-label="anchor" href="#bollinger-bands"></a>
@@ -350,7 +350,7 @@ oversold.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">candle_plot</span> <span class="op">+</span> <span class="va">bb_layer</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-bollinger-bands-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-bollinger-bands-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="moving-average-convergence-divergence-macd">3. Moving Average Convergence Divergence (MACD)<a class="anchor" aria-label="anchor" href="#moving-average-convergence-divergence-macd"></a>
@@ -407,7 +407,7 @@ Line.</p>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">macd_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-macd-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-macd-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="relative-strength-index-rsi">4. Relative Strength Index (RSI)<a class="anchor" aria-label="anchor" href="#relative-strength-index-rsi"></a>
@@ -466,7 +466,7 @@ oversold conditions.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">rsi_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-rsi-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-rsi-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="rate-of-change-roc-momentum">5. Rate of Change (ROC) / Momentum<a class="anchor" aria-label="anchor" href="#rate-of-change-roc-momentum"></a>
@@ -537,7 +537,7 @@ change in price over a specified number of periods.</p>
 <span>    <span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">mom</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-momentum-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-momentum-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 <div class="section level3">
 <h3 id="stochastic-oscillator">5. Stochastic Oscillator<a class="anchor" aria-label="anchor" href="#stochastic-oscillator"></a>
@@ -615,7 +615,7 @@ considered a sell signal.</p>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span>axis.text.x <span class="op">=</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">element_text</span><span class="op">(</span>angle <span class="op">=</span> <span class="fl">45</span>, hjust <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">stoch_plot</span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-stochastic-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-stochastic-1.png" width="1200" style="display: block; margin: auto;"></p>
 </div>
 </div>
 <div class="section level2">
@@ -664,9 +664,10 @@ volume plots into a single layout.</p>
 <span>    <span class="va">rsi_plot_minus_x_axis</span>,</span>
 <span>    <span class="va">macd_plot_minus_x_axis</span>,</span>
 <span>    <span class="va">volume_plot</span>,</span>
-<span>    ncol <span class="op">=</span> <span class="fl">1</span></span>
+<span>    ncol <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>    heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="op">)</span></span></code></pre></div>
-<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-candlestick-volume-1.png" width="900" style="display: block; margin: auto;"></p>
+<p><img src="intro-to-financial-indicators-with-dmplot_files/figure-html/plot-candlestick-volume-1.png" width="1200" style="display: block; margin: auto;"></p>
 <p><strong>Challenge: can you adjust the left padding on the plots so
 the y-axis labels all align?</strong></p>
 </div>
