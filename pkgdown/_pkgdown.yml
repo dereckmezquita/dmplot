@@ -1,0 +1,19 @@
+template:
+  bootstrap: 5
+
+url: https://dereckmezquita.github.io/dmplot/
+
+authors:
+  Dereck Mezquita:
+    href: https://derecksnotes.com
+
+navbar:
+  structure:
+    right: [search, github]
+  components:
+    github:
+      icon: fa-github fa-lg
+      href: https://github.com/dereckmezquita/dmplot
+    twitter:
+      icon: fa-twitter fa-lg
+      href: https://twitter.com/dereckmezquita

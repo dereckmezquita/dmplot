@@ -62,6 +62,7 @@ This is a `ggplot2` extension; it is used with the `+` operator for adding a lay
 }
 
 \examples{
+\donttest{
 
 # get some financial data
 # kucoin is private package - you can use any data source
@@ -115,7 +116,7 @@ dt |>
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
         panel.grid.minor = ggplot2::element_blank()
     )
-
+}
 }
 \author{
 Dereck Mezquita

@@ -1,4 +1,9 @@
-
+#' StatShadedDateRange
+#'
+#' @rdname ggplot2-ggproto
+#' @format NULL
+#' @usage NULL
+#' @export
 StatShadedDateRange <- ggplot2::ggproto(
     "StatShadedDateRange",
     ggplot2::Stat,
@@ -66,32 +71,50 @@ StatShadedDateRange <- ggplot2::ggproto(
 )
 
 
-#' @title Shaded Date Ranges `ggplot2` layer
-#' @author Dereck Mezquita
+#' Shaded Date Ranges ggplot2 layer
 #'
-#' @param mapping A `ggplot2::aes` object (required - default `NULL`).
-#' @param data A `data.table` object (required - default `NULL`).
-#' @param ... Additional arguments passed to `ggplot2::layer`.
+#' This function creates a ggplot2 layer that shades date ranges based on grouped data.
+#' It's particularly useful for highlighting specific periods in time series data.
 #'
-#' @details
+#' @param mapping Set of aesthetic mappings created by \code{\link[ggplot2]{aes}}.
+#'   Must include `x` for dates and `group` for categorizing ranges.
+#' @param data The data to be displayed in this layer. If NULL, the default,
+#'   the data is inherited from the plot data as specified in the call to \code{\link[ggplot2]{ggplot}}.
+#' @param geom The geometric object to use display the data. Default is "linerange".
+#' @param position Position adjustment, either as a string, or the result of a call to a position adjustment function. Default is "identity".
+#' @param na.rm If FALSE, the default, missing values are removed with a warning.
+#'   If TRUE, missing values are silently removed.
+#' @param show.legend logical. Should this layer be included in the legends?
+#'   NA, the default, includes if any aesthetics are mapped.
+#' @param inherit.aes If FALSE, overrides the default aesthetics,
+#'   rather than combining with them.
+#' @param ... Other arguments passed on to \code{\link[ggplot2]{layer}}.
+#'   These are often aesthetics, used to set an aesthetic to a fixed value.
 #'
-#' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
-#' 
-#' You can set the colour by fill aesthetic with a column.
+#' @return A ggplot2 layer object.
 #'
-#' @return A `ggplot2::layer` object.
-#' 
 #' @examples
 #' \dontrun{
-#' dt |>
-#'    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
-#'    ggplot2::geom_line(ggplot2::aes(y = close), linewidth = 1.5, colour = "white") +
-#'    plots$stat_shade_ranges(ggplot2::aes(group = call, fill = call), alpha = 0.25) +
-#'    ggplot2::scale_color_manual(
-#'        name = "call",
-#'        values = c("buy" = "green", "sell" = "red", "none" = "gray"),
-#'        aesthetics = "fill"
-#'   )
+#' library(ggplot2)
+#' library(data.table)
+#'
+#' # Create sample data
+#' dt <- data.table(
+#'     datetime = seq(as.POSIXct("2023-01-01"), as.POSIXct("2023-12-31"), by = "day"),
+#'     close = runif(365, 100, 200),
+#'     call = sample(c("buy", "sell", "none"), 365, replace = TRUE, prob = c(0.3, 0.3, 0.4))
+#' )
+#'
+#' # Create plot with shaded ranges
+#' ggplot(dt, aes(x = datetime)) +
+#'     geom_line(aes(y = close), linewidth = 1.5, colour = "white") +
+#'     stat_shade_ranges(aes(group = call, fill = call), alpha = 0.25) +
+#'     scale_fill_manual(
+#'         name = "Call",
+#'         values = c("buy" = "green", "sell" = "red", "none" = "gray")
+#'     ) +
+#'     theme_minimal() +
+#'     labs(title = "Stock Price with Buy/Sell Signals", x = "Date", y = "Price")
 #' }
 #'
 #' @export
@@ -103,8 +126,7 @@ stat_shade_ranges <- function(
     na.rm = TRUE,
     show.legend = NA,
     inherit.aes = TRUE,
-    ...
-) {
+    ...) {
     list(
         ggplot2::layer(
             stat = StatShadedDateRange,

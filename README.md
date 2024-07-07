@@ -28,9 +28,9 @@ returns a list which can then be plotted.
 
 ### Get financial data
 
-Shown here `kucoin` is a private package by myself for interacting with
-the `KuCoin` api. You can use any source of financial data as long as
-you pass the variables to the stat correctly.
+Shown here [`kucoin`](https://github.com/dereckmezquita/kucoin) is a
+package for interacting with the `KuCoin` api. You can use any source of
+financial data as long as you pass the variables to the stat correctly.
 
 ``` r
 ticker <- "BTC/USDT"
@@ -52,7 +52,7 @@ dt
 #> 167: BTC/USDT 2022-12-05 13:00:00 17254.5 17282.5 17208.1 17229.7 105.2655
 #> 168: BTC/USDT 2022-12-05 14:00:00 17229.8 17241.4 17175.1 17205.2 140.4375
 #> 169: BTC/USDT 2022-12-05 15:00:00 17205.1 17205.1 17021.6 17083.0 504.9158
-#> 1 variable not shown: [turnover <num>]
+#> 1 variable(s) not shown: [turnover <num>]
 ```
 
 Note a demonstration dataset is included in the `demo/data/` directory.
@@ -133,7 +133,7 @@ p <- dt |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
 
 Plotting the MACD (moving average convergence divergence) indicator:
 
@@ -167,7 +167,7 @@ na.omit(dt) |>
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -179,17 +179,4 @@ p + dmplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-6-1.png" style="display: block; margin: auto;" />
-
-## Gallery
-
-<p align="center">
-<img src="./.graphics/countries-inequality-line-1.jpeg" width="350">
-<img src="./.graphics/countries-1-fhos-1.jpeg" width="350">
-<img src="./.graphics/gdp-per-capita-1.jpeg" width="350">
-<img src="./.graphics/gdp-per-capita-2.jpeg" width="350">
-<img src="./.graphics/gdp-per-country-1.jpeg" width="350">
-<img src="./.graphics/pop-to-internet-users.jpeg" width="350">
-</p>
-
-<img src="./.graphics/countries-u5pop-prc-1.jpeg" width="100%">
+<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />

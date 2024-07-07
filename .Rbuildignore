@@ -1,7 +1,7 @@
+.graphics
 ^.*\.Rproj$
 ^\.Rproj\.user$
-
-.graphics
-
+^renv$
+^renv\.lock$
 demo/
 dev/

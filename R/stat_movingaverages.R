@@ -1,4 +1,3 @@
-
 # df <- data.table::fread("data/kucoin_prices.csv")
 
 StatMovingAverage <- ggplot2::ggproto(
@@ -32,14 +31,14 @@ StatMovingAverage <- ggplot2::ggproto(
 
 #' @title Moving averages `ggplot2` layer
 #' @author Dereck Mezquita
-#' 
-#' @description 
+#'
+#' @description
 #' `stat_movingaverages` is a `ggplot2` layer that allows you to plot moving averages on a `ggplot2` plot either by providing the column names `ggplot2::aes` of the previously calculated metrics.
-#' 
+#'
 #' You are free to use whatever algorithm you desire; the result will be two line plots one for a short moving average and one for a long moving average.
-#' 
+#'
 #' To use this layer provide `ggplot2::aes` values for `x` (datetime x-axis) and `short` and `long` (y-axis).
-#' 
+#'
 #' See examples for more details.
 #'
 #' @param mapping A `ggplot2::aes` object (required - default `NULL`).
@@ -47,7 +46,7 @@ StatMovingAverage <- ggplot2::ggproto(
 #' @param linewidth A `numeric` vector of length one; the width of the line (optional - default `1.75`).
 #' @param alpha A `numeric` vector of length one; the alpha of the line (optional - default `0.75`).
 #' @param colour A named or unnamed `list` with three elements "short" and "long". These are the colours for the short and long moving averages (optional - default `list(short = "red", long = "blue")`).
-#' 
+#'
 #' @section Aesthetics:
 #' \code{stat_movingaverages} understands the following aesthetics (required aesthetics are in bold):
 #' \itemize{
@@ -55,39 +54,39 @@ StatMovingAverage <- ggplot2::ggproto(
 #'   \item \strong{short} -- the values for the short moving average (y-axis).
 #'   \item \strong{long} -- the values for the long moving average (y-axis)
 #' }
-#' 
+#'
 #' @details
-#' 
+#'
 #' This is a `ggplot2` extension; it is used with the `+` operator for adding a layer to a `ggplot2` object.
 #'
 #' @return A `ggplot2::layer` object.
 #'
 #' @examples
-#' 
+#'
 #' # get some financial data
 #' # kucoin is private package - you can use any data source
 #' ticker <- "BTC/USDT"
-#' 
+#'
 #' dt <- kucoin::get_market_data(
 #'     symbols = ticker,
 #'     from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
-#'     to = "2022-12-05 15:29:31 EST",# lubridate::now(),
+#'     to = "2022-12-05 15:29:31 EST", # lubridate::now(),
 #'     frequency = "1 hour"
 #' )
-#' 
+#'
 #' dt
-#' 
+#'
 #' # we need a function that calculates the indicator for us
 #' # typically I like to write my own functions in C++; in this case we will use TTR's
 #' # the stat expects a named list to be returned - we redefine ttr
 #' ema <- function(close, n = 2, wilder = TRUE) {
 #'     return(as.list(as.data.frame(TTR::EMA(close, n = n, wilder = wilder))))
 #' }
-#' 
+#'
 #' # calculate the short and long moving averages
 #' dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
 #' dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
-#' 
+#'
 #' dt |>
 #'     ggplot2::ggplot(ggplot2::aes(
 #'         x = datetime,
@@ -117,7 +116,7 @@ StatMovingAverage <- ggplot2::ggproto(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()
 #'     )
-#' 
+#'
 #' @export
 
 stat_movingaverages <- function(
@@ -134,8 +133,7 @@ stat_movingaverages <- function(
         short = "yellow",
         long = "purple"
     ),
-    ...
-) {
+    ...) {
     list(
         ggplot2::layer(
             stat = StatMovingAverage,
@@ -187,5 +185,3 @@ stat_movingaverages <- function(
 #     # allows user to choose which values to use for calculations
 #     # accepts wilder as an additional argument
 #     stat_movingaverages(ggplot2::aes(y = close), FUN = TTR::SMA)
-
-

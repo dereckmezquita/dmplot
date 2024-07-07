@@ -97,6 +97,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #' @return A `ggplot2` layer.
 #'
 #' @examples
+#' \donttest{
 #' 
 #' # get some financial data
 #' # kucoin is private package - you can use any data source
@@ -150,7 +151,7 @@ StatBollingerMovingAverage <- ggplot2::ggproto(
 #'         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
 #'         panel.grid.minor = ggplot2::element_blank()
 #'     )
-#' 
+#' }
 #' @export
 stat_bollingerbands <- function(
     mapping = NULL,

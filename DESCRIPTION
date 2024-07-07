@@ -1,8 +1,15 @@
 Package: dmplot
-Title: Dereck's plotting tool kit for financial and time series data.
-Version: 1.1.0
-Authors@R: person(given = "Dereck", family = "de Mezquita", email = "dereck@demezquita.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-9307-6762"))
-Description: A toolkit for plotting financial and time series datasets using ggplot.
+Title: A plotting tool kit for financial and time series data
+Version: 1.2.0
+URL: https://github.com/dereckmezquita/dmplot
+Authors@R: 
+    person(given = "Dereck",
+           family = "Mezquita",
+           role = c("aut", "cre"),
+           email = "dereck@mezquita.io",
+           comment = c(ORCID = "0000-0002-9307-6762"))
+Maintainer: Dereck Mezquita <dereck@mezquita.io>
+Description: A toolkit for plotting financial and time series datasets in the ggplot framework.
 Depends: R (>= 4.1.0)
 Imports:
     ggplot2 (>= 3.4.0),
@@ -10,4 +17,12 @@ Imports:
 License: All rights reserved.
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 7.2.3
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
+Suggests:
+    knitr,
+    rmarkdown,
+    box,
+    rcmdcheck,
+Remotes:
+    dereckmezquita/kucoin

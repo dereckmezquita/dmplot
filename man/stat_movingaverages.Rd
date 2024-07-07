@@ -63,7 +63,7 @@ ticker <- "BTC/USDT"
 dt <- kucoin::get_market_data(
     symbols = ticker,
     from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
-    to = "2022-12-05 15:29:31 EST",# lubridate::now(),
+    to = "2022-12-05 15:29:31 EST", # lubridate::now(),
     frequency = "1 hour"
 )
 
