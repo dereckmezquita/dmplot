@@ -1,10 +1,10 @@
 # https://github.com/Appsilon/shiny.blueprint
 name: pkgdown
-on: push
 # on:
   # release:
   #   types: [published]
-  workflow_dispatch:
+  # workflow_dispatch:
+on: push
 permissions:
   contents: write
 jobs:
