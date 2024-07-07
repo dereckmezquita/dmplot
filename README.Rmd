@@ -44,7 +44,7 @@ You must provide a function which calculates these indicators and returns a list
 
 Shown here [`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for interacting with the `KuCoin` api. You can use any source of financial data as long as you pass the variables to the stat correctly.
 
-```{r}
+```{r get-financial-data}
 ticker <- "BTC/USDT"
 
 dt <- kucoin::get_market_data(
@@ -73,7 +73,7 @@ And the theme functions for styling:
 1. `dmplot::theme_dereck_dark()`
 1. `dmplot::theme_dereck_light()`
 
-```{r}
+```{r plot-financial-data-1}
 ## ------
 # redifine our function to return a list
 ema <- function(x, n, wilder = TRUE) {
@@ -136,7 +136,7 @@ p
 
 Plotting the MACD (moving average convergence divergence) indicator:
 
-```{r}
+```{r plot-financial-data-2}
 macd <- function(x, s = 12, l = 26, k = 9) {
     return(as.list(as.data.frame(TTR::MACD(x, s, l, k))))
 }
@@ -168,7 +168,7 @@ na.omit(dt) |>
 
 Now let's do the same plot in a light theme:
 
-```{r}
+```{r plot-financial-data-3}
 p + dmplot::theme_dereck_light() +
     ggplot2::theme(
         axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
