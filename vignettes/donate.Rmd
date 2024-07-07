@@ -1,7 +1,6 @@
 ---
 title: "Donate"
-output: 
-  rmarkdown::html_vignette:
+output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{Donate}
   %\VignetteEngine{knitr::rmarkdown}
