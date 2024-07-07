@@ -1,0 +1,235 @@
+---
+title: "Understanding and Calculating Financial Indicators with dmplot"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Understanding and Calculating Financial Indicators with dmplot}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.path = "./man/figures/README-",
+    fig.align = "center",
+    fig.width = 12,
+    fig.height = 10,
+    dpi = 75,
+    collapse = TRUE,
+    comment = "#>"
+)
+
+options("datatable.print.topn" = 3, "datatable.print.nrows" = 50, "datatable.print.class" = TRUE, "datatable.print.trunc.cols" = TRUE)
+```
+
+## Introduction
+
+This vignette explains how to calculate and interpret common financial indicators used in technical analysis. We'll cover the mathematics behind each indicator and provide R functions to calculate them. Finally, we'll demonstrate how to visualize these indicators using the `dmplot` package.
+
+## Setup
+
+First, let's load the necessary libraries:
+
+```{r setup}
+library("dmplot")
+library("data.table")
+library("TTR")
+library("ggplot2")
+```
+
+## Loading Sample Data
+
+We'll use the same sample data as in the README:
+
+```{r load_data}
+ticker <- "BTC/USDT"
+
+dt <- kucoin::get_market_data(
+    symbols = ticker,
+    from = "2022-11-28 15:29:43 EST",
+    to = "2022-12-05 15:29:31 EST",
+    frequency = "1 hour"
+)
+
+head(dt)
+```
+
+## Calculating Financial Indicators
+
+### 1. Exponential Moving Average (EMA)
+
+The EMA gives more weight to recent prices, making it more responsive to new information than a simple moving average.
+
+**Mathematics:**
+For a series Y, the EMA at time t is calculated as:
+
+$$
+    EMA(t) = α * Y(t) + (1 - α) * EMA(t-1)
+$$
+
+where α = 2 / (N + 1), and N is the number of periods.
+
+```{r ema}
+ema <- function(x, n, wilder = TRUE) {
+    as.list(as.data.frame(TTR::EMA(x, n = n, wilder = wilder)))
+}
+
+dt[, `:=`(
+    ema_short = ema(close, n = 10, wilder = TRUE)[[1]],
+    ema_long = ema(close, n = 50, wilder = TRUE)[[1]]
+)]
+
+head(dt)
+```
+
+### 2. Bollinger Bands
+
+Bollinger Bands consist of a middle band (usually a simple moving average) and an upper and lower band that are standard deviations away from the middle band.
+
+**Mathematics:**
+
+- Middle Band = SMA(n)
+- Upper Band = SMA(n) + k * σ(n)
+- Lower Band = SMA(n) - k * σ(n)
+
+where SMA(n) is the n-period simple moving average, σ(n) is the n-period standard deviation, and k is the number of standard deviations (usually 2).
+
+```{r bollinger_bands}
+bb <- function(close, n = 20, sd = 2) {
+    as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd)))
+}
+
+dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
+
+head(dt)
+```
+
+### 3. Moving Average Convergence Divergence (MACD)
+
+MACD is a trend-following momentum indicator that shows the relationship between two moving averages of a security's price.
+
+**Mathematics:**
+MACD Line = EMA(12) - EMA(26)
+Signal Line = EMA(9) of MACD Line
+MACD Histogram = MACD Line - Signal Line
+
+```{r macd}
+macd <- function(x, fast = 12, slow = 26, signal = 9) {
+    as.list(as.data.frame(TTR::MACD(x, fast, slow, signal)))
+}
+
+dt[, c("macd", "macd_signal") := macd(close, fast = 12, slow = 26, signal = 9)]
+dt[, macd_diff := macd - macd_signal]
+
+head(dt)
+```
+
+### 4. Relative Strength Index (RSI)
+
+RSI is a momentum oscillator that measures the speed and change of price movements.
+
+**Mathematics:**
+
+$$
+RSI = 100 - (100 / (1 + RS))
+$$
+
+where RS = Average Gain / Average Loss
+
+- Average Gain = [(previous avg. gain) x 13 + current gain] / 14
+- Average Loss = [(previous avg. loss) x 13 + current loss] / 14
+
+```{r rsi}
+rsi <- function(x, n = 14) {
+    as.list(as.data.frame(TTR::RSI(x, n = n)))
+}
+
+dt[, rsi := rsi(close, n = 14)[[1]]]
+
+head(dt)
+```
+
+### 5. Stochastic Oscillator
+
+The Stochastic Oscillator is a momentum indicator that shows the location of the close relative to the high-low range over a set number of periods.
+
+**Mathematics:**
+
+$$
+%K = (Current Close - Lowest Low)/(Highest High - Lowest Low) * 100
+%D = 3-day SMA of %K
+$$
+
+```{r stochastic}
+stoch <- function(high, low, close, n = 14, k = 3, d = 3) {
+    as.list(as.data.frame(TTR::stoch(HLC = data.frame(high, low, close), nFastK = n, nFastD = k, nSlowD = d)))
+}
+
+dt[, c("fastK", "fastD", "slowD") := stoch(high, low, close, n = 14, k = 3, d = 3)]
+
+head(dt)
+```
+
+## Visualizing Indicators with dmplot
+
+Now that we have calculated our indicators, let's use `dmplot` to visualize them.
+
+### Candlestick Chart with EMA and Bollinger Bands
+
+```{r plot_candlestick_ema_bb}
+p <- ggplot(dt, aes(x = datetime, open = open, high = high, low = low, close = close)) +
+    dmplot::stat_candlestick() +
+    dmplot::stat_movingaverages(aes(short = ema_short, long = ema_long), 
+                                alpha = list(mavg = 0.5)) +
+    dmplot::stat_bollingerbands(aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper), 
+                                colour = list("pink", "cyan", "cyan")) +
+    scale_x_datetime(date_breaks = "1 day", date_labels = "%b %d") +
+    labs(title = paste(ticker, "- Candlestick with EMA and Bollinger Bands"),
+         x = "Date", y = "Price (USD)") +
+    dmplot::theme_dereck_dark() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(p)
+```
+
+### MACD Plot
+
+```{r plot_macd}
+macd_plot <- ggplot(dt, aes(x = datetime)) +
+    dmplot::stat_macd(aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
+    scale_x_datetime(date_breaks = "1 day", date_labels = "%b %d") +
+    labs(title = paste(ticker, "- MACD"),
+         x = "Date", y = "Value") +
+    dmplot::theme_dereck_dark() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(macd_plot)
+```
+
+### RSI and Stochastic Oscillator
+
+```{r plot_rsi_stoch}
+rsi_stoch_plot <- ggplot(dt, aes(x = datetime)) +
+    geom_line(aes(y = rsi, color = "RSI")) +
+    geom_line(aes(y = fastK, color = "Fast %K")) +
+    geom_line(aes(y = slowD, color = "Slow %D")) +
+    geom_hline(yintercept = c(30, 70), linetype = "dashed", color = "yellow") +
+    scale_x_datetime(date_breaks = "1 day", date_labels = "%b %d") +
+    scale_y_continuous(limits = c(0, 100)) +
+    scale_color_manual(values = c("RSI" = "cyan", "Fast %K" = "magenta", "Slow %D" = "yellow")) +
+    labs(title = paste(ticker, "- RSI and Stochastic Oscillator"),
+         x = "Date", y = "Value", color = "Indicator") +
+    dmplot::theme_dereck_dark() +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+print(rsi_stoch_plot)
+```
+
+## Conclusion
+
+This vignette has demonstrated how to calculate and visualize various financial indicators using the `dmplot` package. We've covered the mathematics behind each indicator and provided R functions to calculate them. By combining these indicators with the visualization capabilities of `dmplot`, you can create comprehensive and insightful financial charts.
+
+Remember that while these indicators can be powerful tools for technical analysis, they should be used in conjunction with other forms of analysis and not relied upon exclusively for making investment decisions.
+
+For more advanced usage and customisation options, refer to the individual function documentation in the `dmplot` package and explore combining multiple indicators to create more complex trading strategies.
