@@ -26,11 +26,4 @@ navbar:
       target: _blank
     donate:
       text: Donate
-      href: articles/donate.html
-
-articles:
-- title: All articles
-  contents:
-  - getting-started-with-the-dmplot-framwork
-  - intro-to-financial-indicators-with-dmplot
-  - donate
+      href: references/donate.html
