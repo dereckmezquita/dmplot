@@ -1,6 +1,6 @@
 Package: dmplot
 Title: A Framework and Toolkit for Financial and Time Series Data
-Version: 1.5.2
+Version: 1.5.3
 URL: https://github.com/dereckmezquita/dmplot
 Authors@R: 
     person(given = "Dereck",
