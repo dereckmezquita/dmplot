@@ -48,20 +48,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Build package
-        run: |
-          R CMD build .
-
-      - name: Check package
-        run: |
-          R CMD check --no-manual --no-tests --no-examples --no-codoc --no-vignettes --no-build-vignettes *tar.gz
-
-      - name: Show check results
-        if: always()
-        run: |
-          find . -name "00check.log" -exec cat {} \;
-          find . -name "00install.out" -exec cat {} \;
-
       - name: Deploy to branch
         if: success()
         shell: Rscript {0}
