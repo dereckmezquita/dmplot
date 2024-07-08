@@ -22,6 +22,10 @@ jobs:
           use-public-rspm: true
           r-version: 'release'
 
+      - name: Set R_HOME
+        run: |
+          echo "R_HOME=$(R RHOME)" >> $GITHUB_ENV
+
       - name: Install system dependencies
         run: |
           sudo apt-get update
@@ -39,10 +43,12 @@ jobs:
           renv::install("dereckmezquita/kucoin")
         shell: Rscript {0}
 
-      - name: Set up Rcpp
+      - name: Process Makevars.in
         run: |
-          echo 'Sys.setenv(PKG_CPPFLAGS=paste0("-I", system.file("include", package="Rcpp")))' >> ~/.Rprofile
-          echo 'Sys.setenv(PKG_LIBS=paste0("-L", system.file("libs", package="Rcpp")))' >> ~/.Rprofile
+          PKG_CPPFLAGS=$(Rscript -e "cat(paste0(Rcpp:::CxxFlags(), ' -I', system.file('include', package = 'Rcpp')))")
+          PKG_LIBS=$(Rscript -e "cat(Rcpp:::LdFlags())")
+          sed -e "s|@PKG_CPPFLAGS@|$PKG_CPPFLAGS|" -e "s|@PKG_LIBS@|$PKG_LIBS|" src/Makevars.in > src/Makevars
+          cat src/Makevars
 
       - name: Configure git
         run: |
@@ -51,6 +57,9 @@ jobs:
 
       - name: Debug C++ code
         run: |
+          echo "R_HOME: $R_HOME"
+          echo "Contents of src/Makevars:"
+          cat src/Makevars
           echo "Contents of src/bb-bollinger-bands.cpp:"
           cat src/bb-bollinger-bands.cpp
           echo "Contents of src/sma-simple-moving-average.cpp:"
