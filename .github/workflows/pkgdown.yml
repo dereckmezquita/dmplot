@@ -24,6 +24,11 @@ jobs:
         with:
           use-public-rspm: true
 
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
         with:
@@ -33,6 +38,22 @@ jobs:
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+
+      - name: Build package
+        run: |
+          R CMD build .
+          R CMD check --no-manual --as-cran *tar.gz
+
+      - name: Show check results
+        if: always()
+        run: |
+          find . -name "00check.log" -exec cat {} \;
+
+      - name: Show error logs
+        if: failure()
+        run: |
+          find . -name "*.Rout" -exec cat {} \;
+          find . -name "*.fail" -exec cat {} \;
 
       - name: Deploy to branch
         env:
