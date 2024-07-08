@@ -133,7 +133,7 @@ p <- dt |>
 p
 ```
 
-<img src="man/figures/README-unnamed-chunk-3-1.png" style="display: block; margin: auto;" />
+<img src="./man/figures/README-plot-financial-data-1-1.png" style="display: block; margin: auto;" />
 
 Plotting the MACD (moving average convergence divergence) indicator:
 
@@ -167,7 +167,7 @@ na.omit(dt) |>
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-4-1.png" style="display: block; margin: auto;" />
+<img src="./man/figures/README-plot-financial-data-2-1.png" style="display: block; margin: auto;" />
 
 Now let’s do the same plot in a light theme:
 
@@ -179,4 +179,4 @@ p + dmplot::theme_dereck_light() +
     )
 ```
 
-<img src="man/figures/README-unnamed-chunk-5-1.png" style="display: block; margin: auto;" />
+<img src="./man/figures/README-plot-financial-data-3-1.png" style="display: block; margin: auto;" />
