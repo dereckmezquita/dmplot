@@ -1,6 +1,6 @@
 Package: dmplot
-Title: A framework and toolkit for financial and time series data
-Version: 1.3.0
+Title: A Framework and Toolkit for Financial and Time Series Data
+Version: 1.5.0
 URL: https://github.com/dereckmezquita/dmplot
 Authors@R: 
     person(given = "Dereck",
@@ -9,10 +9,14 @@ Authors@R:
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
-Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with working with and analysing financial and time series data.
+Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data.
+
+The package also includes high-performance functions for calculating technical indicators written in C++.
 Depends: R (>= 4.1.0)
+LinkingTo: Rcpp
 Imports:
     ggplot2 (>= 3.4.0),
+    Rcpp (>= 1.0.12),
     data.table
 License: MIT + file LICENSE
 Encoding: UTF-8
@@ -26,6 +30,8 @@ Suggests:
     rcmdcheck,
     TTR,
     remotes,
-    gridExtra
+    gridExtra,
+    testthat (>= 3.0.0)
 Remotes:
     dereckmezquita/kucoin
+Config/testthat/edition: 3

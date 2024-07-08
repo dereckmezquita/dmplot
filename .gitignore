@@ -3,6 +3,16 @@ deprecated/
 .DS_Store
 *html
 
+# Compiled objects
+*.o
+*.so
+
+# R specific
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+
 # History files
 .Rhistory
 .Rapp.history

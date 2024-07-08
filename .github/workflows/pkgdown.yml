@@ -1,10 +1,7 @@
-# https://github.com/Appsilon/shiny.blueprint
 name: pkgdown
-# on:
-  # release:
-  #   types: [published]
-  # workflow_dispatch:
-on: push
+on:
+  release:
+    types: [published]
 permissions:
   contents: write
 jobs:
@@ -12,6 +9,9 @@ jobs:
     name: Build and publish website
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -23,11 +23,28 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+          r-version: 'release'
 
-      - name: Install R package dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::pkgdown, github::dereckmezquita/kucoin, local::.
+      - name: Set R_HOME
+        run: |
+          echo "R_HOME=$(R RHOME)" >> $GITHUB_ENV
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
+
+      - name: Install R dependencies
+        run: |
+          install.packages(c("devtools", "renv", "Rcpp", "pkgdown", "rcmdcheck", "remotes"))
+          renv::restore()
+          renv::install("dereckmezquita/kucoin")
+        shell: Rscript {0}
+
+      - name: Build and install package
+        run: |
+          devtools::install()
+        shell: Rscript {0}
 
       - name: Configure git
         run: |

@@ -19,6 +19,8 @@ navbar:
         href: articles/getting-started-with-the-dmplot-framwork.html
       - text: "Intro to Financial Indicators with dmplot"
         href: articles/intro-to-financial-indicators-with-dmplot.html
+      - text: "C++ high-performance technical indicators"
+        href: articles/cpp-high-performance-technical-indicators.html
     donate:
       text: Donate
       href: articles/donate.html
