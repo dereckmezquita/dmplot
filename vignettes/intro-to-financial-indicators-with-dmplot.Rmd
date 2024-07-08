@@ -33,6 +33,13 @@ options(
 
 This vignette explains how to calculate and interpret common financial indicators used in technical analysis. We'll cover the mathematics behind each indicator and demonstrate the functions used to calculate them as well as leverage those provided by `dmplot`. Finally, we'll demonstrate how to visualise these indicators using the `dmplot` package.
 
+### Licensing
+
+The `dmplot` package is released under the MIT license, allowing free use and modification. Users must:
+
+1. Cite the original author (see [LICENSE](https://dereckmezquita.github.io/dmplot/LICENSE-text.html) for details).
+2. Include the license in any redistribution.
+
 ## Setup
 
 See the getting started for installing the recommended libraries: [Getting Started with The dmplot Framework]()

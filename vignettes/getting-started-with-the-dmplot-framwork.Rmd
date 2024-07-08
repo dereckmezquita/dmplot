@@ -33,6 +33,13 @@ In this vignette I explain the conventions of `dmplot` and the design choices - 
 
 `dmplot` is not limited to financial data, indeed it's conventions and design choices are applicable to any time series data. However, the package does indeed have a focus on financial data analysis and visualisation.
 
+### Licensing
+
+The `dmplot` package is released under the MIT license, allowing free use and modification. Users must:
+
+1. Cite the original author (see [LICENSE](https://dereckmezquita.github.io/dmplot/LICENSE-text.html) for details).
+2. Include the license in any redistribution.
+
 ## Setup
 
 Let's install the necessary libraries.

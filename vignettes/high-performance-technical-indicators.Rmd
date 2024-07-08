@@ -1,0 +1,398 @@
+---
+title: "C++ high-performance technical indicators"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{C++ high-performance technical indicators}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    fig.width = 14,
+    fig.height = 12,
+    dpi = 100,
+    collapse = TRUE,
+    comment = "#>"
+)
+
+options(
+    "datatable.print.topn" = 3,
+    "datatable.print.nrows" = 50,
+    "datatable.print.class" = TRUE,
+    "datatable.print.trunc.cols" = TRUE
+)
+```
+
+```{r setup}
+library(dmplot)
+```
+
+## Introduction
+
+The `dmplot` package provides a set of high-performance technical indicators commonly used in financial analysis. These indicators are implemented in C++ to achieve maximum computational efficiency, making them suitable for large-scale data analysis and high-frequency trading applications.
+
+### Licensing
+
+The `dmplot` package is released under the MIT license, allowing free use and modification. Users must:
+
+1. Cite the original author (see [LICENSE](https://dereckmezquita.github.io/dmplot/LICENSE-text.html) for details).
+2. Include the license in any redistribution.
+
+## C++ Implementation and Performance
+
+All technical indicator functions in `dmplot` are implemented in C++ using the Rcpp framework. This approach offers several advantages:
+
+1. **Speed**: C++ is significantly faster than pure R code, especially for computationally intensive tasks.
+2. **Memory efficiency**: C++ allows for more efficient memory management, crucial when dealing with large datasets.
+3. **Vectorisation**: The implementations take advantage of C++'s ability to efficiently process vectors of data.
+
+Each function has been carefully optimised and benchmarked to ensure the best possible performance. Users can expect these implementations to outperform equivalent R code in any setting. If you can beat the performance of any of my C++ implementations, please open an issue on the [GitHub repository](https://github.com/dereckmezquita/dmplot/issues) we'd love to hear from you!
+
+Now, let's explore each indicator, focusing on its mathematical foundation and its optimised C++ implementation.
+
+## Bollinger Bands (BB)
+
+### Mathematics
+
+Bollinger Bands consist of three lines:
+
+1. Middle Band: n-period simple moving average (SMA)
+2. Upper Band: Middle Band + (k * n-period standard deviation)
+3. Lower Band: Middle Band - (k * n-period standard deviation)
+
+Where:
+
+- n is the number of periods (typically 20)
+- k is the number of standard deviations (typically 2)
+
+### C++ Implementation
+
+```cpp
+Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
+    // calculate the simple moving average
+    std::vector<double> mavg = sma(price, n);
+
+    // pre-allocate std::vector with 0 values for the standard deviation
+    std::vector<double> std_dev(price.size(), 0);
+
+    // calculate the standard deviation
+    for (int i = n - 1; i < price.size(); i++) {
+        // population standard deviation is used
+        // delta = sqrt(sum((x_i - mean) * (x_i - mean)) / n)
+        double sum = 0;
+        for (int j = i - n + 1; j <= i; j++) {
+            sum += std::pow(price[j] - mavg[i], 2);
+        }
+        std_dev[i] = std::sqrt(sum / (double) n);
+    }
+
+    // calculate the upper and lower bands
+    std::vector<double> upper_bound(price.size(), 0);
+    std::vector<double> lower_bound(price.size(), 0);
+    std::vector<double> pct(price.size(), 0);
+
+    for (int i = 0; i < mavg.size(); i++) {
+        upper_bound[i] = mavg[i] + sd * std_dev[i];
+        lower_bound[i] = mavg[i] - sd * std_dev[i];
+        pct[i] = (price[i] - lower_bound[i]) / (upper_bound[i] - lower_bound[i]);
+    }
+
+    List result = List::create(
+        _["bb_lower"] = lower_bound,
+        _["bb_mavg"] = mavg,
+        _["bb_upper"] = upper_bound,
+        _["bb_pct"] = pct
+    );
+
+    return result;
+}
+
+```
+
+The C++ implementation calculates the SMA and standard deviation in a single pass through the data, minimising the number of loops and improving performance. With benchmarking I found that the use of `std::vector` allows for faster calculations than using Rcpp's `NumericVector`.
+
+## Exponential Moving Average (EMA)
+
+### Mathematics
+
+The EMA gives more weight to recent prices. The formula is:
+
+$$
+EMA = (Close - EMA(previous day)) * multiplier + EMA(previous day)
+$$
+
+Where the multiplier is: $(2 / (Time periods + 1))$
+
+### C++ Implementation
+
+```cpp
+std::vector<double> ema(std::vector<double> price, int n, bool wilder = false) {
+    // define beta
+    // for EMA, wilder=FALSE (the default) uses an exponential smoothing ratio of 2/(n+1), while wilder=TRUE uses Welles Wilder's exponential smoothing ratio of 1/n
+    double beta = wilder ? 1.0 / n : 2.0 / ((double) n + 1.0);
+
+    // pre-allocate the vector with NA values
+    std::vector<double> result(price.size(), NA_REAL);
+
+    // check for non-leading NAs and get first non-NA location
+    int first_non_na = 0;
+    for (int i = 0; i < price.size(); i++) {
+        if (!std::isnan(price[i])) {
+            first_non_na = i;
+            break;
+        }
+    }
+
+    // if first value larger than n then throw error
+    if (n + first_non_na > price.size()) {
+        stop("Not enough non-NA values");
+    }
+
+    // calculate the first value as the average of the first n values
+    double seed = 0.0;
+    for (int i = first_non_na; i < first_non_na + n; i++) {
+        // std::cout << price[i] << std::endl;
+        seed += price[i] / (double) n;
+    }
+
+    result[first_non_na + n - 1] = seed;
+
+    // calculate the ema
+    for (int i = first_non_na + n; i < price.size(); i++) {
+        result[i] = beta * price[i] + (1.0 - beta) * result[i - 1];
+    }
+    
+    return result;
+}
+```
+
+This implementation uses a single pass through the data, updating the EMA value in place. The `wilder` parameter allows for flexibility in the multiplier calculation, accommodating different trading strategies.
+
+## Moving Average Convergence Divergence (MACD)
+
+### Mathematics
+
+MACD is calculated using three components:
+
+1. MACD Line: 12-period EMA - 26-period EMA
+2. Signal Line: 9-period EMA of the MACD Line
+3. MACD Histogram: MACD Line - Signal Line
+
+### C++ Implementation
+
+```cpp
+List macd(std::vector<double> price, int s, int l, int k, bool percent = true) {
+    std::vector<double> mavg_fast = ema(price, s);
+    std::vector<double> mavg_slow = ema(price, l);
+
+    // calculate the macd as the difference between mavg_fast and mavg_slow
+    std::vector<double> macd_res;
+
+    // we use a for loop here
+    for (int i = 0; i < mavg_fast.size(); i++) {
+        if (percent) {
+            macd_res.push_back(100 * (mavg_fast[i] / mavg_slow[i] - 1));
+        } else {
+            macd_res.push_back(mavg_fast[i] - mavg_slow[i]);
+        }
+    }
+
+    std::vector<double> signal = ema(macd_res, k);
+
+    List result = List::create(_["macd"] = macd_res, _["signal"] = signal);
+
+    return result;
+}
+
+```
+
+ The `percent` parameter allows for flexible output formatting.
+
+The MACD implementation leverages the optimised EMA function I wrote myself in C++. This demonstrates the modularity of the Rcpp package. In order to leverage my own C++ code I had to implement the use of header files.
+
+## Momentum
+
+### Mathematics
+
+Momentum is calculated as the difference between the current price and the price n periods ago:
+
+$$
+Momentum = Price(t) - Price(t-n)
+$$
+
+### C++ Implementation
+
+```cpp
+std::vector<double> mom(std::vector<double> price, int n) {
+    std::vector<double> result(price.size(), NA_REAL);
+
+    for (int i = n; i < price.size(); i++) {
+        result[i] = price[i] - price[i - n];
+    }
+
+    return result;
+}
+
+```
+
+This straightforward implementation uses efficient vector operations and minimises memory allocations. Do note the use of `NA_REAL` to handle missing values; this returns to R a valid `NA` value.
+
+## Rate of Change (ROC)
+
+### Mathematics
+
+ROC is calculated as the percentage change in price over a specified period:
+
+$$
+ROC = ((Price(t) - Price(t-n)) / Price(t-n)) * 100
+$$
+
+### C++ Implementation
+
+```cpp
+std::vector<double> roc(std::vector<double> price, int n, char type = 'c') {
+    std::vector<double> result(price.size(), NA_REAL);
+
+    for (int i = n; i < price.size(); i++) {
+        if (type == 'c') {
+            result[i] = std::log(price[i]) - std::log(price[i - n]);
+        } else {
+            result[i] = (price[i] - price[i - n]) / price[i - n];
+        }
+    }
+
+    return result;
+}
+
+```
+
+The ROC function offers both continuous and discrete calculations, controlled by the `type` parameter. This flexibility is achieved with minimal performance overhead.
+
+## Relative Strength Index (RSI)
+
+### Mathematics
+
+RSI is calculated using the following steps:
+
+1. Calculate average gains and losses over n periods
+2. Calculate relative strength (RS) = average gain / average loss
+3. RSI = 100 - (100 / (1 + RS))
+
+### C++ Implementation
+
+```cpp
+std::vector<double> rsi(std::vector<double> price, int n, char method = 'e') {
+    int price_length = price.size();
+    // create result vectors
+    std::vector<double> up(price_length, 0.0);
+    std::vector<double> down(price_length, 0.0);
+
+    for (int i = 1; i < price_length; i++) {
+        double price_diff = price[i] - price[i - 1];
+        if (price_diff > 0) {
+            up[i] = price[i] - price[i - 1];
+        } else {
+            down[i] = price[i - 1] - price[i];
+        }
+    }
+
+    // smoothed averages
+    std::vector<double> smoothed_average_gain(price_length, NA_REAL);
+    std::vector<double> smoothed_average_loss(price_length, NA_REAL);
+
+    if (method == 'e') {
+        smoothed_average_gain = ema(up, n, true);
+        smoothed_average_loss = ema(down, n, true);
+    } else if (method == 's') {
+        smoothed_average_gain = sma(up, n);
+        smoothed_average_loss = sma(down, n);
+    } else {
+        // throw c++ error
+        throw std::invalid_argument("method must be 'e' or 's'");
+    }
+
+    // calculate the relative strength
+    std::vector<double> result(price_length, NA_REAL);
+
+    for (int i = 0; i < price_length; i++) {
+        double relative_strength_value = smoothed_average_gain[i] / smoothed_average_loss[i];
+        result[i] = 100.0 - 100.0 / (1.0 + relative_strength_value);
+    }
+
+    return result;
+}
+
+```
+
+The RSI implementation allows for both EMA and SMA methods in calculating average gains and losses. This flexibility is achieved by leveraging the existing optimised EMA and SMA functions.
+
+## Simple Moving Average (SMA)
+
+### Mathematics
+
+SMA is calculated as the arithmetic mean of a set of prices over a specified number of periods:
+
+$$
+SMA = (P1 + P2 + ... + Pn) / n
+$$
+
+Where P is the price and n is the number of periods.
+
+### C++ Implementation
+
+```cpp
+std::vector<double> sma(std::vector<double> price, int n) {
+    // pre-allocate the vector with NA values
+    std::vector<double> result(price.size(), NA_REAL);
+
+    // calculate the first value as the average of the first n values
+    double first_val = 0;
+    for (int i = 0; i < n; i++) {
+        first_val += price[i] / (double) n;
+    }
+
+    // proof dividing in the for loop is correct
+    // 1+2+3+4+5+6+7+8+9+10 = 55 / 10 = 5.5
+    // (1/10)+(2/10)+(3/10)+(4/10)+(5/10)+(6/10)+(7/10)+(8/10)+(9/10)+(10/10) = 5.5
+    // first_val /= (double) n;
+
+    result[n - 1] = first_val;
+
+    // iterate over every position of the result array
+    // each are calculated from all values in window of size n
+    for (int i = n; i <= price.size(); i++) {
+        // iterate over the window of size n and calculate the sum / n
+        // values are initially set to NA so we must do initial value at 0
+        double sum = 0;
+        for (int j = i - n; j < i; j++) {
+            sum += price[j];
+        }
+        result[i - 1] = sum / (double) n;
+    }
+    
+    // cast to NumericVector
+    return result;
+}
+```
+
+The SMA function uses an efficient rolling sum algorithm to minimise redundant calculations, resulting in O(n) time complexity.
+
+## Performance Considerations
+
+When using these functions, consider the following to maximise performance:
+
+1. **Vectorisation**: Pass entire price vectors rather than individual prices when possible.
+2. **Memory management**: Reuse output vectors when calling functions repeatedly to minimise allocations.
+3. **Appropriate types**: Use the correct data types (e.g., integer for periods, double for prices) to avoid unnecessary conversions.
+
+## Conclusion
+
+The `dmplot` package provides a set of high-performance technical indicators implemented in C++. By leveraging the speed and efficiency of C++, these functions offer superior performance compared to equivalent R implementations, especially for large datasets or high-frequency calculations.
+
+The combination of mathematical rigor and optimised C++ code makes `dmplot` an excellent choice for financial analysts, quantitative traders, and researchers working with large-scale financial data or requiring real-time analysis capabilities.
+
+Future developments will continue to focus on performance optimisations and expanding the range of available indicators, always with an emphasis on C++ implementation for maximum efficiency.
