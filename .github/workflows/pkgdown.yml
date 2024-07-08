@@ -27,6 +27,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
+      - name: Fix DESCRIPTION file
+        run: |
+          sed -i -e '$a\' DESCRIPTION
+          cat DESCRIPTION
+
       - name: Install R dependencies
         run: |
           install.packages(c("renv", "Rcpp", "pkgdown", "rcmdcheck"))
@@ -36,8 +41,8 @@ jobs:
 
       - name: Set up Rcpp
         run: |
-          echo "PKG_CPPFLAGS=$(Rscript -e 'Rcpp:::CxxFlags()')" >> $GITHUB_ENV
-          echo "PKG_LIBS=$(Rscript -e 'Rcpp:::LdFlags()')" >> $GITHUB_ENV
+          echo 'Sys.setenv(PKG_CPPFLAGS=paste0("-I", system.file("include", package="Rcpp")))' >> ~/.Rprofile
+          echo 'Sys.setenv(PKG_LIBS=paste0("-L", system.file("libs", package="Rcpp")))' >> ~/.Rprofile
 
       - name: Configure git
         run: |
