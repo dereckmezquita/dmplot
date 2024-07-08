@@ -1,10 +1,8 @@
 #include <Rcpp.h>
-// [[Rcpp::interfaces(r, cpp)]]
+// [[Rcpp::depends(Rcpp)]]
 
 #include <math.h>
 #include "sma-simple-moving-average.h"
-
-// https://gallery.rcpp.org/articles/creating-a-datatable-in-rcpp/
 
 using namespace Rcpp;
 
@@ -47,3 +45,5 @@ Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
 
     return result;
 }
+
+// https://gallery.rcpp.org/articles/creating-a-datatable-in-rcpp/

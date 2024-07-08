@@ -27,21 +27,17 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
-      - name: Install renv
+      - name: Install R dependencies
         run: |
-          install.packages("renv")
-        shell: Rscript {0}
-
-      - name: Restore renv environment
-        run: |
+          install.packages(c("renv", "Rcpp", "pkgdown", "rcmdcheck"))
           renv::restore()
-        shell: Rscript {0}
-
-      - name: Install additional packages
-        run: |
-          renv::install(c("pkgdown", "rcmdcheck"))
           renv::install("dereckmezquita/kucoin")
         shell: Rscript {0}
+
+      - name: Set up Rcpp
+        run: |
+          echo "PKG_CPPFLAGS=$(Rscript -e 'Rcpp:::CxxFlags()')" >> $GITHUB_ENV
+          echo "PKG_LIBS=$(Rscript -e 'Rcpp:::LdFlags()')" >> $GITHUB_ENV
 
       - name: Configure git
         run: |
