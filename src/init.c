@@ -9,6 +9,9 @@ extern SEXP _dmplot_ema(SEXP, SEXP, SEXP);
 extern SEXP _dmplot_macd(SEXP, SEXP, SEXP, SEXP, SEXP);
 extern SEXP _dmplot_mom(SEXP, SEXP);
 extern SEXP _dmplot_monte_carlo(SEXP, SEXP, SEXP, SEXP);
+extern SEXP _dmplot_roc(SEXP, SEXP, SEXP);
+extern SEXP _dmplot_rsi(SEXP, SEXP, SEXP);
+extern SEXP _dmplot_sma(SEXP, SEXP);
 
 static const R_CallMethodDef CallEntries[] = {
     {"_dmplot_bb", (DL_FUNC) &_dmplot_bb, 3},
@@ -16,6 +19,9 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dmplot_macd", (DL_FUNC) &_dmplot_macd, 5},
     {"_dmplot_mom", (DL_FUNC) &_dmplot_mom, 2},
     {"_dmplot_monte_carlo", (DL_FUNC) &_dmplot_monte_carlo, 4},
+    {"_dmplot_roc", (DL_FUNC) &_dmplot_roc, 3},
+    {"_dmplot_rsi", (DL_FUNC) &_dmplot_rsi, 3},
+    {"_dmplot_sma", (DL_FUNC) &_dmplot_sma, 2},
     {NULL, NULL, 0}
 };
 

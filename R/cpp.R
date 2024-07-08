@@ -60,3 +60,35 @@ mom <- function(price, n) {
 monte_carlo <- function(seed_price, daily_vol, num_sims, num_days) {
     .Call('_dmplot_monte_carlo', PACKAGE = 'dmplot', seed_price, daily_vol, num_sims, num_days)
 }
+
+#' Rate of Change (ROC)
+#'
+#' @param price A numeric vector of prices
+#' @param n The period for ROC calculation
+#' @param type The type of ROC calculation: 'c' for continuous (default) or 'd' for discrete
+#' @return A numeric vector containing the ROC values
+#' @export
+roc <- function(price, n, type = 'c') {
+    .Call('_dmplot_roc', PACKAGE = 'dmplot', price, n, type)
+}
+
+#' Relative Strength Index (RSI)
+#'
+#' @param price A numeric vector of prices
+#' @param n The period for RSI calculation
+#' @param method The method for average calculation: 'e' for EMA (default) or 's' for SMA
+#' @return A numeric vector containing the RSI values
+#' @export
+rsi <- function(price, n, method = 'e') {
+    .Call('_dmplot_rsi', PACKAGE = 'dmplot', price, n, method)
+}
+
+#' Simple Moving Average (SMA)
+#'
+#' @param price A numeric vector of prices
+#' @param n The period for SMA calculation
+#' @return A numeric vector containing the SMA values
+#' @export
+sma <- function(price, n) {
+    .Call('_dmplot_sma', PACKAGE = 'dmplot', price, n)
+}
