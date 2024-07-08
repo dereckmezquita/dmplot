@@ -101,6 +101,10 @@ technical indicators commonly used in financial analysis. These
 indicators are implemented in C++ to achieve maximum computational
 efficiency, making them suitable for large-scale data analysis and
 high-frequency trading applications.</p>
+<p>In this document, we focus specifically on discussing the C++
+Implementation of each algorithm. For the mathematics behind each
+indicator, please refer to the documentation: <a href="https://dereckmezquita.github.io/dmplot/articles/intro-to-financial-indicators-with-dmplot.html">dmplot
+documentation</a>.</p>
 <div class="section level3">
 <h3 id="licensing">Licensing<a class="anchor" aria-label="anchor" href="#licensing"></a>
 </h3>
@@ -142,24 +146,6 @@ foundation and its optimised C++ implementation.</p>
 <div class="section level2">
 <h2 id="bollinger-bands-bb">Bollinger Bands (BB)<a class="anchor" aria-label="anchor" href="#bollinger-bands-bb"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics"></a>
-</h3>
-<p>Bollinger Bands consist of three lines:</p>
-<ol style="list-style-type: decimal">
-<li>Middle Band: n-period simple moving average (SMA)</li>
-<li>Upper Band: Middle Band + (k * n-period standard deviation)</li>
-<li>Lower Band: Middle Band - (k * n-period standard deviation)</li>
-</ol>
-<p>Where:</p>
-<ul>
-<li>n is the number of periods (typically 20)</li>
-<li>k is the number of standard deviations (typically 2)</li>
-</ul>
-</div>
-<div class="section level3">
-<h3 id="c-implementation">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation"></a>
-</h3>
 <div class="sourceCode" id="cb2"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>Rcpp<span class="op">::</span>List bb<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">int</span> sd <span class="op">=</span> <span class="dv">2</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>    <span class="co">// calculate the simple moving average</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> mavg <span class="op">=</span> sma<span class="op">(</span>price<span class="op">,</span> n<span class="op">);</span></span>
@@ -198,29 +184,45 @@ foundation and its optimised C++ implementation.</p>
 <span id="cb2-36"><a href="#cb2-36" tabindex="-1"></a></span>
 <span id="cb2-37"><a href="#cb2-37" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb2-38"><a href="#cb2-38" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The C++ implementation calculates the SMA and standard deviation in a
-single pass through the data, minimising the number of loops and
-improving performance. With benchmarking I found that the use of
-<code>std::vector</code> allows for faster calculations than using
-Rcpp’s <code>NumericVector</code>.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation"></a>
+</h3>
+<p>The Bollinger Bands algorithm is implemented in C++ using the
+following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Calculate the simple moving average (SMA) of the price data.</li>
+<li>Compute the standard deviation for each point using a rolling
+window.</li>
+<li>Calculate upper and lower bands by adding/subtracting the standard
+deviation multiplied by a factor.</li>
+<li>Determine the percentage B, which indicates where the price is in
+relation to the bands.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance"></a>
+</h3>
+<ul>
+<li>Optimise rolling calculations: Implement a sliding window approach
+for SMA and standard deviation calculations to reduce redundant
+computations.</li>
+<li>Parallelise computations: Utilise OpenMP or std::thread to perform
+calculations on different sections of the data concurrently.</li>
+<li>Use SIMD instructions: Implement SIMD (Single Instruction, Multiple
+Data) operations for vectorised calculations, especially for the
+standard deviation computation.</li>
+<li>Precompute squares: Calculate and store the squares of price
+differences from the mean to avoid repeated power operations.</li>
+<li>Memory efficiency: Consider using in-place calculations where
+possible to reduce memory usage.</li>
+<li>Optimise data structures: Evaluate the use of more efficient data
+structures or memory layouts for improved cache performance.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="exponential-moving-average-ema">Exponential Moving Average (EMA)<a class="anchor" aria-label="anchor" href="#exponential-moving-average-ema"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-1">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-1"></a>
-</h3>
-<p>The EMA gives more weight to recent prices. The formula is:</p>
-<p><span class="math display">\[
-EMA = (Close - EMA(previous day)) * multiplier + EMA(previous day)
-\]</span></p>
-<p>Where the multiplier is: <span class="math inline">\((2 / (Time
-periods + 1))\)</span></p>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-1">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-1"></a>
-</h3>
 <div class="sourceCode" id="cb3"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> ema<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">bool</span> wilder <span class="op">=</span> <span class="kw">false</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>    <span class="co">// define beta</span></span>
 <span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>    <span class="co">// for EMA, wilder=FALSE (the default) uses an exponential smoothing ratio of 2/(n+1), while wilder=TRUE uses Welles Wilder's exponential smoothing ratio of 1/n</span></span>
@@ -259,28 +261,44 @@ periods + 1))\)</span></p>
 <span id="cb3-36"><a href="#cb3-36" tabindex="-1"></a>    </span>
 <span id="cb3-37"><a href="#cb3-37" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb3-38"><a href="#cb3-38" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>This implementation uses a single pass through the data, updating the
-EMA value in place. The <code>wilder</code> parameter allows for
-flexibility in the multiplier calculation, accommodating different
-trading strategies.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-1">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-1"></a>
+</h3>
+<p>The Exponential Moving Average (EMA) algorithm is implemented in C++
+using the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Calculate the smoothing factor (beta) based on the period and
+whether Wilder’s method is used.</li>
+<li>Handle non-leading NA values in the input data.</li>
+<li>Compute the initial seed value as the simple average of the first n
+non-NA values.</li>
+<li>Calculate the EMA recursively for the remaining data points.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-1">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-1"></a>
+</h3>
+<ul>
+<li>Optimise NA handling: Consider using a more efficient method to find
+the first non-NA value, such as std::find_if.</li>
+<li>Vectorise calculations: Implement SIMD operations for the EMA
+calculation loop to process multiple data points simultaneously.</li>
+<li>Memory efficiency: Use in-place calculations where possible to
+reduce memory usage.</li>
+<li>Parallelise computations: For large datasets, consider parallelising
+the EMA calculations for different segments of the data.</li>
+<li>Precompute constants: Calculate and store constant values (e.g., 1.0
+- beta) outside the main loop.</li>
+<li>Optimise error handling: Implement more efficient error checking and
+handling mechanisms.</li>
+<li>Consider alternative data structures: Evaluate the use of more
+cache-friendly data structures for improved performance.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="moving-average-convergence-divergence-macd">Moving Average Convergence Divergence (MACD)<a class="anchor" aria-label="anchor" href="#moving-average-convergence-divergence-macd"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-2">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-2"></a>
-</h3>
-<p>MACD is calculated using three components:</p>
-<ol style="list-style-type: decimal">
-<li>MACD Line: 12-period EMA - 26-period EMA</li>
-<li>Signal Line: 9-period EMA of the MACD Line</li>
-<li>MACD Histogram: MACD Line - Signal Line</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-2">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-2"></a>
-</h3>
 <div class="sourceCode" id="cb4"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>List macd<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> s<span class="op">,</span> <span class="dt">int</span> l<span class="op">,</span> <span class="dt">int</span> k<span class="op">,</span> <span class="dt">bool</span> percent <span class="op">=</span> <span class="kw">true</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> mavg_fast <span class="op">=</span> ema<span class="op">(</span>price<span class="op">,</span> s<span class="op">);</span></span>
 <span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> mavg_slow <span class="op">=</span> ema<span class="op">(</span>price<span class="op">,</span> l<span class="op">);</span></span>
@@ -303,59 +321,97 @@ trading strategies.</p>
 <span id="cb4-20"><a href="#cb4-20" tabindex="-1"></a></span>
 <span id="cb4-21"><a href="#cb4-21" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb4-22"><a href="#cb4-22" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The <code>percent</code> parameter allows for flexible output
-formatting.</p>
-<p>The MACD implementation leverages the optimised EMA function I wrote
-myself in C++. This demonstrates the modularity of the Rcpp package. In
-order to leverage my own C++ code I had to implement the use of header
-files.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-2">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-2"></a>
+</h3>
+<p>The Moving Average Convergence Divergence (MACD) algorithm is
+implemented in C++ using the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Calculate the fast and slow Exponential Moving Averages (EMA) using
+the provided periods.</li>
+<li>Compute the MACD line by either taking the difference or the
+percentage difference between the fast and slow EMAs.</li>
+<li>Calculate the signal line by applying EMA to the MACD line.</li>
+<li>Return both the MACD line and the signal line as a list.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-2">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-2"></a>
+</h3>
+<ul>
+<li>Vectorise calculations: Implement SIMD operations for the MACD
+calculation loop to process multiple data points simultaneously.</li>
+<li>Optimise memory allocation: Pre-allocate the <code>macd_res</code>
+vector to avoid multiple reallocations during push_back operations.</li>
+<li>Parallel processing: For large datasets, consider parallelising the
+MACD calculations for different segments of the data.</li>
+<li>Inline EMA calculations: If possible, inline the EMA calculations
+within the MACD function to reduce function call overhead.</li>
+<li>Use references: Pass large vectors by reference to avoid unnecessary
+copying.</li>
+<li>Optimise conditional statements: Consider using a ternary operator
+or template specialisation to handle the percent flag more
+efficiently.</li>
+<li>Memory efficiency: Evaluate the possibility of in-place calculations
+to reduce memory usage.</li>
+<li>Cache optimisation: Analyse and optimise the data access patterns
+for better cache utilisation.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="momentum">Momentum<a class="anchor" aria-label="anchor" href="#momentum"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-3">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-3"></a>
-</h3>
-<p>Momentum is calculated as the difference between the current price
-and the price n periods ago:</p>
-<p><span class="math display">\[
-Momentum = Price(t) - Price(t-n)
-\]</span></p>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-3">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-3"></a>
-</h3>
 <div class="sourceCode" id="cb5"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> mom<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> result<span class="op">(</span>price<span class="op">.</span>size<span class="op">(),</span> NA_REAL<span class="op">);</span></span>
-<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a></span>
-<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> n<span class="op">;</span> i <span class="op">&lt;</span> price<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> <span class="op">{</span></span>
-<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>        result<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> price<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> price<span class="op">[</span>i <span class="op">-</span> n<span class="op">];</span></span>
-<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a></span>
-<span id="cb5-8"><a href="#cb5-8" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
-<span id="cb5-9"><a href="#cb5-9" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> n<span class="op">;</span> i <span class="op">&lt;</span> price<span class="op">.</span>size<span class="op">();</span> i<span class="op">++)</span> <span class="op">{</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a>        result<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> price<span class="op">[</span>i<span class="op">]</span> <span class="op">-</span> price<span class="op">[</span>i <span class="op">-</span> n<span class="op">];</span></span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb5-6"><a href="#cb5-6" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-3">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-3"></a>
+</h3>
+<p>The Momentum algorithm is implemented in C++ using the following
+steps:</p>
+<ol style="list-style-type: decimal">
+<li>Pre-allocate a result vector with NA_REAL values to handle missing
+data points.</li>
+<li>Iterate through the price vector, calculating the difference between
+the current price and the price n periods ago.</li>
+<li>Store the calculated momentum values in the result vector.</li>
+</ol>
 <p>This straightforward implementation uses efficient vector operations
-and minimises memory allocations. Do note the use of
-<code>NA_REAL</code> to handle missing values; this returns to R a valid
-<code>NA</code> value.</p>
+and minimises memory allocations. The use of <code>NA_REAL</code>
+ensures that R receives valid <code>NA</code> values for the initial n-1
+periods where momentum cannot be calculated.</p>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-3">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-3"></a>
+</h3>
+<ul>
+<li>Vectorisation: Implement SIMD instructions to calculate multiple
+momentum values simultaneously.</li>
+<li>Parallel processing: For large datasets, consider using OpenMP or
+std::thread to parallelize the momentum calculations.</li>
+<li>Memory access optimisation: Analyse the memory access pattern and
+consider cache-friendly data structures or algorithms.</li>
+<li>Inline expansion: If this function is called frequently, consider
+making it inline to reduce function call overhead.</li>
+<li>Error handling: Add input validation to ensure n is not larger than
+the price vector size.</li>
+<li>Optimise for specific n values: For common n values (e.g., 1, 5,
+10), consider creating specialised implementations.</li>
+<li>Use iterator-based approach: Consider using iterators instead of
+indexing, which might be more efficient for some compilers.</li>
+<li>Precision control: If lower precision is acceptable, consider using
+float instead of double for faster calculations.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="rate-of-change-roc">Rate of Change (ROC)<a class="anchor" aria-label="anchor" href="#rate-of-change-roc"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-4">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-4"></a>
-</h3>
-<p>ROC is calculated as the percentage change in price over a specified
-period:</p>
-<p><span class="math display">\[
-ROC = ((Price(t) - Price(t-n)) / Price(t-n)) * 100
-\]</span></p>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-4">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-4"></a>
-</h3>
 <div class="sourceCode" id="cb6"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> roc<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">char</span> type <span class="op">=</span> <span class="ch">'c'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> result<span class="op">(</span>price<span class="op">.</span>size<span class="op">(),</span> NA_REAL<span class="op">);</span></span>
 <span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a></span>
@@ -369,27 +425,60 @@ ROC = ((Price(t) - Price(t-n)) / Price(t-n)) * 100
 <span id="cb6-11"><a href="#cb6-11" tabindex="-1"></a></span>
 <span id="cb6-12"><a href="#cb6-12" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb6-13"><a href="#cb6-13" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The ROC function offers both continuous and discrete calculations,
-controlled by the <code>type</code> parameter. This flexibility is
-achieved with minimal performance overhead.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-4">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-4"></a>
+</h3>
+<p>The Rate of Change (ROC) algorithm is implemented in C++ using the
+following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Pre-allocate a result vector with NA_REAL values to handle missing
+data points.</li>
+<li>Iterate through the price vector, starting from the nth
+element.</li>
+<li>Calculate the ROC based on the specified type:
+<ul>
+<li>If type is ‘c’ (continuous), calculate the difference of
+logarithms.</li>
+<li>Otherwise, calculate the percentage change.</li>
+</ul>
+</li>
+<li>Store the calculated ROC values in the result vector.</li>
+</ol>
+<p>This implementation allows for two types of ROC calculations:
+continuous (logarithmic) and discrete (percentage). The use of
+<code>NA_REAL</code> ensures that R receives valid <code>NA</code>
+values for the initial n-1 periods where ROC cannot be calculated.</p>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-4">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-4"></a>
+</h3>
+<ul>
+<li>Vectorisation: Implement SIMD instructions to calculate multiple ROC
+values simultaneously, especially for the arithmetic operations.</li>
+<li>Branch prediction optimisation: Consider reordering the if-else
+statement based on the most common use case to improve branch
+prediction.</li>
+<li>Parallel processing: For large datasets, use OpenMP or std::thread
+to parallelise the ROC calculations.</li>
+<li>Precompute logarithms: If memory is not a constraint, consider
+precomputing logarithms for the ‘c’ type to avoid redundant
+calculations.</li>
+<li>Memory access optimisation: Analyse the memory access pattern and
+consider cache-friendly data structures or algorithms.</li>
+<li>Inline expansion: If this function is called frequently, consider
+making it inline to reduce function call overhead.</li>
+<li>Error handling: Add input validation to ensure n is not larger than
+the price vector size and that type is valid.</li>
+<li>Template specialisation: Create specialised implementations for ‘c’
+and non-‘c’ types to avoid the runtime conditional check.</li>
+<li>Precision control: If lower precision is acceptable, consider using
+float instead of double for faster calculations.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="relative-strength-index-rsi">Relative Strength Index (RSI)<a class="anchor" aria-label="anchor" href="#relative-strength-index-rsi"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-5">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-5"></a>
-</h3>
-<p>RSI is calculated using the following steps:</p>
-<ol style="list-style-type: decimal">
-<li>Calculate average gains and losses over n periods</li>
-<li>Calculate relative strength (RS) = average gain / average loss</li>
-<li>RSI = 100 - (100 / (1 + RS))</li>
-</ol>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-5">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-5"></a>
-</h3>
 <div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> rsi<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">,</span> <span class="dt">char</span> method <span class="op">=</span> <span class="ch">'e'</span><span class="op">)</span> <span class="op">{</span></span>
 <span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="dt">int</span> price_length <span class="op">=</span> price<span class="op">.</span>size<span class="op">();</span></span>
 <span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    <span class="co">// create result vectors</span></span>
@@ -430,27 +519,57 @@ achieved with minimal performance overhead.</p>
 <span id="cb7-38"><a href="#cb7-38" tabindex="-1"></a></span>
 <span id="cb7-39"><a href="#cb7-39" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb7-40"><a href="#cb7-40" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The RSI implementation allows for both EMA and SMA methods in
-calculating average gains and losses. This flexibility is achieved by
-leveraging the existing optimised EMA and SMA functions.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-5">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-5"></a>
+</h3>
+<p>The Relative Strength Index (RSI) algorithm is implemented in C++
+using the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Calculate price differences and separate them into ‘up’ and ‘down’
+movements.</li>
+<li>Compute smoothed averages of gains and losses using either
+Exponential Moving Average (EMA) or Simple Moving Average (SMA), based
+on the specified method.</li>
+<li>Calculate the relative strength as the ratio of average gain to
+average loss.</li>
+<li>Compute the RSI values using the formula: RSI = 100 - (100 / (1 +
+RS)).</li>
+</ol>
+<p>This implementation allows for flexibility in choosing between EMA
+and SMA methods for calculating average gains and losses. It leverages
+the previously implemented EMA and SMA functions for efficiency and code
+reuse.</p>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-5">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-5"></a>
+</h3>
+<ul>
+<li>Vectorisation: Implement SIMD instructions to calculate multiple RSI
+values simultaneously, especially for the arithmetic operations.</li>
+<li>Optimise branching: Consider using template specialisation or
+function pointers to avoid the method check in each function call.</li>
+<li>Parallel processing: For large datasets, use OpenMP or std::thread
+to parallelise the RSI calculations.</li>
+<li>Memory optimisation: Consider using in-place calculations for up and
+down movements to reduce memory usage.</li>
+<li>Precompute constants: Calculate and store constant values (e.g.,
+100.0, 1.0) outside the loops.</li>
+<li>Inline expansion: If this function is called frequently, consider
+making it inline to reduce function call overhead.</li>
+<li>Error handling: Implement more robust error checking and handling
+mechanisms.</li>
+<li>Precision control: If lower precision is acceptable, consider using
+float instead of double for faster calculations.</li>
+<li>Cache optimisation: Analyse and optimise the data access patterns
+for better cache utilisation.</li>
+<li>Optimise division operations: Consider using reciprocal
+multiplication instead of division where applicable.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
 <h2 id="simple-moving-average-sma">Simple Moving Average (SMA)<a class="anchor" aria-label="anchor" href="#simple-moving-average-sma"></a>
 </h2>
-<div class="section level3">
-<h3 id="mathematics-6">Mathematics<a class="anchor" aria-label="anchor" href="#mathematics-6"></a>
-</h3>
-<p>SMA is calculated as the arithmetic mean of a set of prices over a
-specified number of periods:</p>
-<p><span class="math display">\[
-SMA = (P1 + P2 + ... + Pn) / n
-\]</span></p>
-<p>Where P is the price and n is the number of periods.</p>
-</div>
-<div class="section level3">
-<h3 id="c-implementation-6">C++ Implementation<a class="anchor" aria-label="anchor" href="#c-implementation-6"></a>
-</h3>
 <div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> sma<span class="op">(</span><span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> price<span class="op">,</span> <span class="dt">int</span> n<span class="op">)</span> <span class="op">{</span></span>
 <span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="co">// pre-allocate the vector with NA values</span></span>
 <span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    <span class="bu">std::</span>vector<span class="op">&lt;</span><span class="dt">double</span><span class="op">&gt;</span> result<span class="op">(</span>price<span class="op">.</span>size<span class="op">(),</span> NA_REAL<span class="op">);</span></span>
@@ -483,27 +602,183 @@ SMA = (P1 + P2 + ... + Pn) / n
 <span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>    <span class="co">// cast to NumericVector</span></span>
 <span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a>    <span class="cf">return</span> result<span class="op">;</span></span>
 <span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
-<p>The SMA function uses an efficient rolling sum algorithm to minimise
-redundant calculations, resulting in O(n) time complexity.</p>
+<div class="section level3">
+<h3 id="brief-explanation-of-c-implementation-6">Brief Explanation of C++ Implementation<a class="anchor" aria-label="anchor" href="#brief-explanation-of-c-implementation-6"></a>
+</h3>
+<p>The Simple Moving Average (SMA) algorithm is implemented in C++ using
+the following steps:</p>
+<ol style="list-style-type: decimal">
+<li>Pre-allocate a result vector with NA_REAL values to handle missing
+data points.</li>
+<li>Calculate the first SMA value by averaging the first n elements of
+the price vector.</li>
+<li>Iterate through the remaining price data, calculating the SMA for
+each window of size n.</li>
+<li>Store the calculated SMA values in the result vector.</li>
+</ol>
+<p>This implementation uses an efficient rolling sum algorithm to
+minimise redundant calculations, resulting in O(n) time complexity. The
+use of <code>NA_REAL</code> ensures that R receives valid
+<code>NA</code> values for the initial n-1 periods where SMA cannot be
+calculated.</p>
+</div>
+<div class="section level3">
+<h3 id="potential-improvements-for-performance-6">Potential Improvements for Performance<a class="anchor" aria-label="anchor" href="#potential-improvements-for-performance-6"></a>
+</h3>
+<ul>
+<li>Optimise rolling sum: Implement a sliding window approach to avoid
+recalculating the entire sum for each window.</li>
+<li>Vectorisation: Use SIMD instructions to calculate multiple sums or
+divisions simultaneously.</li>
+<li>Parallel processing: For large datasets, consider using OpenMP or
+std::thread to parallelise the SMA calculations.</li>
+<li>Memory access optimisation: Analyse the memory access pattern and
+consider cache-friendly data structures or algorithms.</li>
+<li>Precision control: If lower precision is acceptable, consider using
+float instead of double for faster calculations.</li>
+<li>Precompute reciprocals: Store 1/n to replace division with
+multiplication in the main loop.</li>
+<li>Error handling: Add input validation to ensure n is not larger than
+the price vector size.</li>
+<li>Inline expansion: If this function is called frequently, consider
+making it inline to reduce function call overhead.</li>
+<li>Optimise for specific n values: For common n values (e.g., 5, 10,
+20), consider creating specialised implementations.</li>
+<li>Use iterators: Consider using iterators instead of indexing, which
+might be more efficient for some compilers.</li>
+</ul>
 </div>
 </div>
 <div class="section level2">
-<h2 id="performance-considerations">Performance Considerations<a class="anchor" aria-label="anchor" href="#performance-considerations"></a>
+<h2 id="performance-discussion">Performance Discussion<a class="anchor" aria-label="anchor" href="#performance-discussion"></a>
 </h2>
-<p>When using these functions, consider the following to maximise
-performance:</p>
+<p>When implementing technical analysis algorithms in C++ for use in R
+via Rcpp, several performance considerations and optimisation strategies
+come into play. This section discusses general performance aspects and
+Rcpp-specific optimisations that can enhance the efficiency of our
+package.</p>
+<div class="section level3">
+<h3 id="general-c-optimisations">General C++ Optimisations<a class="anchor" aria-label="anchor" href="#general-c-optimisations"></a>
+</h3>
 <ol style="list-style-type: decimal">
 <li>
-<strong>Vectorisation</strong>: Pass entire price vectors rather
-than individual prices when possible.</li>
+<strong>Vectorisation</strong>: Utilise SIMD (Single Instruction,
+Multiple Data) operations where possible. Modern C++ compilers can
+auto-vectorise some loops, but explicit use of libraries like Eigen or
+Boost.SIMD can yield further improvements.</li>
 <li>
-<strong>Memory management</strong>: Reuse output vectors when
-calling functions repeatedly to minimise allocations.</li>
+<strong>Memory Management</strong>: Minimise dynamic allocations.
+Pre-allocate vectors where sizes are known in advance. Consider using
+reserve() for vectors that grow.</li>
 <li>
-<strong>Appropriate types</strong>: Use the correct data types
-(e.g., integer for periods, double for prices) to avoid unnecessary
-conversions.</li>
+<strong>Loop Optimisation</strong>: Unroll small loops, and consider
+loop fusion where applicable. Be mindful of cache-friendly access
+patterns.</li>
+<li>
+<strong>Inline Functions</strong>: Use inline functions for small,
+frequently called functions to reduce function call overhead.</li>
+<li>
+<strong>Const Correctness</strong>: Use const wherever possible to
+allow for compiler optimisations.</li>
+<li>
+<strong>Move Semantics</strong>: Utilise C++11 move semantics to
+reduce unnecessary copying of large objects.</li>
 </ol>
+</div>
+<div class="section level3">
+<h3 id="rcpp-specific-optimisations">Rcpp-Specific Optimisations<a class="anchor" aria-label="anchor" href="#rcpp-specific-optimisations"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>
+<strong>RcppArmadillo</strong>: For linear algebra operations,
+consider using RcppArmadillo, which provides efficient matrix and vector
+operations.</li>
+<li>
+<strong>Rcpp Sugar</strong>: Leverage Rcpp Sugar for vectorised
+operations. It provides R-like syntax with C++ performance.</li>
+<li>
+<strong>Rcpp Attributes</strong>: Use Rcpp attributes for seamless R
+and C++ integration, reducing boilerplate code.</li>
+<li>
+<strong>Avoid R API in Loops</strong>: Minimise calls to R API
+functions inside loops, as these can be expensive.</li>
+<li>
+<strong>Use Appropriate R Data Types</strong>: Match C++ types to
+appropriate R types (e.g., NumericVector for double vectors) for
+efficient data transfer between R and C++.</li>
+<li>
+<strong>Parallel Processing</strong>: Utilise OpenMP for
+parallelisation, which is supported by Rcpp.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="r-integration-considerations">R Integration Considerations<a class="anchor" aria-label="anchor" href="#r-integration-considerations"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Minimise R-C++ Context Switching</strong>: Batch operations
+in C++ where possible to reduce the overhead of switching between R and
+C++ contexts.</li>
+<li>
+<strong>Efficient Data Passing</strong>: Pass large datasets by
+reference using Rcpp::Reference class to avoid copying.</li>
+<li>
+<strong>Use RcppParallel</strong>: For embarrassingly parallel
+tasks, consider using RcppParallel to leverage multi-core
+processors.</li>
+<li>
+<strong>Profiling</strong>: Use Rcpp’s microbenchmark package to
+profile your C++ code and identify bottlenecks.</li>
+<li>
+<strong>Memory Management in R</strong>: Be aware of R’s garbage
+collection. Properly scope Rcpp objects to ensure timely cleanup.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="algorithm-specific-optimisations">Algorithm-Specific Optimisations<a class="anchor" aria-label="anchor" href="#algorithm-specific-optimisations"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>
+<strong>Rolling Window Calculations</strong>: Implement efficient
+rolling window algorithms to avoid redundant calculations in moving
+averages and similar indicators.</li>
+<li>
+<strong>Lookup Tables</strong>: For functions with discrete inputs
+(e.g., small integer ranges), consider using lookup tables instead of
+repeated calculations.</li>
+<li>
+<strong>Approximations</strong>: Where appropriate, use fast
+approximations for complex functions (e.g., fast log approximations for
+certain calculations).</li>
+<li>
+<strong>Specialised Implementations</strong>: For common parameter
+values (e.g., specific lookback periods), consider creating specialised,
+optimised implementations.</li>
+</ol>
+</div>
+<div class="section level3">
+<h3 id="future-optimisations">Future Optimisations<a class="anchor" aria-label="anchor" href="#future-optimisations"></a>
+</h3>
+<ol style="list-style-type: decimal">
+<li>
+<strong>GPU Acceleration</strong>: For very large datasets or
+compute-intensive algorithms, consider GPU acceleration using libraries
+like RcppCUDA.</li>
+<li>
+<strong>Adaptive Algorithms</strong>: Implement algorithms that can
+adapt to different data sizes, potentially switching between different
+implementations based on input size.</li>
+<li>
+<strong>Code Generation</strong>: For highly repetitive code
+patterns, consider using template metaprogramming or code generation
+techniques to create optimised implementations.</li>
+</ol>
+<p>By applying these optimisations and consistently profiling our code,
+we can ensure that our Rcpp-based technical analysis package maintains
+high performance while providing a seamless integration with R. Remember
+to always benchmark and profile before and after optimisations to ensure
+that changes actually improve performance in real-world scenarios.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="conclusion">Conclusion<a class="anchor" aria-label="anchor" href="#conclusion"></a>
