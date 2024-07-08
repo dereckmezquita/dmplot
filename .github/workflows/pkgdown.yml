@@ -1,4 +1,3 @@
-# https://github.com/Appsilon/shiny.blueprint
 name: pkgdown
 on: push
 permissions:
@@ -19,34 +18,68 @@ jobs:
         uses: r-lib/actions/setup-r@v2
         with:
           use-public-rspm: true
+          r-version: 'release'
 
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
       - name: Print R session info
         run: |
           Rscript -e "sessionInfo()"
           Rscript -e "installed.packages()[, c('Package', 'Version')]"
 
-      - name: Install R package dependencies
-        uses: r-lib/actions/setup-r-dependencies@v2
-        with:
-          extra-packages: any::pkgdown, github::dereckmezquita/kucoin, local::.
+      - name: Debug environment before dependency installation
+        run: |
+          echo "R version:"
+          R --version
+          echo "R library paths:"
+          Rscript -e ".libPaths()"
+          echo "System libraries:"
+          dpkg -l | grep -E 'libcurl4-openssl-dev|libssl-dev|libxml2-dev|libgit2-dev'
+          echo "Contents of DESCRIPTION file:"
+          cat DESCRIPTION
+          echo "Available disk space:"
+          df -h
+
+      - name: Install R package dependencies (with debug)
+        run: |
+          options(warn = 2)
+          tryCatch({
+            remotes::install_deps(dependencies = TRUE, upgrade = "never")
+            remotes::install_github("dereckmezquita/kucoin")
+            remotes::install_cran(c("pkgdown", "rcmdcheck", "remotes"))
+          }, error = function(e) {
+            message("Error occurred during dependency installation:")
+            print(e)
+            message("Session info:")
+            print(sessionInfo())
+            message("Installed packages:")
+            print(installed.packages()[, c("Package", "Version")])
+            stop("Dependency installation failed")
+          })
+        shell: Rscript {0}
 
       - name: Configure git
+        if: success()
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: List package contents
+        if: success()
         run: |
           ls -R
 
       - name: Build package
+        if: success()
         run: |
           R CMD build . --no-build-vignettes
+
+      - name: Install and check package
+        if: success()
+        run: |
           R CMD INSTALL --build .
           R CMD check --no-manual --no-tests --no-examples --no-codoc --no-vignettes --no-build-vignettes *tar.gz
 
@@ -63,6 +96,7 @@ jobs:
           find . -name "*.fail" -exec cat {} \;
 
       - name: Deploy to branch
+        if: success()
         env:
           GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         shell: Rscript {0}
