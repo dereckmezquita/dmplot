@@ -1,4 +1,6 @@
 #include <Rcpp.h>
+// [[Rcpp::interfaces(r, cpp)]]
+
 #include <vector>
 
 using namespace Rcpp;

@@ -1,12 +1,12 @@
 #include <Rcpp.h>
-#include <math.h>
+// [[Rcpp::interfaces(r, cpp)]]
 
-#include "bb-bollinger-bands.h"
+#include <math.h>
 #include "sma-simple-moving-average.h"
 
-using namespace Rcpp;
-
 // https://gallery.rcpp.org/articles/creating-a-datatable-in-rcpp/
+
+using namespace Rcpp;
 
 // [[Rcpp::export]]
 Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {

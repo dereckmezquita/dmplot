@@ -52,6 +52,8 @@ jobs:
         run: |
           echo "Contents of src/bb-bollinger-bands.cpp:"
           cat src/bb-bollinger-bands.cpp
+          echo "Contents of src/sma-simple-moving-average.cpp:"
+          cat src/sma-simple-moving-average.cpp
           echo "Contents of src/init.c:"
           cat src/init.c
           echo "Compiling C++ code manually:"
