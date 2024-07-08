@@ -35,6 +35,8 @@ library(dmplot)
 
 The `dmplot` package provides a set of high-performance technical indicators commonly used in financial analysis. These indicators are implemented in C++ to achieve maximum computational efficiency, making them suitable for large-scale data analysis and high-frequency trading applications.
 
+In this document, we focus specifically on discussing the C++ Implementation of each algorithm. For the mathematics behind each indicator, please refer to the documentation: [dmplot documentation](https://dereckmezquita.github.io/dmplot/articles/intro-to-financial-indicators-with-dmplot.html).
+
 ### Licensing
 
 The `dmplot` package is released under the MIT license, allowing free use and modification. Users must:
@@ -55,21 +57,6 @@ Each function has been carefully optimised and benchmarked to ensure the best po
 Now, let's explore each indicator, focusing on its mathematical foundation and its optimised C++ implementation.
 
 ## Bollinger Bands (BB)
-
-### Mathematics
-
-Bollinger Bands consist of three lines:
-
-1. Middle Band: n-period simple moving average (SMA)
-2. Upper Band: Middle Band + (k * n-period standard deviation)
-3. Lower Band: Middle Band - (k * n-period standard deviation)
-
-Where:
-
-- n is the number of periods (typically 20)
-- k is the number of standard deviations (typically 2)
-
-### C++ Implementation
 
 ```cpp
 Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
@@ -110,24 +97,27 @@ Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
 
     return result;
 }
-
 ```
 
-The C++ implementation calculates the SMA and standard deviation in a single pass through the data, minimising the number of loops and improving performance. With benchmarking I found that the use of `std::vector` allows for faster calculations than using Rcpp's `NumericVector`.
+### Brief Explanation of C++ Implementation
+
+The Bollinger Bands algorithm is implemented in C++ using the following steps:
+
+1. Calculate the simple moving average (SMA) of the price data.
+2. Compute the standard deviation for each point using a rolling window.
+3. Calculate upper and lower bands by adding/subtracting the standard deviation multiplied by a factor.
+4. Determine the percentage B, which indicates where the price is in relation to the bands.
+
+### Potential Improvements for Performance
+
+- Optimise rolling calculations: Implement a sliding window approach for SMA and standard deviation calculations to reduce redundant computations.
+- Parallelise computations: Utilise OpenMP or std::thread to perform calculations on different sections of the data concurrently.
+- Use SIMD instructions: Implement SIMD (Single Instruction, Multiple Data) operations for vectorised calculations, especially for the standard deviation computation.
+- Precompute squares: Calculate and store the squares of price differences from the mean to avoid repeated power operations.
+- Memory efficiency: Consider using in-place calculations where possible to reduce memory usage.
+- Optimise data structures: Evaluate the use of more efficient data structures or memory layouts for improved cache performance.
 
 ## Exponential Moving Average (EMA)
-
-### Mathematics
-
-The EMA gives more weight to recent prices. The formula is:
-
-$$
-EMA = (Close - EMA(previous day)) * multiplier + EMA(previous day)
-$$
-
-Where the multiplier is: $(2 / (Time periods + 1))$
-
-### C++ Implementation
 
 ```cpp
 std::vector<double> ema(std::vector<double> price, int n, bool wilder = false) {
@@ -170,19 +160,26 @@ std::vector<double> ema(std::vector<double> price, int n, bool wilder = false) {
 }
 ```
 
-This implementation uses a single pass through the data, updating the EMA value in place. The `wilder` parameter allows for flexibility in the multiplier calculation, accommodating different trading strategies.
+### Brief Explanation of C++ Implementation
+
+The Exponential Moving Average (EMA) algorithm is implemented in C++ using the following steps:
+
+1. Calculate the smoothing factor (beta) based on the period and whether Wilder's method is used.
+2. Handle non-leading NA values in the input data.
+3. Compute the initial seed value as the simple average of the first n non-NA values.
+4. Calculate the EMA recursively for the remaining data points.
+
+### Potential Improvements for Performance
+
+- Optimise NA handling: Consider using a more efficient method to find the first non-NA value, such as std::find_if.
+- Vectorise calculations: Implement SIMD operations for the EMA calculation loop to process multiple data points simultaneously.
+- Memory efficiency: Use in-place calculations where possible to reduce memory usage.
+- Parallelise computations: For large datasets, consider parallelising the EMA calculations for different segments of the data.
+- Precompute constants: Calculate and store constant values (e.g., 1.0 - beta) outside the main loop.
+- Optimise error handling: Implement more efficient error checking and handling mechanisms.
+- Consider alternative data structures: Evaluate the use of more cache-friendly data structures for improved performance.
 
 ## Moving Average Convergence Divergence (MACD)
-
-### Mathematics
-
-MACD is calculated using three components:
-
-1. MACD Line: 12-period EMA - 26-period EMA
-2. Signal Line: 9-period EMA of the MACD Line
-3. MACD Histogram: MACD Line - Signal Line
-
-### C++ Implementation
 
 ```cpp
 List macd(std::vector<double> price, int s, int l, int k, bool percent = true) {
@@ -207,51 +204,62 @@ List macd(std::vector<double> price, int s, int l, int k, bool percent = true) {
 
     return result;
 }
-
 ```
 
- The `percent` parameter allows for flexible output formatting.
+### Brief Explanation of C++ Implementation
 
-The MACD implementation leverages the optimised EMA function I wrote myself in C++. This demonstrates the modularity of the Rcpp package. In order to leverage my own C++ code I had to implement the use of header files.
+The Moving Average Convergence Divergence (MACD) algorithm is implemented in C++ using the following steps:
+
+1. Calculate the fast and slow Exponential Moving Averages (EMA) using the provided periods.
+2. Compute the MACD line by either taking the difference or the percentage difference between the fast and slow EMAs.
+3. Calculate the signal line by applying EMA to the MACD line.
+4. Return both the MACD line and the signal line as a list.
+
+### Potential Improvements for Performance
+
+- Vectorise calculations: Implement SIMD operations for the MACD calculation loop to process multiple data points simultaneously.
+- Optimise memory allocation: Pre-allocate the `macd_res` vector to avoid multiple reallocations during push_back operations.
+- Parallel processing: For large datasets, consider parallelising the MACD calculations for different segments of the data.
+- Inline EMA calculations: If possible, inline the EMA calculations within the MACD function to reduce function call overhead.
+- Use references: Pass large vectors by reference to avoid unnecessary copying.
+- Optimise conditional statements: Consider using a ternary operator or template specialisation to handle the percent flag more efficiently.
+- Memory efficiency: Evaluate the possibility of in-place calculations to reduce memory usage.
+- Cache optimisation: Analyse and optimise the data access patterns for better cache utilisation.
 
 ## Momentum
-
-### Mathematics
-
-Momentum is calculated as the difference between the current price and the price n periods ago:
-
-$$
-Momentum = Price(t) - Price(t-n)
-$$
-
-### C++ Implementation
 
 ```cpp
 std::vector<double> mom(std::vector<double> price, int n) {
     std::vector<double> result(price.size(), NA_REAL);
-
     for (int i = n; i < price.size(); i++) {
         result[i] = price[i] - price[i - n];
     }
-
     return result;
 }
-
 ```
 
-This straightforward implementation uses efficient vector operations and minimises memory allocations. Do note the use of `NA_REAL` to handle missing values; this returns to R a valid `NA` value.
+### Brief Explanation of C++ Implementation
+
+The Momentum algorithm is implemented in C++ using the following steps:
+
+1. Pre-allocate a result vector with NA_REAL values to handle missing data points.
+2. Iterate through the price vector, calculating the difference between the current price and the price n periods ago.
+3. Store the calculated momentum values in the result vector.
+
+This straightforward implementation uses efficient vector operations and minimises memory allocations. The use of `NA_REAL` ensures that R receives valid `NA` values for the initial n-1 periods where momentum cannot be calculated.
+
+### Potential Improvements for Performance
+
+- Vectorisation: Implement SIMD instructions to calculate multiple momentum values simultaneously.
+- Parallel processing: For large datasets, consider using OpenMP or std::thread to parallelize the momentum calculations.
+- Memory access optimisation: Analyse the memory access pattern and consider cache-friendly data structures or algorithms.
+- Inline expansion: If this function is called frequently, consider making it inline to reduce function call overhead.
+- Error handling: Add input validation to ensure n is not larger than the price vector size.
+- Optimise for specific n values: For common n values (e.g., 1, 5, 10), consider creating specialised implementations.
+- Use iterator-based approach: Consider using iterators instead of indexing, which might be more efficient for some compilers.
+- Precision control: If lower precision is acceptable, consider using float instead of double for faster calculations.
 
 ## Rate of Change (ROC)
-
-### Mathematics
-
-ROC is calculated as the percentage change in price over a specified period:
-
-$$
-ROC = ((Price(t) - Price(t-n)) / Price(t-n)) * 100
-$$
-
-### C++ Implementation
 
 ```cpp
 std::vector<double> roc(std::vector<double> price, int n, char type = 'c') {
@@ -267,22 +275,34 @@ std::vector<double> roc(std::vector<double> price, int n, char type = 'c') {
 
     return result;
 }
-
 ```
 
-The ROC function offers both continuous and discrete calculations, controlled by the `type` parameter. This flexibility is achieved with minimal performance overhead.
+### Brief Explanation of C++ Implementation
+
+The Rate of Change (ROC) algorithm is implemented in C++ using the following steps:
+
+1. Pre-allocate a result vector with NA_REAL values to handle missing data points.
+2. Iterate through the price vector, starting from the nth element.
+3. Calculate the ROC based on the specified type:
+   - If type is 'c' (continuous), calculate the difference of logarithms.
+   - Otherwise, calculate the percentage change.
+4. Store the calculated ROC values in the result vector.
+
+This implementation allows for two types of ROC calculations: continuous (logarithmic) and discrete (percentage). The use of `NA_REAL` ensures that R receives valid `NA` values for the initial n-1 periods where ROC cannot be calculated.
+
+### Potential Improvements for Performance
+
+- Vectorisation: Implement SIMD instructions to calculate multiple ROC values simultaneously, especially for the arithmetic operations.
+- Branch prediction optimisation: Consider reordering the if-else statement based on the most common use case to improve branch prediction.
+- Parallel processing: For large datasets, use OpenMP or std::thread to parallelise the ROC calculations.
+- Precompute logarithms: If memory is not a constraint, consider precomputing logarithms for the 'c' type to avoid redundant calculations.
+- Memory access optimisation: Analyse the memory access pattern and consider cache-friendly data structures or algorithms.
+- Inline expansion: If this function is called frequently, consider making it inline to reduce function call overhead.
+- Error handling: Add input validation to ensure n is not larger than the price vector size and that type is valid.
+- Template specialisation: Create specialised implementations for 'c' and non-'c' types to avoid the runtime conditional check.
+- Precision control: If lower precision is acceptable, consider using float instead of double for faster calculations.
 
 ## Relative Strength Index (RSI)
-
-### Mathematics
-
-RSI is calculated using the following steps:
-
-1. Calculate average gains and losses over n periods
-2. Calculate relative strength (RS) = average gain / average loss
-3. RSI = 100 - (100 / (1 + RS))
-
-### C++ Implementation
 
 ```cpp
 std::vector<double> rsi(std::vector<double> price, int n, char method = 'e') {
@@ -325,24 +345,33 @@ std::vector<double> rsi(std::vector<double> price, int n, char method = 'e') {
 
     return result;
 }
-
 ```
 
-The RSI implementation allows for both EMA and SMA methods in calculating average gains and losses. This flexibility is achieved by leveraging the existing optimised EMA and SMA functions.
+### Brief Explanation of C++ Implementation
+
+The Relative Strength Index (RSI) algorithm is implemented in C++ using the following steps:
+
+1. Calculate price differences and separate them into 'up' and 'down' movements.
+2. Compute smoothed averages of gains and losses using either Exponential Moving Average (EMA) or Simple Moving Average (SMA), based on the specified method.
+3. Calculate the relative strength as the ratio of average gain to average loss.
+4. Compute the RSI values using the formula: RSI = 100 - (100 / (1 + RS)).
+
+This implementation allows for flexibility in choosing between EMA and SMA methods for calculating average gains and losses. It leverages the previously implemented EMA and SMA functions for efficiency and code reuse.
+
+### Potential Improvements for Performance
+
+- Vectorisation: Implement SIMD instructions to calculate multiple RSI values simultaneously, especially for the arithmetic operations.
+- Optimise branching: Consider using template specialisation or function pointers to avoid the method check in each function call.
+- Parallel processing: For large datasets, use OpenMP or std::thread to parallelise the RSI calculations.
+- Memory optimisation: Consider using in-place calculations for up and down movements to reduce memory usage.
+- Precompute constants: Calculate and store constant values (e.g., 100.0, 1.0) outside the loops.
+- Inline expansion: If this function is called frequently, consider making it inline to reduce function call overhead.
+- Error handling: Implement more robust error checking and handling mechanisms.
+- Precision control: If lower precision is acceptable, consider using float instead of double for faster calculations.
+- Cache optimisation: Analyse and optimise the data access patterns for better cache utilisation.
+- Optimise division operations: Consider using reciprocal multiplication instead of division where applicable.
 
 ## Simple Moving Average (SMA)
-
-### Mathematics
-
-SMA is calculated as the arithmetic mean of a set of prices over a specified number of periods:
-
-$$
-SMA = (P1 + P2 + ... + Pn) / n
-$$
-
-Where P is the price and n is the number of periods.
-
-### C++ Implementation
 
 ```cpp
 std::vector<double> sma(std::vector<double> price, int n) {
@@ -379,15 +408,74 @@ std::vector<double> sma(std::vector<double> price, int n) {
 }
 ```
 
-The SMA function uses an efficient rolling sum algorithm to minimise redundant calculations, resulting in O(n) time complexity.
+### Brief Explanation of C++ Implementation
 
-## Performance Considerations
+The Simple Moving Average (SMA) algorithm is implemented in C++ using the following steps:
 
-When using these functions, consider the following to maximise performance:
+1. Pre-allocate a result vector with NA_REAL values to handle missing data points.
+2. Calculate the first SMA value by averaging the first n elements of the price vector.
+3. Iterate through the remaining price data, calculating the SMA for each window of size n.
+4. Store the calculated SMA values in the result vector.
 
-1. **Vectorisation**: Pass entire price vectors rather than individual prices when possible.
-2. **Memory management**: Reuse output vectors when calling functions repeatedly to minimise allocations.
-3. **Appropriate types**: Use the correct data types (e.g., integer for periods, double for prices) to avoid unnecessary conversions.
+This implementation uses an efficient rolling sum algorithm to minimise redundant calculations, resulting in O(n) time complexity. The use of `NA_REAL` ensures that R receives valid `NA` values for the initial n-1 periods where SMA cannot be calculated.
+
+### Potential Improvements for Performance
+
+- Optimise rolling sum: Implement a sliding window approach to avoid recalculating the entire sum for each window.
+- Vectorisation: Use SIMD instructions to calculate multiple sums or divisions simultaneously.
+- Parallel processing: For large datasets, consider using OpenMP or std::thread to parallelise the SMA calculations.
+- Memory access optimisation: Analyse the memory access pattern and consider cache-friendly data structures or algorithms.
+- Precision control: If lower precision is acceptable, consider using float instead of double for faster calculations.
+- Precompute reciprocals: Store 1/n to replace division with multiplication in the main loop.
+- Error handling: Add input validation to ensure n is not larger than the price vector size.
+- Inline expansion: If this function is called frequently, consider making it inline to reduce function call overhead.
+- Optimise for specific n values: For common n values (e.g., 5, 10, 20), consider creating specialised implementations.
+- Use iterators: Consider using iterators instead of indexing, which might be more efficient for some compilers.
+
+## Performance Discussion
+
+When implementing technical analysis algorithms in C++ for use in R via Rcpp, several performance considerations and optimisation strategies come into play. This section discusses general performance aspects and Rcpp-specific optimisations that can enhance the efficiency of our package.
+
+### General C++ Optimisations
+
+1. **Vectorisation**: Utilise SIMD (Single Instruction, Multiple Data) operations where possible. Modern C++ compilers can auto-vectorise some loops, but explicit use of libraries like Eigen or Boost.SIMD can yield further improvements.
+2. **Memory Management**: Minimise dynamic allocations. Pre-allocate vectors where sizes are known in advance. Consider using reserve() for vectors that grow.
+3. **Loop Optimisation**: Unroll small loops, and consider loop fusion where applicable. Be mindful of cache-friendly access patterns.
+4. **Inline Functions**: Use inline functions for small, frequently called functions to reduce function call overhead.
+5. **Const Correctness**: Use const wherever possible to allow for compiler optimisations.
+6. **Move Semantics**: Utilise C++11 move semantics to reduce unnecessary copying of large objects.
+
+### Rcpp-Specific Optimisations
+
+1. **RcppArmadillo**: For linear algebra operations, consider using RcppArmadillo, which provides efficient matrix and vector operations.
+2. **Rcpp Sugar**: Leverage Rcpp Sugar for vectorised operations. It provides R-like syntax with C++ performance.
+3. **Rcpp Attributes**: Use Rcpp attributes for seamless R and C++ integration, reducing boilerplate code.
+4. **Avoid R API in Loops**: Minimise calls to R API functions inside loops, as these can be expensive.
+5. **Use Appropriate R Data Types**: Match C++ types to appropriate R types (e.g., NumericVector for double vectors) for efficient data transfer between R and C++.
+6. **Parallel Processing**: Utilise OpenMP for parallelisation, which is supported by Rcpp.
+
+### R Integration Considerations
+
+1. **Minimise R-C++ Context Switching**: Batch operations in C++ where possible to reduce the overhead of switching between R and C++ contexts.
+2. **Efficient Data Passing**: Pass large datasets by reference using Rcpp::Reference class to avoid copying.
+3. **Use RcppParallel**: For embarrassingly parallel tasks, consider using RcppParallel to leverage multi-core processors.
+4. **Profiling**: Use Rcpp's microbenchmark package to profile your C++ code and identify bottlenecks.
+5. **Memory Management in R**: Be aware of R's garbage collection. Properly scope Rcpp objects to ensure timely cleanup.
+
+### Algorithm-Specific Optimisations
+
+1. **Rolling Window Calculations**: Implement efficient rolling window algorithms to avoid redundant calculations in moving averages and similar indicators.
+2. **Lookup Tables**: For functions with discrete inputs (e.g., small integer ranges), consider using lookup tables instead of repeated calculations.
+3. **Approximations**: Where appropriate, use fast approximations for complex functions (e.g., fast log approximations for certain calculations).
+4. **Specialised Implementations**: For common parameter values (e.g., specific lookback periods), consider creating specialised, optimised implementations.
+
+### Future Optimisations
+
+1. **GPU Acceleration**: For very large datasets or compute-intensive algorithms, consider GPU acceleration using libraries like RcppCUDA.
+2. **Adaptive Algorithms**: Implement algorithms that can adapt to different data sizes, potentially switching between different implementations based on input size.
+3. **Code Generation**: For highly repetitive code patterns, consider using template metaprogramming or code generation techniques to create optimised implementations.
+
+By applying these optimisations and consistently profiling our code, we can ensure that our Rcpp-based technical analysis package maintains high performance while providing a seamless integration with R. Remember to always benchmark and profile before and after optimisations to ensure that changes actually improve performance in real-world scenarios.
 
 ## Conclusion
 
