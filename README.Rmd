@@ -92,14 +92,14 @@ ema <- function(x, n, wilder = TRUE) {
 # }
 
 # we can use dmplot's bb function
-box::use(dmplot[ bb ])
+
 
 # calculate the short and long moving averages
 dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
 dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
 
 # calculate the bollinger bands
-dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(close, n = 10, sd = 2)]
+dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := dmplot::bb(close, n = 10, sd = 2)]
 
 ## ------
 # plot
