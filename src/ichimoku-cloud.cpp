@@ -76,8 +76,6 @@ Rcpp::List ichimoku_cloud(
 
 // -----
 
-using namespace Rcpp;
-
 // Helper function to calculate the middle point of high and low over a period
 std::vector<double> calculate_midpoint(const std::vector<double>& high, const std::vector<double>& low, int period) {
     std::vector<double> result(high.size(), NA_REAL);
@@ -92,7 +90,11 @@ std::vector<double> calculate_midpoint(const std::vector<double>& high, const st
 // Helper function to shift a vector forward (into the future)
 std::vector<double> shift_vector(const std::vector<double>& vec, int shift) {
     std::vector<double> result(vec.size(), NA_REAL);
-    std::copy(vec.begin(), vec.end() - shift, result.begin() + shift);
+    if (shift >= 0) {
+        std::copy(vec.begin(), vec.end() - shift, result.begin() + shift);
+    } else {
+        std::copy(vec.begin() - shift, vec.end(), result.begin());
+    }
     return result;
 }
 
