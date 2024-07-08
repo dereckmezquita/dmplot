@@ -9,8 +9,7 @@ Authors@R:
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
-Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data.
-The package also includes high-performance functions for calculating technical indicators written in C++.
+Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data. The package also includes high-performance functions for calculating technical indicators written in C++.
 Depends: R (>= 4.1.0)
 LinkingTo: Rcpp
 Imports:
