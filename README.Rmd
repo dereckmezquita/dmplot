@@ -30,7 +30,9 @@ options(
 [![Travis build status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-Dereck's library for plotting `financial` and `time series` data as well helper functions for plotting in the style of Dereck.
+A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data.
+
+The package also includes high-performance functions for calculating technical indicators written in `C++`.
 
 ## Installation
 
@@ -85,9 +87,12 @@ ema <- function(x, n, wilder = TRUE) {
     return(as.list(as.data.frame(TTR::EMA(x, n = n, wilder = wilder))))
 }
 
-bb <- function(close, n = 2, sd = 2) {
-    return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
-}
+# bb <- function(close, n = 2, sd = 2) {
+#     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
+# }
+
+# we can use dmplot's bb function
+box::use(dmplot[ bb ])
 
 # calculate the short and long moving averages
 dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
