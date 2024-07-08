@@ -1,5 +1,6 @@
 ## usethis namespace: start
+#' @useDynLib dmplot, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
-#' @useDynLib dmplot
+#' @importFrom Rcpp evalCpp
 ## usethis namespace: end
 NULL
