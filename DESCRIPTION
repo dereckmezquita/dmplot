@@ -11,9 +11,11 @@ Authors@R:
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
 Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with working with and analysing financial and time series data.
 Depends: R (>= 4.1.0)
+LinkingTo: Rcpp
 Imports:
     ggplot2 (>= 3.4.0),
-    data.table
+    data.table,
+    Rcpp
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

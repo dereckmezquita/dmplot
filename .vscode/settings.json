@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.Rmd": "rmd",
+        "*.lock": "json",
+        "init.C": "cpp"
+    }
+}
