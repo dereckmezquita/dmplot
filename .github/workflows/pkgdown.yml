@@ -39,7 +39,7 @@ jobs:
 
       - name: Install R dependencies
         run: |
-          install.packages(c("renv", "Rcpp", "pkgdown", "rcmdcheck", "remotes"))
+          install.packages(c("devtools", "renv", "Rcpp", "pkgdown", "rcmdcheck", "remotes"))
           renv::restore()
           renv::install("dereckmezquita/kucoin")
         shell: Rscript {0}
