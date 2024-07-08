@@ -1,7 +1,10 @@
-.graphics
+^\.graphics$
 ^.*\.Rproj$
 ^\.Rproj\.user$
 ^renv$
 ^renv\.lock$
-demo/
-dev/
+^demo$
+^dev$
+^\.github$
+^_pkgdown\.yml$
+^docs$

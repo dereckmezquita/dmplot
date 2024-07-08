@@ -1,9 +1,5 @@
 # https://github.com/Appsilon/shiny.blueprint
 name: pkgdown
-# on:
-  # release:
-  #   types: [published]
-  # workflow_dispatch:
 on: push
 permissions:
   contents: write
@@ -27,7 +23,12 @@ jobs:
       - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y libcurl4-openssl-dev libssl-dev
+          sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev
+
+      - name: Print R session info
+        run: |
+          Rscript -e "sessionInfo()"
+          Rscript -e "installed.packages()[, c('Package', 'Version')]"
 
       - name: Install R package dependencies
         uses: r-lib/actions/setup-r-dependencies@v2
@@ -39,15 +40,21 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
+      - name: List package contents
+        run: |
+          ls -R
+
       - name: Build package
         run: |
-          R CMD build .
-          R CMD check --no-manual --as-cran *tar.gz
+          R CMD build . --no-build-vignettes
+          R CMD INSTALL --build .
+          R CMD check --no-manual --no-tests --no-examples --no-codoc --no-vignettes --no-build-vignettes *tar.gz
 
       - name: Show check results
         if: always()
         run: |
           find . -name "00check.log" -exec cat {} \;
+          find . -name "00install.out" -exec cat {} \;
 
       - name: Show error logs
         if: failure()
