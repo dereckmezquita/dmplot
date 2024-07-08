@@ -9,21 +9,28 @@ authors:
 
 navbar:
   structure:
-    left: [intro, reference, articles, tutorials, news, donate]
-    right: [search, github, twitter, website]
+    left: [home, reference, articles, donate]
+    right: [github, youtube, search, website]
   components:
+    articles:
+      text: Articles
+      menu:
+      - text: "Getting Started with the dmplot Framework"
+        href: articles/getting-started-with-the-dmplot-framwork.html
+      - text: "Intro to Financial Indicators with dmplot"
+        href: articles/intro-to-financial-indicators-with-dmplot.html
+    donate:
+      text: Donate
+      href: articles/donate.html
     github:
       icon: fa-github fa-lg
       href: https://github.com/dereckmezquita/dmplot
       target: _blank
-    twitter:
-      icon: fa-twitter fa-lg
-      href: https://twitter.com/dereckmezquita
+    youtube:
+      icon: fa-youtube fa-lg
+      href: https://www.youtube.com/@derecksyoutube
       target: _blank
     website:
-      text: Website
+      text: derecksnotes.com
       href: https://derecksnotes.com
       target: _blank
-    donate:
-      text: Donate
-      href: references/donate.html
