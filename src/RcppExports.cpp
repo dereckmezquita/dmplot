@@ -36,6 +36,34 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fib
+Rcpp::List fib(double high, double low);
+RcppExport SEXP _dmplot_fib(SEXP highSEXP, SEXP lowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type high(highSEXP);
+    Rcpp::traits::input_parameter< double >::type low(lowSEXP);
+    rcpp_result_gen = Rcpp::wrap(fib(high, low));
+    return rcpp_result_gen;
+END_RCPP
+}
+// ichimoku_cloud
+Rcpp::List ichimoku_cloud(NumericVector high, NumericVector low, NumericVector close, int tenkan_period, int kijun_period, int senkou_period);
+RcppExport SEXP _dmplot_ichimoku_cloud(SEXP highSEXP, SEXP lowSEXP, SEXP closeSEXP, SEXP tenkan_periodSEXP, SEXP kijun_periodSEXP, SEXP senkou_periodSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericVector >::type high(highSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type low(lowSEXP);
+    Rcpp::traits::input_parameter< NumericVector >::type close(closeSEXP);
+    Rcpp::traits::input_parameter< int >::type tenkan_period(tenkan_periodSEXP);
+    Rcpp::traits::input_parameter< int >::type kijun_period(kijun_periodSEXP);
+    Rcpp::traits::input_parameter< int >::type senkou_period(senkou_periodSEXP);
+    rcpp_result_gen = Rcpp::wrap(ichimoku_cloud(high, low, close, tenkan_period, kijun_period, senkou_period));
+    return rcpp_result_gen;
+END_RCPP
+}
 // macd
 List macd(std::vector<double> price, int s, int l, int k, bool percent);
 RcppExport SEXP _dmplot_macd(SEXP priceSEXP, SEXP sSEXP, SEXP lSEXP, SEXP kSEXP, SEXP percentSEXP) {
@@ -119,6 +147,8 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dmplot_bb", (DL_FUNC) &_dmplot_bb, 3},
     {"_dmplot_ema", (DL_FUNC) &_dmplot_ema, 3},
+    {"_dmplot_fib", (DL_FUNC) &_dmplot_fib, 2},
+    {"_dmplot_ichimoku_cloud", (DL_FUNC) &_dmplot_ichimoku_cloud, 6},
     {"_dmplot_macd", (DL_FUNC) &_dmplot_macd, 5},
     {"_dmplot_mom", (DL_FUNC) &_dmplot_mom, 2},
     {"_dmplot_monte_carlo", (DL_FUNC) &_dmplot_monte_carlo, 4},

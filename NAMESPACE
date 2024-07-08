@@ -3,6 +3,8 @@
 export(bb)
 export(cite_package)
 export(ema)
+export(fib)
+export(ichimoku_cloud)
 export(macd)
 export(mom)
 export(monte_carlo)
