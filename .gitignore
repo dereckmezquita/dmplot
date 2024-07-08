@@ -13,10 +13,6 @@ deprecated/
 .RData
 .Ruserdata
 
-# RcppExports
-RcppExports.cpp
-RcppExports.R
-
 # History files
 .Rhistory
 .Rapp.history

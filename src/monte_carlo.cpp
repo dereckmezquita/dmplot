@@ -1,5 +1,13 @@
 #include <Rcpp.h>
 
+//' Monte Carlo Simulation
+//'
+//' @param seed_price The starting price
+//' @param daily_vol The daily volatility
+//' @param num_sims The number of simulations to run
+//' @param num_days The number of days to simulate
+//' @return A list containing the simulation results and end prices
+//' @export
 // [[Rcpp::export]]
 Rcpp::List monte_carlo(double seed_price, double daily_vol, int num_sims, int num_days) {
     int total_rows = num_sims * num_days;

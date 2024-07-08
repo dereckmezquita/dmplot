@@ -11,6 +11,13 @@ using namespace Rcpp;
 // continuous type - TTR uses continuous by default
 // ROC_t(K) = log(P_t) - log(P_(t-K))
 
+//' Rate of Change (ROC)
+//'
+//' @param price A numeric vector of prices
+//' @param n The period for ROC calculation
+//' @param type The type of ROC calculation: 'c' for continuous (default) or 'd' for discrete
+//' @return A numeric vector containing the ROC values
+//' @export
 // [[Rcpp::export]]
 std::vector<double> roc(std::vector<double> price, int n, char type = 'c') {
     std::vector<double> result(price.size(), NA_REAL);

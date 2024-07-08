@@ -7,6 +7,13 @@
 
 using namespace Rcpp;
 
+//' Relative Strength Index (RSI)
+//'
+//' @param price A numeric vector of prices
+//' @param n The period for RSI calculation
+//' @param method The method for average calculation: 'e' for EMA (default) or 's' for SMA
+//' @return A numeric vector containing the RSI values
+//' @export
 // [[Rcpp::export]]
 std::vector<double> rsi(std::vector<double> price, int n, char method = 'e') {
     int price_length = price.size();

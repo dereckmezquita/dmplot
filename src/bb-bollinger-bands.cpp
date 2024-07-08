@@ -1,11 +1,20 @@
 #include <Rcpp.h>
-// [[Rcpp::depends(Rcpp)]]
-
 #include <math.h>
-#include "sma-simple-moving-average.h"
 
 using namespace Rcpp;
 
+#include "bb-bollinger-bands.h"
+#include "sma-simple-moving-average.h"
+
+// https://gallery.rcpp.org/articles/creating-a-datatable-in-rcpp/
+
+//' Bollinger Bands
+//'
+//' @param price A numeric vector of prices
+//' @param n The period for the moving average
+//' @param sd The number of standard deviations for the bands
+//' @return A list containing the lower band, moving average, upper band, and percentage B
+//' @export
 // [[Rcpp::export]]
 Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
     // calculate the simple moving average
@@ -45,5 +54,3 @@ Rcpp::List bb(std::vector<double> price, int n, int sd = 2) {
 
     return result;
 }
-
-// https://gallery.rcpp.org/articles/creating-a-datatable-in-rcpp/

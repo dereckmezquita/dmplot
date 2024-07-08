@@ -32,11 +32,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
-      - name: Fix DESCRIPTION file
-        run: |
-          sed -i -e '$a\' DESCRIPTION
-          cat DESCRIPTION
-
       - name: Install R dependencies
         run: |
           install.packages(c("devtools", "renv", "Rcpp", "pkgdown", "rcmdcheck", "remotes"))

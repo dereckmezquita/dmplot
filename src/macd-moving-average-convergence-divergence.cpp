@@ -6,6 +6,15 @@
 
 using namespace Rcpp;
 
+//' Moving Average Convergence Divergence (MACD)
+//'
+//' @param price A numeric vector of prices
+//' @param s The short-term period
+//' @param l The long-term period
+//' @param k The signal line period
+//' @param percent Whether to return the MACD as a percentage
+//' @return A list containing the MACD and signal line values
+//' @export
 // [[Rcpp::export]]
 List macd(std::vector<double> price, int s, int l, int k, bool percent = true) {
     std::vector<double> mavg_fast = ema(price, s);

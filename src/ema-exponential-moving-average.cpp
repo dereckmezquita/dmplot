@@ -10,6 +10,13 @@ using namespace Rcpp;
 // https://github.com/joshuaulrich/TTR/blob/master/src/moving_averages.c
 
 
+//' Exponential Moving Average
+//'
+//' @param price A numeric vector of prices
+//' @param n The period for the EMA
+//' @param wilder Whether to use Wilder's smoothing
+//' @return A numeric vector containing the EMA values
+//' @export
 // [[Rcpp::export]]
 std::vector<double> ema(std::vector<double> price, int n, bool wilder = false) {
     // define beta

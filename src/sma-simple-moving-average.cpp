@@ -1,10 +1,14 @@
 #include <Rcpp.h>
-// [[Rcpp::interfaces(r, cpp)]]
-
 #include <vector>
 
 using namespace Rcpp;
 
+//' Simple Moving Average (SMA)
+//'
+//' @param price A numeric vector of prices
+//' @param n The period for SMA calculation
+//' @return A numeric vector containing the SMA values
+//' @export
 // [[Rcpp::export]]
 std::vector<double> sma(std::vector<double> price, int n) {
     // pre-allocate the vector with NA values
