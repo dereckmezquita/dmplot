@@ -25,10 +25,14 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
-      - name: Print R session info
+      - name: Fix DESCRIPTION file
         run: |
-          Rscript -e "sessionInfo()"
-          Rscript -e "installed.packages()[, c('Package', 'Version')]"
+          sed -i -e '$a\' DESCRIPTION
+
+      - name: Install remotes
+        run: |
+          install.packages("remotes")
+        shell: Rscript {0}
 
       - name: Debug environment before dependency installation
         run: |
@@ -42,23 +46,21 @@ jobs:
           cat DESCRIPTION
           echo "Available disk space:"
           df -h
+          echo "Installed packages:"
+          Rscript -e "installed.packages()[, c('Package', 'Version')]"
 
       - name: Install R package dependencies (with debug)
         run: |
           options(warn = 2)
-          tryCatch({
+          if (file.exists("renv.lock")) {
+            message("renv lockfile found, restoring environment...")
+            renv::restore()
+          } else {
+            message("No renv lockfile found, installing dependencies normally...")
             remotes::install_deps(dependencies = TRUE, upgrade = "never")
-            remotes::install_github("dereckmezquita/kucoin")
-            remotes::install_cran(c("pkgdown", "rcmdcheck", "remotes"))
-          }, error = function(e) {
-            message("Error occurred during dependency installation:")
-            print(e)
-            message("Session info:")
-            print(sessionInfo())
-            message("Installed packages:")
-            print(installed.packages()[, c("Package", "Version")])
-            stop("Dependency installation failed")
-          })
+          }
+          remotes::install_github("dereckmezquita/kucoin")
+          remotes::install_cran(c("pkgdown", "rcmdcheck"))
         shell: Rscript {0}
 
       - name: Configure git
