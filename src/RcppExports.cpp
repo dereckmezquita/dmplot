@@ -115,3 +115,20 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+
+static const R_CallMethodDef CallEntries[] = {
+    {"_dmplot_bb", (DL_FUNC) &_dmplot_bb, 3},
+    {"_dmplot_ema", (DL_FUNC) &_dmplot_ema, 3},
+    {"_dmplot_macd", (DL_FUNC) &_dmplot_macd, 5},
+    {"_dmplot_mom", (DL_FUNC) &_dmplot_mom, 2},
+    {"_dmplot_monte_carlo", (DL_FUNC) &_dmplot_monte_carlo, 4},
+    {"_dmplot_roc", (DL_FUNC) &_dmplot_roc, 3},
+    {"_dmplot_rsi", (DL_FUNC) &_dmplot_rsi, 3},
+    {"_dmplot_sma", (DL_FUNC) &_dmplot_sma, 2},
+    {NULL, NULL, 0}
+};
+
+RcppExport void R_init_dmplot(DllInfo *dll) {
+    R_registerRoutines(dll, NULL, CallEntries, NULL, NULL);
+    R_useDynamicSymbols(dll, FALSE);
+}

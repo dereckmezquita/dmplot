@@ -3,7 +3,6 @@
 #' @rdname ggplot2-ggproto
 #' @format NULL
 #' @usage NULL
-#' @export
 StatShadedDateRange <- ggplot2::ggproto(
     "StatShadedDateRange",
     ggplot2::Stat,
