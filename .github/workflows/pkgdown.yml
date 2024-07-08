@@ -7,6 +7,8 @@ jobs:
     name: Build and publish website
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -25,64 +27,33 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y libcurl4-openssl-dev libssl-dev libxml2-dev libgit2-dev
 
-      - name: Fix DESCRIPTION file
+      - name: Install renv
         run: |
-          sed -i -e '$a\' DESCRIPTION
-
-      - name: Install remotes
-        run: |
-          install.packages("remotes")
+          install.packages("renv")
         shell: Rscript {0}
 
-      - name: Debug environment before dependency installation
+      - name: Restore renv environment
         run: |
-          echo "R version:"
-          R --version
-          echo "R library paths:"
-          Rscript -e ".libPaths()"
-          echo "System libraries:"
-          dpkg -l | grep -E 'libcurl4-openssl-dev|libssl-dev|libxml2-dev|libgit2-dev'
-          echo "Contents of DESCRIPTION file:"
-          cat DESCRIPTION
-          echo "Available disk space:"
-          df -h
-          echo "Installed packages:"
-          Rscript -e "installed.packages()[, c('Package', 'Version')]"
+          renv::restore()
+        shell: Rscript {0}
 
-      - name: Install R package dependencies (with debug)
+      - name: Install additional packages
         run: |
-          options(warn = 2)
-          if (file.exists("renv.lock")) {
-            message("renv lockfile found, restoring environment...")
-            renv::restore()
-          } else {
-            message("No renv lockfile found, installing dependencies normally...")
-            remotes::install_deps(dependencies = TRUE, upgrade = "never")
-          }
-          remotes::install_github("dereckmezquita/kucoin")
-          remotes::install_cran(c("pkgdown", "rcmdcheck"))
+          renv::install(c("pkgdown", "rcmdcheck"))
+          renv::install("dereckmezquita/kucoin")
         shell: Rscript {0}
 
       - name: Configure git
-        if: success()
         run: |
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: List package contents
-        if: success()
-        run: |
-          ls -R
-
       - name: Build package
-        if: success()
         run: |
-          R CMD build . --no-build-vignettes
+          R CMD build .
 
-      - name: Install and check package
-        if: success()
+      - name: Check package
         run: |
-          R CMD INSTALL --build .
           R CMD check --no-manual --no-tests --no-examples --no-codoc --no-vignettes --no-build-vignettes *tar.gz
 
       - name: Show check results
@@ -91,15 +62,7 @@ jobs:
           find . -name "00check.log" -exec cat {} \;
           find . -name "00install.out" -exec cat {} \;
 
-      - name: Show error logs
-        if: failure()
-        run: |
-          find . -name "*.Rout" -exec cat {} \;
-          find . -name "*.fail" -exec cat {} \;
-
       - name: Deploy to branch
         if: success()
-        env:
-          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         shell: Rscript {0}
         run: pkgdown::deploy_to_branch(branch = "bot/github-pages")
