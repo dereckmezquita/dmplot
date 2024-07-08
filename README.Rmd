@@ -30,43 +30,50 @@ options(
 [![Travis build status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data.
+`R` framework written in high-performance `C++` and `ggplot2` for financial and time series data analysis.
 
-The package also includes high-performance functions for calculating technical indicators written in `C++`.
+The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial and time series data.
 
 ## Installation
 
-You can install the development version of `dmplot` using:
+You can install `dmplot` using:
 
 ```r
 # install.packages("remotes")
 remotes::install_github("dereckmezquita/dmplot")
 ```
 
-## Financial data
+## Load libraries
 
-You must provide a function which calculates these indicators and returns a list which can then be plotted.
+```{r load-libs}
+box::use(kucoin[ get_market_data ])
+box::use(dt = data.table)
+box::use(ggplot2)
+box::use(dmplot)
+```
+
+## Getting started
 
 ### Get financial data
 
-Shown here [`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for interacting with the `KuCoin` api. You can use any source of financial data as long as you pass the variables to the stat correctly.
+[`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for interacting with the [`kucoin`](https://www.kucoin.com) api. You can use any source of financial data as long as you pass the variables to the `ggplot2` stat correctly.
 
 ```{r get-financial-data}
 ticker <- "BTC/USDT"
 
-dt <- kucoin::get_market_data(
+data <- get_market_data(
     symbols = ticker,
-    from = "2022-11-28 15:29:43 EST", # lubridate::now() - lubridate::days(7),
-    to = "2022-12-05 15:29:31 EST",# lubridate::now(),
+    from = "2024-07-01 10:36:50 EST", # lubridate::now() - lubridate::days(7),
+    to = "2024-07-08 10:36:53 EST", # lubridate::now(),
     frequency = "1 hour"
 )
 
-dt
+head(data)
 ```
 
-Note a demonstration dataset is included in the `demo/data/` directory.
+NOTE: a demo dataset is included in the `demo/data/` directory.
 
-### Plot financial data
+### Working with and plotting financial data
 
 Here I demonstrate how to use the stats for plotting financial data along with the theme functions included in this package:
 
@@ -80,108 +87,167 @@ And the theme functions for styling:
 1. `dmplot::theme_dereck_dark()`
 1. `dmplot::theme_dereck_light()`
 
-```{r plot-financial-data-1}
-## ------
-# redifine our function to return a list
+The `dmplot` framework provides a number of high-performance `C++` implementations of technical indicators which can be used directly in the `data.table` `:=` operator. This allows one to leverage the power of `data.table` and the speed of `C++` for calculations.
+
+1. `dmplot::bb()` - Bollinger Bands
+1. `dmplot::ema()` - Exponential Moving Average, with wilder argument
+1. `dmplot::macd()` - Moving Average Convergence Divergence
+1. `dmplot::mom()` - Momentum
+1. `dmplot::monte_carlo()` - Monte Carlo simulation
+1. `dmplot::roc()` - Rate of Change
+1. `dmplot::rsi()` - Relative Strength Index
+1. `dmplot::sma()` - Simple Moving Average
+
+One can easily use external packages to calculate indicators as long as they return a `list` or can be coerced to a `list`.
+
+The reason for this is that we want to impose the use of "Tidy Data" principles, as this is the convention that `ggplot2` follows and would allow us to easily build our analyses and plots in layers.
+
+For more information on working with `dmplot` see [Getting started with the dmplot framework](articles/getting-started-with-the-dmplot-framwork.html).
+
+#### EMA and Bollinger Bands
+
+Here we demonstrate how one might use an external package to calculate an indicator such as EMA (`TTR`). `dmplot` also provides a high-performance `C++` implmentation of `ema` and `bb` which can be used directly in the `data.table` `:=` operator.
+
+```{r calculate-ema-bollinger-bands}
+box::use(TTR[ EMA ])
+
+data2 <- dt$copy(data)
+
+# wrap to return a list
 ema <- function(x, n, wilder = TRUE) {
-    return(as.list(as.data.frame(TTR::EMA(x, n = n, wilder = wilder))))
+    return(as.list(as.data.frame(EMA(x, n = n, wilder = wilder))))
 }
 
-# bb <- function(close, n = 2, sd = 2) {
-#     return(as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd))))
-# }
-
-# we can use dmplot's bb function
-
-
 # calculate the short and long moving averages
-dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
-dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
+data2[, ema_short := ema(close, n = 10, wilder = TRUE)]
+data2[, ema_long := ema(close, n = 50, wilder = TRUE)]
 
-# calculate the bollinger bands
-dt[, c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := dmplot::bb(close, n = 10, sd = 2)]
+# use dmplot's C++ implementation of bollinger bands
+data2[,
+    c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := dmplot$bb(close, n = 10, sd = 2)
+]
 
-## ------
-# plot
-p <- dt |>
-    ggplot2::ggplot(ggplot2::aes(
+tail(data2[, .(datetime, close, ema_short, ema_long, bb_lower, bb_mavg, bb_upper)])
+```
+
+Because of the `dmplot` framework we can build our analyses and plots in layers. First we create the candlestick plot and then add the EMA and Bollinger Bands in separate layers. This would allow us to dynamically overlay different indicators and analyses.
+
+```{r plot-ema-bollinger}
+candle_plot <- data2 |>
+    ggplot2$ggplot(ggplot2$aes(
         x = datetime,
         open = open,
-        close = close,
         high = high,
         low = low,
-        group = symbol
+        close = close
     )) +
     ## ------------------------------------
-    dmplot::stat_candlestick() +
+    dmplot$stat_candlestick() +
     ## ------------------------------------
-    # moving averages
-    dmplot::stat_movingaverages(ggplot2::aes(
-        short = ema_short,
-        long = ema_long
-    ), alpha = list(mavg = 0.5)) +
-    dmplot::stat_bollingerbands(ggplot2::aes(
-        ymin = bb_lower,
-        mavg = bb_mavg,
-        ymax = bb_upper
-    ), colour = list("pink", "cyan", "cyan")) +
-    ## ------------------------------------
-    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-        lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    }) +
-    ggplot2::scale_y_continuous(n.breaks = 25) +
-    ggplot2::labs(
-        title = ticker,
+    ggplot2$scale_x_datetime(date_breaks = "1 day", date_labels = "%b %d") +
+    ggplot2$labs(
+        title = paste(ticker, "- Candlestick with EMA and Bollinger Bands"),
         x = "Date",
         y = "Price (USD)"
     ) +
-    dmplot::theme_dereck_dark() +
-    ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
-        panel.grid.minor = ggplot2::element_blank()
+    dmplot$theme_dereck_dark() +
+    ggplot2$theme(axis.text.x = ggplot2$element_text(angle = 45, hjust = 1))
+
+ema_layer <- dmplot$stat_movingaverages(data = data2,
+        ggplot2$aes(x = datetime, short = ema_short, long = ema_long),
+        alpha = list(mavg = 0.5),
+        colour = list("cyan", "magenta")
     )
 
-p
+bb_layer <- dmplot$stat_bollingerbands(data = data2,
+        ggplot2$aes(ymin = bb_lower, mavg = bb_mavg, ymax = bb_upper),
+        colour = list("pink", "cyan", "cyan")
+    )
+
+print(candle_plot + ema_layer + bb_layer)
 ```
+
+#### MACD
 
 Plotting the MACD (moving average convergence divergence) indicator:
 
-```{r plot-financial-data-2}
-macd <- function(x, s = 12, l = 26, k = 9) {
-    return(as.list(as.data.frame(TTR::MACD(x, s, l, k))))
-}
+```{r calculate-macd}
+data2 <- dt$copy(data)
 
-# calculate the macd
-dt[, c("macd", "macd_signal") := macd(close, s = 12, l = 26, k = 9)]
-dt[, macd_diff := macd - macd_signal]
+data2[, c("macd", "macd_signal") := dmplot$macd(close, s = 12, l = 26, k = 9)]
+data2[, macd_diff := macd - macd_signal]
 
-na.omit(dt) |>
-    ggplot2::ggplot(ggplot2::aes(x = datetime)) +
+tail(data2[, .(datetime, close, macd, macd_signal, macd_diff)])
+```
+
+```{r plot-macd}
+macd_plot <- ggplot2$ggplot(data2, ggplot2$aes(x = datetime)) +
     ## ------------------------------------
-    dmplot::stat_macd(ggplot2::aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)) +
-    ## ------------------------------------
-    ggplot2::scale_x_continuous(n.breaks = 25, labels = \(x) {
-        lubridate::floor_date(lubridate::as_datetime(x), "hours")
-    }) +
-    ggplot2::scale_y_continuous(n.breaks = 25) +
-    ggplot2::labs(
-        title = ticker,
-        x = "Date",
-        y = "Price (USD)"
+    dmplot$stat_macd(
+        ggplot2$aes(macd = macd, macd_signal = macd_signal, macd_diff = macd_diff)
     ) +
-    dmplot::theme_dereck_dark() +
-    ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+    ggplot2$scale_x_datetime(
+        date_breaks = "12 hour", date_labels = "%Y-%m-%d %H:%M"
+    ) +
+    ggplot2$scale_y_continuous(n.breaks = 15) +
+    ggplot2$labs(
+        title = paste(ticker, "- MACD"),
+        x = "Date",
+        y = "MACD Value"
+    ) +
+    dmplot$theme_dereck_dark() +
+    ggplot2$theme(
+        axis.text.x = ggplot2$element_text(angle = 45, hjust = 1),
         panel.grid.minor = ggplot2::element_blank()
     )
+
+print(macd_plot)
 ```
 
 Now let's do the same plot in a light theme:
 
 ```{r plot-financial-data-3}
-p + dmplot::theme_dereck_light() +
-    ggplot2::theme(
-        axis.text.x = ggplot2::element_text(angle = 75, vjust = 0.925, hjust = 0.975),
+macd_plot +
+    dmplot$theme_dereck_light() +
+    ggplot2$theme(
+        axis.text.x = ggplot2$element_text(angle = 45, hjust = 1),
         panel.grid.minor = ggplot2::element_blank()
     )
+```
+
+### Benchmarking `dmplot`'s high-performance C++ technical indicators
+
+Here we do a simple demonstration and benchmark of `dmplot`'s Bolinger Bands implementation vs the `TTR` package. Note that despite using a version not wrapped to return a `list` the `TTR` implementation is still significantly slower than `dmplot`'s C++ implementation.
+
+```{r benchmark-bollinger-bands}
+box::use(microbenchmark[ microbenchmark ])
+box::use(TTR[ BBands ])
+
+ttr_bb_wrapped <- function(close, n = 2, sd = 2) {
+    return(as.list(as.data.frame(BBands(close, n = n, sd = sd))))
+}
+
+benchmark_reps <- 10L
+time_interval <- 5L
+standard_dev <- 2L
+
+single_micro <- microbenchmark(
+    ttr_bb_naked = BBands(data$close, n = time_interval, sd = standard_dev),
+    ttr_bb_wrapped = ttr_bb_wrapped(data$close, n = time_interval, sd = standard_dev),
+    dmplot_bb = dmplot$bb(data$close, n = time_interval, sd = standard_dev),
+
+    times = benchmark_reps
+)
+
+
+ggplot2$autoplot(single_micro) +
+    dmplot$theme_dereck_dark() +
+    ggplot2$geom_violin(ggplot2$aes(fill = expr), linewidth = 0.25) +
+    ggplot2$scale_fill_manual(
+        values = c("ttr_bb_naked" = "red", "ttr_bb_wrapped" = "red", "dmplot_bb" = "green")
+    ) +
+    ggplot2$labs(
+        title = "dmpplot vs TTR BBands"
+    ) +
+    ggplot2$theme(legend.position = "none")
 ```
