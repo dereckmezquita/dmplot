@@ -64,6 +64,23 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ichimoku_cloud2
+List ichimoku_cloud2(std::vector<double> high, std::vector<double> low, std::vector<double> close, int tenkan_period, int kijun_period, int senkou_span_b_period, int chikou_shift);
+RcppExport SEXP _dmplot_ichimoku_cloud2(SEXP highSEXP, SEXP lowSEXP, SEXP closeSEXP, SEXP tenkan_periodSEXP, SEXP kijun_periodSEXP, SEXP senkou_span_b_periodSEXP, SEXP chikou_shiftSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type high(highSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type low(lowSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type close(closeSEXP);
+    Rcpp::traits::input_parameter< int >::type tenkan_period(tenkan_periodSEXP);
+    Rcpp::traits::input_parameter< int >::type kijun_period(kijun_periodSEXP);
+    Rcpp::traits::input_parameter< int >::type senkou_span_b_period(senkou_span_b_periodSEXP);
+    Rcpp::traits::input_parameter< int >::type chikou_shift(chikou_shiftSEXP);
+    rcpp_result_gen = Rcpp::wrap(ichimoku_cloud2(high, low, close, tenkan_period, kijun_period, senkou_span_b_period, chikou_shift));
+    return rcpp_result_gen;
+END_RCPP
+}
 // macd
 List macd(std::vector<double> price, int s, int l, int k, bool percent);
 RcppExport SEXP _dmplot_macd(SEXP priceSEXP, SEXP sSEXP, SEXP lSEXP, SEXP kSEXP, SEXP percentSEXP) {
@@ -149,6 +166,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_dmplot_ema", (DL_FUNC) &_dmplot_ema, 3},
     {"_dmplot_fib", (DL_FUNC) &_dmplot_fib, 2},
     {"_dmplot_ichimoku_cloud", (DL_FUNC) &_dmplot_ichimoku_cloud, 6},
+    {"_dmplot_ichimoku_cloud2", (DL_FUNC) &_dmplot_ichimoku_cloud2, 7},
     {"_dmplot_macd", (DL_FUNC) &_dmplot_macd, 5},
     {"_dmplot_mom", (DL_FUNC) &_dmplot_mom, 2},
     {"_dmplot_monte_carlo", (DL_FUNC) &_dmplot_monte_carlo, 4},
