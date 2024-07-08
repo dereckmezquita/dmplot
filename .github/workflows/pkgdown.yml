@@ -48,20 +48,6 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
-      - name: Debug C++ code
-        run: |
-          echo "R_HOME: $R_HOME"
-          echo "Contents of src/Makevars:"
-          cat src/Makevars
-          echo "Contents of src/bb-bollinger-bands.cpp:"
-          cat src/bb-bollinger-bands.cpp
-          echo "Contents of src/sma-simple-moving-average.cpp:"
-          cat src/sma-simple-moving-average.cpp
-          echo "Contents of src/init.c:"
-          cat src/init.c
-          echo "Compiling C++ code manually:"
-          R CMD SHLIB src/*.cpp src/*.c
-
       - name: Build package
         run: |
           R CMD build .
