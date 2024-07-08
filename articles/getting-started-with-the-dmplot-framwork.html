@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="../index.html">dmplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.5.2</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -195,9 +195,8 @@ efficient. The second point is that if you return a named
 <span><span class="co">#&gt; 3:          4.7         3.2          1.3         0.2  setosa</span></span>
 <span><span class="co">#&gt; 4:          4.6         3.1          1.5         0.2  setosa</span></span>
 <span><span class="co">#&gt; 5:          5.0         3.6          1.4         0.2  setosa</span></span>
-<span><span class="co">#&gt; 6:          5.4         3.9          1.7         0.4  setosa</span></span></code></pre></div>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span></span>
+<span><span class="co">#&gt; 6:          5.4         3.9          1.7         0.4  setosa</span></span>
+<span></span>
 <span><span class="va">iris2</span><span class="op">[</span>,</span>
 <span>    <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"petal_ratio"</span>, <span class="st">"sepal_ratio"</span><span class="op">)</span> <span class="op">:=</span> <span class="fu">petal_ratios</span><span class="op">(</span></span>
 <span>        <span class="va">Petal.Length</span>,</span>
@@ -225,7 +224,7 @@ new columns and thus new indicators.</p>
 <h2 id="loading-sample-data">Loading Sample Data<a class="anchor" aria-label="anchor" href="#loading-sample-data"></a>
 </h2>
 <p>We’ll use the same sample data as in the README:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ticker</span> <span class="op">&lt;-</span> <span class="st">"BTC/USDT"</span></span>
 <span></span>
 <span><span class="va">dt</span> <span class="op">&lt;-</span> <span class="va">kucoin</span><span class="op">$</span><span class="fu">get_market_data</span><span class="op">(</span></span>
@@ -258,7 +257,7 @@ wrap them in a function which returns a named <code>list</code> of
 values.</p>
 <p>Here we demonstrate with <code>TTT::EMA</code> and
 <code>TTT::BBands</code>:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span><span class="va">EMA</span>, <span class="va">BBands</span><span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># redifine our function to return a list</span></span>
