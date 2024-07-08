@@ -9,6 +9,7 @@ jobs:
     timeout-minutes: 30
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -38,9 +39,14 @@ jobs:
 
       - name: Install R dependencies
         run: |
-          install.packages(c("renv", "Rcpp", "pkgdown", "rcmdcheck"))
+          install.packages(c("renv", "Rcpp", "pkgdown", "rcmdcheck", "remotes"))
           renv::restore()
           renv::install("dereckmezquita/kucoin")
+        shell: Rscript {0}
+
+      - name: Build and install package
+        run: |
+          devtools::install()
         shell: Rscript {0}
 
       - name: Configure git
@@ -49,6 +55,8 @@ jobs:
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Deploy to branch
-        if: success()
+        env:
+          GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
         shell: Rscript {0}
         run: pkgdown::deploy_to_branch(branch = "bot/github-pages")
+  
