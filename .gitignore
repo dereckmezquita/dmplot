@@ -2,6 +2,7 @@ docs/
 deprecated/
 .DS_Store
 *html
+.vscode/
 
 # Compiled objects
 *.o
