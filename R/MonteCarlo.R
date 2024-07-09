@@ -114,15 +114,15 @@ MonteCarlo <- R6::R6Class(
             # Adding datetime column
             results$simulations[, datetime := rep(
                 seq(
-                    from = self$start_date + lubridate::days(1),
-                    to = self$start_date + lubridate::days(self$project_days),
+                    from = self$start_date,
+                    to = self$start_date + lubridate::days(self$project_days - 1),
                     by = "day"
                 ),
                 times = self$number_sims
             )]
 
             results$end_prices[,
-                datetime := rep(self$start_date + lubridate::days(self$project_days), times = self$number_sims)
+                datetime := rep(self$start_date + lubridate::days(self$project_days - 1), times = self$number_sims)
             ]
 
             self$simulation_results <- results$simulations[]
