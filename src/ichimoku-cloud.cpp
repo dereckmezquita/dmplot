@@ -27,8 +27,6 @@ std::vector<double> calculate_line(const NumericVector& high, const NumericVecto
 //' @param kijun_period The period for the Kijun-sen (Base Line)
 //' @param senkou_period The period for the Senkou Span B (Leading Span B)
 //' @return A list containing the Ichimoku Cloud components
-//' @export
-// [[Rcpp::export]]
 Rcpp::List ichimoku_cloud(
     NumericVector high,
     NumericVector low,
@@ -87,18 +85,30 @@ std::vector<double> calculate_midpoint(const std::vector<double>& high, const st
     return result;
 }
 
-// Helper function to shift a vector forward (into the future)
-std::vector<double> shift_vector(const std::vector<double>& vec, int shift) {
-    std::vector<double> result(vec.size(), NA_REAL);
+// Helper function to shift a vector
+std::vector<double> shift_vector(const std::vector<double>& vec, int shift, bool fill_na = true) {
+    int n = vec.size();
+    std::vector<double> result(n, NA_REAL);
+    
     if (shift >= 0) {
-        std::copy(vec.begin(), vec.end() - shift, result.begin() + shift);
+        for (int i = shift; i < n; ++i) {
+            result[i] = vec[i - shift];
+        }
     } else {
-        std::copy(vec.begin() - shift, vec.end(), result.begin());
+        for (int i = 0; i < n + shift; ++i) {
+            result[i] = vec[i - shift];
+        }
+        if (!fill_na) {
+            for (int i = n + shift; i < n; ++i) {
+                result[i] = vec[n - 1];  // Repeat last value
+            }
+        }
     }
+    
     return result;
 }
 
-//' Ichimoku Cloud
+//' Ichimoku Cloud with Future Predictions
 //'
 //' @param high A numeric vector of high prices
 //' @param low A numeric vector of low prices
@@ -108,8 +118,6 @@ std::vector<double> shift_vector(const std::vector<double>& vec, int shift) {
 //' @param senkou_span_b_period The period for Senkou Span B
 //' @param chikou_shift The shift for Chikou Span (typically 26)
 //' @return A list containing Tenkan-sen, Kijun-sen, Senkou Span A, Senkou Span B, and Chikou Span
-//' @export
-// [[Rcpp::export]]
 List ichimoku_cloud2(
     std::vector<double> high,
     std::vector<double> low,
@@ -119,7 +127,6 @@ List ichimoku_cloud2(
     int senkou_span_b_period = 52,
     int chikou_shift = 26
 ) {
-    
     int n = high.size();
     
     // Calculate Tenkan-sen (Conversion Line)
@@ -133,11 +140,11 @@ List ichimoku_cloud2(
     for (int i = kijun_period - 1; i < n; ++i) {
         senkou_span_a[i] = (tenkan_sen[i] + kijun_sen[i]) / 2.0;
     }
-    senkou_span_a = shift_vector(senkou_span_a, kijun_period);
+    senkou_span_a = shift_vector(senkou_span_a, kijun_period, false);
     
     // Calculate Senkou Span B (Leading Span B)
     std::vector<double> senkou_span_b = calculate_midpoint(high, low, senkou_span_b_period);
-    senkou_span_b = shift_vector(senkou_span_b, kijun_period);
+    senkou_span_b = shift_vector(senkou_span_b, kijun_period, false);
     
     // Calculate Chikou Span (Lagging Span)
     std::vector<double> chikou_span = shift_vector(close, -chikou_shift);

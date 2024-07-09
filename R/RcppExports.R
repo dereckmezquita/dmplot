@@ -33,20 +33,6 @@ fib <- function(high, low) {
     .Call(`_dmplot_fib`, high, low)
 }
 
-#' Ichimoku Cloud
-#' Calculate the Ichimoku Cloud for a given price series
-#' @param high The high prices
-#' @param low The low prices
-#' @param close The closing prices
-#' @param tenkan_period The period for the Tenkan-sen (Conversion Line)
-#' @param kijun_period The period for the Kijun-sen (Base Line)
-#' @param senkou_period The period for the Senkou Span B (Leading Span B)
-#' @return A list containing the Ichimoku Cloud components
-#' @export
-ichimoku_cloud <- function(high, low, close, tenkan_period = 9L, kijun_period = 26L, senkou_period = 52L) {
-    .Call(`_dmplot_ichimoku_cloud`, high, low, close, tenkan_period, kijun_period, senkou_period)
-}
-
 #' Moving Average Convergence Divergence (MACD)
 #'
 #' @param price A numeric vector of prices
