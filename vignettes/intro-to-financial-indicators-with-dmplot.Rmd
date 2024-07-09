@@ -45,7 +45,6 @@ The `dmplot` package is released under the MIT license, allowing free use and mo
 See the getting started for installing the recommended libraries: [Getting Started with The dmplot Framework]()
 
 ```{r load-libraries}
-box::use(kucoin)
 box::use(dt = data.table)
 box::use(ggplot2)
 box::use(dmplot)
@@ -56,9 +55,11 @@ box::use(dmplot)
 We'll use the same sample data as in the README:
 
 ```{r load-data}
+box::use(kucoin[ get_market_data ])
+
 ticker <- "BTC/USDT"
 
-data <- kucoin$get_market_data(
+data <- get_market_data(
     symbols = ticker,
     from = "2024-06-30 11:34:17 EST", # lubridate::now() - lubridate::days(7),
     to = "2024-07-07 11:34:12 EST", # lubridate::now(),
