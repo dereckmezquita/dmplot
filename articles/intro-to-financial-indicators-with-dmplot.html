@@ -117,8 +117,7 @@ for details).</li>
 </h2>
 <p>See the getting started for installing the recommended libraries: <a href="">Getting Started with The dmplot Framework</a></p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">kucoin</span><span class="op">)</span></span>
-<span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span>dt <span class="op">=</span> <span class="va">data.table</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span>dt <span class="op">=</span> <span class="va">data.table</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">ggplot2</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -127,9 +126,11 @@ for details).</li>
 </h2>
 <p>We’ll use the same sample data as in the README:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">ticker</span> <span class="op">&lt;-</span> <span class="st">"BTC/USDT"</span></span>
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">kucoin</span><span class="op">[</span> <span class="va">get_market_data</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="va">kucoin</span><span class="op">$</span><span class="fu">get_market_data</span><span class="op">(</span></span>
+<span><span class="va">ticker</span> <span class="op">&lt;-</span> <span class="st">"BTC/USDT"</span></span>
+<span></span>
+<span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_market_data</span><span class="op">(</span></span>
 <span>    symbols <span class="op">=</span> <span class="va">ticker</span>,</span>
 <span>    from <span class="op">=</span> <span class="st">"2024-06-30 11:34:17 EST"</span>, <span class="co"># lubridate::now() - lubridate::days(7),</span></span>
 <span>    to <span class="op">=</span> <span class="st">"2024-07-07 11:34:12 EST"</span>, <span class="co"># lubridate::now(),</span></span>
