@@ -19,7 +19,6 @@
 #'     # geom_hline(yintercept = 0, size = 1, colour = "#333333") +
 #'     ggplot2::labs(title = "New Hampshire yearly temperatures", subtitle = "Collected between 1912 and 1971", x = "Year", y = "Average temperature") +
 #'     dmplot::theme_dereck_light()
-#'
 theme_dereck_light <- function(base_size = 11, base_family = "") {
     ggplot2::theme_bw(base_size = base_size, base_family = base_family) %+replace% ggplot2::theme(
         plot.title = ggplot2::element_text(face = "bold", hjust = 1, margin = ggplot2::margin(0, 0, 5, 0, unit = "pt")), # 0.5 centres when position is set to "plot"
@@ -60,7 +59,6 @@ theme_dereck_light <- function(base_size = 11, base_family = "") {
 #'     # geom_hline(yintercept = 0, size = 1, colour = "#333333") +
 #'     ggplot2::labs(title = "New Hampshire yearly temperatures", subtitle = "Collected between 1912 and 1971", x = "Year", y = "Average temperature") +
 #'     dmplot::theme_dereck_dark()
-#'
 theme_dereck_dark <- function(base_size = 12, base_family = "") {
     ggplot2::theme_gray(base_size = base_size, base_family = base_family) %+replace% ggplot2::theme(
         plot.title = ggplot2::element_text(face = "bold", hjust = 1, margin = ggplot2::margin(0, 0, 5, 0, unit = "pt")), # 0.5 centres when position is set to "plot"
