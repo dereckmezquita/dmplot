@@ -9,7 +9,7 @@
 #' @return A list containing the lower band, moving average, upper band, and percentage B
 #' @export
 bb <- function(price, n, sd = 2L) {
-    .Call('_dmplot_bb', PACKAGE = 'dmplot', price, n, sd)
+    .Call(`_dmplot_bb`, price, n, sd)
 }
 
 #' Exponential Moving Average
@@ -20,7 +20,17 @@ bb <- function(price, n, sd = 2L) {
 #' @return A numeric vector containing the EMA values
 #' @export
 ema <- function(price, n, wilder = FALSE) {
-    .Call('_dmplot_ema', PACKAGE = 'dmplot', price, n, wilder)
+    .Call(`_dmplot_ema`, price, n, wilder)
+}
+
+#' Fibonacci Retracement Levels
+#' Calculate the Fibonacci retracement levels for a given price range
+#' @param high The high price
+#' @param low The low price
+#' @return A list containing the retracement levels and prices
+#' @export
+fib <- function(high, low) {
+    .Call(`_dmplot_fib`, high, low)
 }
 
 #' Moving Average Convergence Divergence (MACD)
@@ -33,7 +43,7 @@ ema <- function(price, n, wilder = FALSE) {
 #' @return A list containing the MACD and signal line values
 #' @export
 macd <- function(price, s, l, k, percent = TRUE) {
-    .Call('_dmplot_macd', PACKAGE = 'dmplot', price, s, l, k, percent)
+    .Call(`_dmplot_macd`, price, s, l, k, percent)
 }
 
 #' Momentum
@@ -43,7 +53,7 @@ macd <- function(price, s, l, k, percent = TRUE) {
 #' @return A numeric vector containing the momentum values
 #' @export
 mom <- function(price, n) {
-    .Call('_dmplot_mom', PACKAGE = 'dmplot', price, n)
+    .Call(`_dmplot_mom`, price, n)
 }
 
 #' Monte Carlo Simulation
@@ -55,7 +65,7 @@ mom <- function(price, n) {
 #' @return A list containing the simulation results and end prices
 #' @export
 monte_carlo <- function(seed_price, daily_vol, num_sims, num_days) {
-    .Call('_dmplot_monte_carlo', PACKAGE = 'dmplot', seed_price, daily_vol, num_sims, num_days)
+    .Call(`_dmplot_monte_carlo`, seed_price, daily_vol, num_sims, num_days)
 }
 
 #' Rate of Change (ROC)
@@ -66,7 +76,7 @@ monte_carlo <- function(seed_price, daily_vol, num_sims, num_days) {
 #' @return A numeric vector containing the ROC values
 #' @export
 roc <- function(price, n, type = 'c') {
-    .Call('_dmplot_roc', PACKAGE = 'dmplot', price, n, type)
+    .Call(`_dmplot_roc`, price, n, type)
 }
 
 #' Relative Strength Index (RSI)
@@ -77,7 +87,7 @@ roc <- function(price, n, type = 'c') {
 #' @return A numeric vector containing the RSI values
 #' @export
 rsi <- function(price, n, method = 'e') {
-    .Call('_dmplot_rsi', PACKAGE = 'dmplot', price, n, method)
+    .Call(`_dmplot_rsi`, price, n, method)
 }
 
 #' Simple Moving Average (SMA)
@@ -87,6 +97,6 @@ rsi <- function(price, n, method = 'e') {
 #' @return A numeric vector containing the SMA values
 #' @export
 sma <- function(price, n) {
-    .Call('_dmplot_sma', PACKAGE = 'dmplot', price, n)
+    .Call(`_dmplot_sma`, price, n)
 }
 

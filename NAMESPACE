@@ -3,6 +3,7 @@
 export(bb)
 export(cite_package)
 export(ema)
+export(fib)
 export(macd)
 export(mom)
 export(monte_carlo)

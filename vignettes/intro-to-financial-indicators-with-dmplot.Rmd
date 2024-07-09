@@ -9,14 +9,14 @@ Author: Dereck Mezquita
 Date: "`r Sys.Date()`"
 ---
 
-```{r, include = FALSE}
+```{r, include=FALSE}
 knitr::opts_chunk$set(
     warning = FALSE,
     message = FALSE,
     fig.align = "center",
     fig.width = 12,
     fig.height = 10,
-    dpi = 100,
+    dpi = 150,
     collapse = TRUE,
     comment = "#>"
 )
@@ -279,7 +279,57 @@ bb_layer <- dmplot$stat_bollingerbands(data = data2,
 print(candle_plot + bb_layer)
 ```
 
-### 3. Moving Average Convergence Divergence (MACD)
+### 3. Fibonacci Retracement (Fib)
+
+Fibonacci retracement is a popular tool used in technical analysis to identify potential support and resistance levels based on the Fibonacci sequence.
+
+**Mathematics:**
+
+The Fibonacci retracement levels are calculated as follows:
+
+- 0.000 (0.0%)
+- 0.236 (23.6%)
+- 0.382 (38.2%)
+- 0.500 (50.0%)
+- 0.618 (61.8%)
+- 0.786 (78.6%)
+- 1.000 (100.0%)
+
+```{r fib}
+data2 <- dt$copy(data)
+
+high_price <- max(data2$high)
+low_price <- min(data2$low)
+
+fib_levels <- dmplot$fib(high_price, low_price)
+
+print(fib_levels)
+```
+
+In the plot we overlay the Fibonacci retracement levels on the candlestick chart to identify potential support and resistance levels.
+
+```{r plot-fib}
+fib_plot <- candle_plot +
+    ggplot2$geom_hline(
+        yintercept = fib_levels$prices, color = "yellow", linetype = "dashed"
+    ) +
+    ggplot2$scale_y_continuous(
+        name = "Price",
+        sec.axis = ggplot2$sec_axis(
+            ~ (. - low_price) / (high_price - low_price) * 100,
+            name = "Retracement %",
+            labels = \(x) paste0(round(x, 1), "%")
+        )
+    ) +
+    ggplot2$labs(
+        title = "Price Chart with Fibonacci Retracement Levels",
+        x = "Date"
+    )
+
+print(fib_plot)
+```
+
+### 4. Moving Average Convergence Divergence (MACD)
 
 MACD is a trend-following momentum indicator that shows the relationship between two moving averages of a security's price.
 
@@ -328,7 +378,7 @@ macd_plot <- data2 |>
 print(macd_plot)
 ```
 
-### 4. Relative Strength Index (RSI)
+### 5. Relative Strength Index (RSI)
 
 RSI is a momentum oscillator that measures the speed and change of price movements.
 
@@ -383,7 +433,7 @@ rsi_plot <- na.omit(data2) |>
 print(rsi_plot)
 ```
 
-### 5. Rate of Change (ROC) / Momentum
+### 6. Rate of Change (ROC) / Momentum
 
 The Rate of Change (ROC) indicator measures the percentage change in price between the current price and the price n periods ago.
 
@@ -450,7 +500,7 @@ mom <- data2 |>
 print(mom)
 ```
 
-### 5. Stochastic Oscillator
+### 7. Stochastic Oscillator
 
 The Stochastic Oscillator is a momentum indicator that shows the location of the close relative to the high-low range over a set number of periods.
 

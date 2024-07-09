@@ -1,7 +1,7 @@
 name: pkgdown
-on:
-  release:
-    types: [published]
+on: push
+  # release:
+  #   types: [published]
 permissions:
   contents: write
 jobs:

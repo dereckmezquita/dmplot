@@ -36,6 +36,18 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// fib
+Rcpp::List fib(double high, double low);
+RcppExport SEXP _dmplot_fib(SEXP highSEXP, SEXP lowSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< double >::type high(highSEXP);
+    Rcpp::traits::input_parameter< double >::type low(lowSEXP);
+    rcpp_result_gen = Rcpp::wrap(fib(high, low));
+    return rcpp_result_gen;
+END_RCPP
+}
 // macd
 List macd(std::vector<double> price, int s, int l, int k, bool percent);
 RcppExport SEXP _dmplot_macd(SEXP priceSEXP, SEXP sSEXP, SEXP lSEXP, SEXP kSEXP, SEXP percentSEXP) {
@@ -119,6 +131,7 @@ END_RCPP
 static const R_CallMethodDef CallEntries[] = {
     {"_dmplot_bb", (DL_FUNC) &_dmplot_bb, 3},
     {"_dmplot_ema", (DL_FUNC) &_dmplot_ema, 3},
+    {"_dmplot_fib", (DL_FUNC) &_dmplot_fib, 2},
     {"_dmplot_macd", (DL_FUNC) &_dmplot_macd, 5},
     {"_dmplot_mom", (DL_FUNC) &_dmplot_mom, 2},
     {"_dmplot_monte_carlo", (DL_FUNC) &_dmplot_monte_carlo, 4},
