@@ -26,7 +26,7 @@
     
     <a class="navbar-brand me-2" href="index.html">dmplot</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.7.1</small>
 
     
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -109,7 +109,7 @@
 <div class="section level3">
 <h3 id="get-financial-data">Get financial data<a class="anchor" aria-label="anchor" href="#get-financial-data"></a>
 </h3>
-<p><a href="https://github.com/dereckmezquita/kucoin" class="external-link"><code>kucoin</code></a> is a package for interacting with the <a href="https://www.kucoin.com" class="external-link"><code>kucoin</code></a> api. You can use any source of financial data as long as you pass the variables to the <code>ggplot2</code> stat correctly.</p>
+<p><a href="https://github.com/dereckmezquita/kucoin" class="external-link"><code>kucoin</code></a> is a package for interacting with the <a href="https://www.kucoin.com" class="external-link">kucoin.com API</a> api. You can use any source of financial data as long as you pass the variables to the <code>ggplot2</code> stat correctly.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ticker</span> <span class="op">&lt;-</span> <span class="st">"BTC/USDT"</span></span>
 <span></span>
@@ -291,10 +291,38 @@
 </div>
 </div>
 <div class="section level3">
+<h3 id="monte-carlo-simulation">Monte Carlo simulation<a class="anchor" aria-label="anchor" href="#monte-carlo-simulation"></a>
+</h3>
+<p>Here we demonstrate how to use the <code><a href="reference/MonteCarlo.html">dmplot::MonteCarlo()</a></code> <code>R6</code> class which uses <code>C++</code> under the hood and makes executing a Monte Carlo simulation extremely simple.</p>
+<ol style="list-style-type: decimal">
+<li>Create a <code>MonteCarlo</code> object</li>
+<li>Run the simulation</li>
+<li>Plot the results</li>
+</ol>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">[</span> <span class="va">MonteCarlo</span> <span class="op">]</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">monte</span> <span class="op">&lt;-</span> <span class="va"><a href="reference/MonteCarlo.html">MonteCarlo</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">data</span>, number_sims <span class="op">=</span> <span class="fl">1500</span>, project_days <span class="op">=</span> <span class="fl">30</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># run Monte Carlo simulation</span></span>
+<span><span class="va">monte</span><span class="op">$</span><span class="fu">carlo</span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/README-monte-carlo-simulation-1.png" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_distribution</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/README-monte-carlo-simulation-2.png" style="display: block; margin: auto;"></p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices_and_predictions</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/README-monte-carlo-simulation-3.png" style="display: block; margin: auto;"></p>
+</div>
+<div class="section level3">
 <h3 id="benchmarking-dmplots-high-performance-c-technical-indicators">Benchmarking <code>dmplot</code>’s high-performance C++ technical indicators<a class="anchor" aria-label="anchor" href="#benchmarking-dmplots-high-performance-c-technical-indicators"></a>
 </h3>
 <p>Here we do a simple demonstration and benchmark of <code>dmplot</code>’s Bolinger Bands implementation vs the <code>TTR</code> package. Note that despite using a version not wrapped to return a <code>list</code> the <code>TTR</code> implementation is still significantly slower than <code>dmplot</code>’s C++ implementation.</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">microbenchmark</span><span class="op">[</span> <span class="va">microbenchmark</span> <span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span> <span class="va">BBands</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
