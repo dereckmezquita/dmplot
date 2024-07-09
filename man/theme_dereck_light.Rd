@@ -23,7 +23,6 @@ data.frame(year = time(nhtemp), tmps = as.matrix(nhtemp)) |>
     # geom_hline(yintercept = 0, size = 1, colour = "#333333") +
     ggplot2::labs(title = "New Hampshire yearly temperatures", subtitle = "Collected between 1912 and 1971", x = "Year", y = "Average temperature") +
     dmplot::theme_dereck_light()
-
 }
 \author{
 Dereck Mezquita
