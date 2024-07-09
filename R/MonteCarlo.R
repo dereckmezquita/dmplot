@@ -22,8 +22,6 @@
 MonteCarlo <- R6::R6Class(
     "MonteCarlo",
     private = list(
-        #' @description
-        #' Validate the input data format and required columns.
         validate_data = \() {
             if (!inherits(self$data, "data.table")) {
                 rlang::abort("data must be a data.table")
@@ -37,23 +35,13 @@ MonteCarlo <- R6::R6Class(
                 rlang::abort("data must contain the following columns: ", paste(required_cols, collapse = ", "))
             }
         },
-        #' @description
-        #' Prepare the data for simulation by calculating historical returns and volatility.
-        #' @param log_historical Logical. Whether to use log returns for volatility calculation.
         prepare = \(log_historical = FALSE) {
             dt <- self$data
 
             if (log_historical) {
-                dt[,
-                    historical_returns := log(close / data.table::shift(close, 1L, type = "lag"))
-                ]
+                dt[, historical_returns := log(close / data.table::shift(close, 1L, type = "lag")) ]
             } else {
-                dt[,
-                    historical_returns :=
-                    ((close - data.table::shift(close, 1L, type = "lag"))
-                        /
-                    close)
-                ]
+                dt[, historical_returns := ((close - data.table::shift(close, 1L, type = "lag")) / close) ]
             }
 
             # this is the standard deviation of the historical returns
@@ -66,16 +54,11 @@ MonteCarlo <- R6::R6Class(
 
             private$seed_price <- dt$close[nrow(dt)]
         },
-        #' @field seed_price Numeric. The starting price for the simulation.
         seed_price = NA_real_,
-         #' @field daily_vol Numeric. The calculated daily volatility based on historical data.
         daily_vol = NA_real_
     ),
     active = list(
-        #' @field results
-        #' @description
-        #' Get the simulation results and end prices.
-        #' @return A list containing simulation_results and end_prices.
+        #' @field results A list containing simulation results and end prices.
         results = \() {
             return(list(
                 simulation_results = self$simulation_results,
@@ -84,22 +67,13 @@ MonteCarlo <- R6::R6Class(
         }
     ),
     public = list(
-        #' @field data A data.table containing the historical price data.
         data = NULL,
-        #' @field simulation_results A data.table containing the results of the Monte Carlo simulation.
         simulation_results = NULL,
-        #' @field end_prices A data.table containing the final prices from each simulation path.
         end_prices = NULL,
-        # ----------------
-        #' @field log_historical Logical. Whether to use log returns for historical volatility calculation.
         log_historical = FALSE,
-        #' @field number_sims Integer. The number of simulation paths to generate.
         number_sims = 1000,
-         #' @field project_days Integer. The number of days to project into the future.
         project_days = 30,
-        #' @field start_date POSIXct. The start date for the simulation (last date of historical data).
         start_date = NULL,
-        #' @field verbose Logical. Whether to print progress messages.
         verbose = FALSE,
 
         #' @description
@@ -109,32 +83,31 @@ MonteCarlo <- R6::R6Class(
         #' @param number_sims Integer. The number of simulation paths to generate.
         #' @param project_days Integer. The number of days to project into the future.
         #' @param verbose Logical. Whether to print progress messages.
-        initialize = function(dt, log_historical = FALSE, number_sims = 1000, project_days = 30, verbose = FALSE) {
+        initialize = \(dt, log_historical = FALSE, number_sims = 1000, project_days = 30, verbose = FALSE) {
             self$log_historical <- log_historical
             self$number_sims <- number_sims
             self$project_days <- project_days
-
             self$data <- dt
-
             self$start_date <- dt$datetime[nrow(dt)]
-
+            self$verbose <- verbose
             private$validate_data()
-
             self$simulation_results <- vector(mode = "list", length = number_sims)
         },
+
         #' @description
         #' Run the Monte Carlo simulation.
         carlo = \() {
             private$prepare(log_historical = self$log_historical)
 
             # message("Running Monte Carlo cpp simulation...")
-            results <- monte_carlo(
+            results <- dmplot::monte_carlo(
                 seed_price = private$seed_price,
                 daily_vol = private$daily_vol,
                 num_sims = self$number_sims,
                 num_days = self$project_days
             )
 
+            # Process and store results...
             data.table::setDT(results$simulations)
             data.table::setDT(results$end_prices)
 
@@ -155,6 +128,7 @@ MonteCarlo <- R6::R6Class(
             self$simulation_results <- results$simulations[]
             self$end_prices <- results$end_prices[]
         },
+
         #' @description
         #' Plot the simulated price paths.
         #' @return A ggplot object showing the simulated price paths.
@@ -173,6 +147,7 @@ MonteCarlo <- R6::R6Class(
                     caption = stringr::str_interp('Iterations: ${self$number_sims}')
                 )
         },
+
         #' @description
         #' Plot the distribution of final prices.
         #' @return A ggplot object showing the distribution of final prices.
@@ -186,16 +161,18 @@ MonteCarlo <- R6::R6Class(
                 ggplot2::geom_violin() +
                 ggplot2::geom_boxplot(width = 0.1, fill = "gold") +
                 # ggplot2::scale_y_continuous(n.breaks = 50, trans = "log2") +
-                ggplot2::scale_y_continuous(n.breaks = 25, labels = function(x) {
-                    # scales::label_number_si(accuracy = 0.1)(2 ^ x)
-                    scales::label_number(scale_cut = scales::cut_short_scale())(2 ^ x)
-                }) +
+                # BUG: Error in break_suffix[bad_break][improved_break & !power10_break] <- names(lower_break[improved_break &  : NAs are not allowed in subscripted assignments
+                # ggplot2::scale_y_continuous(n.breaks = 25, labels = function(x) {
+                #     # scales::label_number_si(accuracy = 0.1)(2 ^ x)
+                #     scales::label_number(scale_cut = scales::cut_short_scale())(2 ^ x)
+                # }) +
                 ggplot2::labs(
-                    title = "Last values projected by Monte Carlo",
+                    title = "Distribution of final simulated prices",
                     # subtitle = stringr::str_interp('Daily volatility ${round(private$daily_vol, 6)} calculated from: ${start} - ${end} (n days: ${end - start})\nmean<last_prices> on ${end + lubridate::days(num_days)} days(${num_days}): ${round(mean(last_prices), 2)}'),
                     caption = stringr::str_interp('Iterations: ${self$number_sims}')
                 )
         },
+
         #' @description
         #' Plot historical prices and simulated future prices.
         #' @return A ggplot object showing historical and simulated prices.
