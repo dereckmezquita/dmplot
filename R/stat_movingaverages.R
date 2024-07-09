@@ -1,5 +1,3 @@
-# df <- data.table::fread("data/kucoin_prices.csv")
-
 StatMovingAverage <- ggplot2::ggproto(
     "StatMovingAverage",
     ggplot2::Stat,
@@ -118,7 +116,6 @@ StatMovingAverage <- ggplot2::ggproto(
 #'     )
 #'
 #' @export
-
 stat_movingaverages <- function(
     mapping = NULL,
     data = NULL,
@@ -169,19 +166,3 @@ stat_movingaverages <- function(
         )
     )
 }
-
-
-# tail(df, 500) |>
-#     ggplot2::ggplot(ggplot2::aes(
-#         datetime,
-#         open = open,
-#         close = close,
-#         high = high,
-#         low = low,
-#         group = symbol
-#     )) +
-#     stat_candlestick() +
-#     # y = close can go in ggplot2 call or here
-#     # allows user to choose which values to use for calculations
-#     # accepts wilder as an additional argument
-#     stat_movingaverages(ggplot2::aes(y = close), FUN = TTR::SMA)

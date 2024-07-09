@@ -1,6 +1,3 @@
-
-# df <- data.table::fread("data/kucoin_prices.csv")
-
 StatBollingerRibbon <- ggplot2::ggproto(
     "StatBollingerRibbon",
     ggplot2::Stat,
@@ -218,19 +215,3 @@ stat_bollingerbands <- function(
         )
     )
 }
-
-
-# if you wish to supply TTR::BBands you need to cast to list
-# mybb <- function(close, n = 2, sd = 2) {as.list(as.data.frame(TTR::BBands(close, n = n, sd = sd)))}
-
-# tail(df, 500) |>
-#     ggplot2::ggplot(ggplot2::aes(
-#         datetime,
-#         open = open,
-#         close = close,
-#         high = high,
-#         low = low,
-#         group = symbol
-#     )) +
-#     stat_candlestick() +
-#     stat_bollingerbands(ggplot2::aes(y = close), n = 20L, sd = 2L, FUN = mybb)

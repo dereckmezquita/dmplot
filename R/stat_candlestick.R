@@ -1,7 +1,4 @@
-
 # https://www.reddit.com/r/Rlanguage/comments/yytgdm/create_custom_ggplot2_candlesticks_geom_based_on/
-# df <- data.table::fread("data/kucoin_prices.csv")
-
 StatCandleBarrel <- ggplot2::ggproto(
     "StatCandleBarrel",
     ggplot2::Stat,
@@ -173,14 +170,3 @@ stat_candlestick <- function(
         )
     )
 }
-
-# tail(df, 50) |>
-#     ggplot2::ggplot(ggplot2::aes(
-#         datetime,
-#         open = open,
-#         close = close,
-#         high = high,
-#         low = low,
-#         group = symbol
-#     )) +
-#     stat_candlestick()

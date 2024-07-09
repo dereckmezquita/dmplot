@@ -1,4 +1,3 @@
-
 StatMacdMovingAverage <- ggplot2::ggproto(
     "StatMacdMovingAverage",
     ggplot2::Stat,
