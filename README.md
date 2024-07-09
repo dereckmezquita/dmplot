@@ -39,9 +39,9 @@ box::use(dmplot)
 ### Get financial data
 
 [`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for
-interacting with the [`kucoin`](https://www.kucoin.com) api. You can use
-any source of financial data as long as you pass the variables to the
-`ggplot2` stat correctly.
+interacting with the [kucoin.com API](https://www.kucoin.com) api. You
+can use any source of financial data as long as you pass the variables
+to the `ggplot2` stat correctly.
 
 ``` r
 ticker <- "BTC/USDT"
@@ -245,6 +245,43 @@ macd_plot +
 ```
 
 <img src="./man/figures/README-plot-financial-data-3-1.png" style="display: block; margin: auto;" />
+
+### Monte Carlo simulation
+
+Here we demonstrate how to use the `dmplot::MonteCarlo()` `R6` class
+which uses `C++` under the hood and makes executing a Monte Carlo
+simulation extremely simple.
+
+1.  Create a `MonteCarlo` object
+2.  Run the simulation
+3.  Plot the results
+
+``` r
+box::use(dmplot[ MonteCarlo ])
+
+data2 <- dt$copy(data)
+
+monte <- MonteCarlo$new(data, number_sims = 1500, project_days = 30)
+
+# run Monte Carlo simulation
+monte$carlo()
+
+monte$plot_prices()
+```
+
+<img src="./man/figures/README-monte-carlo-simulation-1.png" style="display: block; margin: auto;" />
+
+``` r
+monte$plot_distribution()
+```
+
+<img src="./man/figures/README-monte-carlo-simulation-2.png" style="display: block; margin: auto;" />
+
+``` r
+monte$plot_prices_and_predictions()
+```
+
+<img src="./man/figures/README-monte-carlo-simulation-3.png" style="display: block; margin: auto;" />
 
 ### Benchmarking `dmplot`’s high-performance C++ technical indicators
 

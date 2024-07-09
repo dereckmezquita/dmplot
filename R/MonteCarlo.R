@@ -140,6 +140,7 @@ MonteCarlo <- R6::R6Class(
             self$simulation_results |>
                 ggplot2::ggplot(ggplot2::aes(datetime, close, group = simulation, colour = as.character(simulation))) +
                 ggplot2::geom_line(alpha = 0.5, linewidth = 1) +
+                theme_dereck_dark() +
                 ggplot2::theme(legend.position = "none") +
                 ggplot2::labs(
                     title = "Monte carlo: price of bitcoin",
@@ -166,6 +167,7 @@ MonteCarlo <- R6::R6Class(
                 #     # scales::label_number_si(accuracy = 0.1)(2 ^ x)
                 #     scales::label_number(scale_cut = scales::cut_short_scale())(2 ^ x)
                 # }) +
+                theme_dereck_dark() +
                 ggplot2::labs(
                     title = "Distribution of final simulated prices",
                     # subtitle = stringr::str_interp('Daily volatility ${round(private$daily_vol, 6)} calculated from: ${start} - ${end} (n days: ${end - start})\nmean<last_prices> on ${end + lubridate::days(num_days)} days(${num_days}): ${round(mean(last_prices), 2)}'),
@@ -214,6 +216,7 @@ MonteCarlo <- R6::R6Class(
                     date_breaks = scale_period,
                     date_labels = "%d %b %y"
                 ) + 
+                theme_dereck_dark() +
                 ggplot2::labs(
                     x = ggplot2::element_blank(),
                     y = ggplot2::element_blank()

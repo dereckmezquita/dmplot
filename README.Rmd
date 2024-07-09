@@ -215,6 +215,29 @@ macd_plot +
     )
 ```
 
+### Monte Carlo simulation
+
+Here we demonstrate how to use the `dmplot::MonteCarlo()` `R6` class which uses `C++` under the hood and makes executing a Monte Carlo simulation extremely simple.
+
+1. Create a `MonteCarlo` object
+1. Run the simulation
+1. Plot the results
+
+```{r monte-carlo-simulation}
+box::use(dmplot[ MonteCarlo ])
+
+data2 <- dt$copy(data)
+
+monte <- MonteCarlo$new(data, number_sims = 1500, project_days = 30)
+
+# run Monte Carlo simulation
+monte$carlo()
+
+monte$plot_prices()
+monte$plot_distribution()
+monte$plot_prices_and_predictions()
+```
+
 ### Benchmarking `dmplot`'s high-performance C++ technical indicators
 
 Here we do a simple demonstration and benchmark of `dmplot`'s Bolinger Bands implementation vs the `TTR` package. Note that despite using a version not wrapped to return a `list` the `TTR` implementation is still significantly slower than `dmplot`'s C++ implementation.
