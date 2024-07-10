@@ -27,10 +27,6 @@ options(
 )
 ```
 
-```{r setup}
-library(dmplot)
-```
-
 ## Introduction
 
 The `dmplot` package provides a set of high-performance technical indicators commonly used in financial analysis. These indicators are implemented in C++ to achieve maximum computational efficiency, making them suitable for large-scale data analysis and high-frequency trading applications.
