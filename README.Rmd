@@ -34,6 +34,8 @@ options(
 
 The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial, bioinformatics, and time series data.
 
+In short this package is a condensation and accumulation of all of all the knowledge I've gathered over the years spurred on by personal curiosity and framed by the need for order with a comprehensive framework.
+
 ## Installation
 
 You can install `dmplot` using:
@@ -52,21 +54,29 @@ box::use(ggplot2)
 box::use(dmplot)
 ```
 
-## Getting started with financial data
+## Getting started - Finance
 
 ### Get financial data
 
 [`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for interacting with the [kucoin.com API](https://www.kucoin.com) api. You can use any source of financial data as long as you pass the variables to the `ggplot2` stat correctly.
 
-```{r get-financial-data}
+```r
 ticker <- "BTC/USDT"
 
 data <- get_market_data(
     symbols = ticker,
-    from = "2024-07-01 10:36:50 EST", # lubridate::now() - lubridate::days(7),
-    to = "2024-07-08 10:36:53 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
+
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
+]
 
 head(data)
 ```
@@ -238,7 +248,7 @@ monte$plot_distribution()
 monte$plot_prices_and_predictions()
 ```
 
-## Getting started with bioinformatics data
+## Getting started - Bioinformatics
 
 `dmplot` offers a host of functions for working with bioinformatics data. Here we demonstrate how to use the `dmplot::Volcano()` `R6` class to plot a volcano plot.
 
@@ -250,12 +260,12 @@ A volcano plot can be generated in 3 easy steps.
 
 ```{r volcano-plot}
 # 1. load the data
-data <- dt$fread("./data/volcano-differential-expression.csv")
+data(diff_expr_res, package = "dmplot")
 
-head(data)
+head(diff_expr_res)
 
 # 2. create the Volcano object
-volc <- dmplot$Volcano$new(data)
+volc <- dmplot$Volcano$new(diff_expr_res)
 
 # 3. plot the volcano plot
 volc$plot_volcano()
