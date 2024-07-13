@@ -59,6 +59,19 @@ data <- get_market_data(
 )
 ```
 
+``` r
+head(data)
+#>      symbol            datetime    open    high     low   close   volume
+#>      <char>              <POSc>   <num>   <num>   <num>   <num>    <num>
+#> 1: BTC/USDT 2024-07-06 05:00:00 56057.9 56485.8 56025.2 56363.1 79.48139
+#> 2: BTC/USDT 2024-07-06 06:00:00 56363.1 56573.3 56346.6 56413.8 41.94569
+#> 3: BTC/USDT 2024-07-06 07:00:00 56413.7 56672.4 56402.5 56602.2 98.02022
+#> 4: BTC/USDT 2024-07-06 08:00:00 56602.2 56655.3 56508.8 56555.8 49.06419
+#> 5: BTC/USDT 2024-07-06 09:00:00 56555.9 56767.0 56441.6 56759.9 42.89421
+#> 6: BTC/USDT 2024-07-06 10:00:00 56757.4 56887.1 56645.3 56786.6 45.64148
+#> 1 variable(s) not shown: [turnover <num>]
+```
+
 NOTE: a demo dataset is included in the `demo/data/` directory.
 
 ### Working with and plotting financial data
