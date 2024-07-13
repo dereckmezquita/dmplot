@@ -54,7 +54,7 @@ I often use the following packages:
 
 I strongly recommend using `data.table` for any work in finance. This is indeed one of the primary reasons why `data.table` was created - to work with large datasets efficiently. For installing `data.table` on `M1` MacOS consult this guide for building from source: [gist.github.com/dereckmezquita/ed860601138a46cf591a1bdcc95db0a2](https://gist.github.com/dereckmezquita/ed860601138a46cf591a1bdcc95db0a2)
 
-```{r install-libraries, eval = FALSE}
+```{r install-libraries, eval=FALSE}
 install.packages("data.table", type = "source")
 install.packages("TTR")
 install.packages("ggplot2")
@@ -115,17 +115,25 @@ As you can see sticking to this convention allows us to easily and efficiently l
 
 We'll use the same sample data as in the README:
 
-```{r load_data}
+```r
 ticker <- "BTC/USDT"
 
-dt <- kucoin$get_market_data(
+data <- get_market_data(
     symbols = ticker,
-    from = "2024-06-30 11:34:17 EST", # lubridate::now() - lubridate::days(7),
-    to = "2024-07-07 11:34:12 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
 
-head(dt)
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+ data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
+]
+
+head(data)
 ```
 
 
@@ -139,27 +147,24 @@ Here we demonstrate with `TTT::EMA` and `TTT::BBands`:
 
 ```{r wrapping-ema-bbands}
 box::use(TTR[EMA, BBands])
+box::use(dmplot[ bb ])
 
 # redifine our function to return a list
 ema <- function(x, n, wilder = TRUE) {
     return(as.list(as.data.frame(EMA(x, n = n, wilder = wilder))))
 }
 
-bb <- function(close, n = 2, sd = 2) {
-    return(as.list(as.data.frame(BBands(close, n = n, sd = sd))))
-}
-
 # calculate the short and long moving averages
-dt[, ema_short := ema(close, n = 10, wilder = TRUE)]
-dt[, ema_long := ema(close, n = 50, wilder = TRUE)]
+data[, ema_short := ema(close, n = 10, wilder = TRUE)]
+data[, ema_long := ema(close, n = 50, wilder = TRUE)]
 
 # calculate the bollinger bands
-dt[,
+data[,
     c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(
         close, n = 10,
         sd = 2
     )
 ]
 
-head(dt)
+head(data)
 ```

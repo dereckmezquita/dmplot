@@ -44,17 +44,23 @@ The `dmplot` package is released under the MIT license, allowing free use and mo
 
 We'll use the same sample data as in the README:
 
-```{r load-data}
-box::use(kucoin[ get_market_data ])
-
+```r
 ticker <- "BTC/USDT"
 
 data <- get_market_data(
     symbols = ticker,
-    from = "2024-01-10 22:29:26 EST", # lubridate::now() - lubridate::days(180),
-    to = "2024-07-08 22:29:41 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
+
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+ data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(180),
+]
 
 head(data)
 ```

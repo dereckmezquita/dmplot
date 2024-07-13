@@ -54,17 +54,23 @@ box::use(dmplot)
 
 We'll use the same sample data as in the README:
 
-```{r load-data}
-box::use(kucoin[ get_market_data ])
-
+```r
 ticker <- "BTC/USDT"
 
 data <- get_market_data(
     symbols = ticker,
-    from = "2024-06-30 11:34:17 EST", # lubridate::now() - lubridate::days(7),
-    to = "2024-07-07 11:34:12 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
+
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+ data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
+]
 
 head(data)
 ```

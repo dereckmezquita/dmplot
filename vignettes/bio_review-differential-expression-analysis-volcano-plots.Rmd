@@ -44,12 +44,12 @@ box::use(dt = data.table)
 box::use(dmplot[ Volcano ])
 
 # 1. load data
-data <- dt$data.table("./data/volcano-differential-expression.csv")
+data(diff_expr_res, package = "dmplot")
 
-head(data)
+head(diff_expr_res)
 
 # 2. create the Volcano object
-volc <- Volcano$new(data = data)
+volc <- Volcano$new(data = diff_expr_res)
 
 # 3. create the plot
 volcano_plot <- volc$plot_volcano()
@@ -127,7 +127,7 @@ Simply put what this means is that we go over every row of the matrix and execut
 We end up with a result table that contains the gene name, the p-value, and the log fold change. It will look a little like the following:
 
 ```{r print-data}
-head(data[, -"fdr"])
+head(diff_expr_res[, -"fdr"])
 ```
 
 #### False Discovery Rate (FDR)
@@ -146,7 +146,7 @@ Typically one would look at these distributions by eye to determine an anti-cons
 Thus after adjusting the p-values of our data we have a new column on our data:
 
 ```{r print-data-fdr}
-head(data)
+head(diff_expr_res)
 ```
 
 ### Log Fold Change
@@ -176,9 +176,11 @@ Notice on a volcano plot the x-axis is centred around 0. This is because the log
 Volcano plots are a popular way to visualise the results of differential expression analysis. They combine statistical significance with the magnitude of change.
 
 ```{r volcano-plot}
+box::use(dmplot[ theme_dereck_light ])
+
 # since dmplot always returns a ggplot object we can make adjustments
 volcano_plot2 <- volcano_plot +
-    dmplot$theme_dereck_light()
+    theme_dereck_light()
 
 print(volcano_plot2)
 ```
