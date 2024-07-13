@@ -30,9 +30,9 @@ options(
 [![Travis build status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-`R` framework written in high-performance `C++` and `ggplot2` for financial and time series data analysis.
+`R` framework written in high-performance `C++` and `ggplot2` for financial, bioinformatics, and time series data analysis.
 
-The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial and time series data.
+The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial, bioinformatics, and time series data.
 
 ## Installation
 
@@ -52,7 +52,7 @@ box::use(ggplot2)
 box::use(dmplot)
 ```
 
-## Getting started
+## Getting started with financial data
 
 ### Get financial data
 
@@ -238,7 +238,30 @@ monte$plot_distribution()
 monte$plot_prices_and_predictions()
 ```
 
-### Benchmarking `dmplot`'s high-performance C++ technical indicators
+## Getting started with bioinformatics data
+
+`dmplot` offers a host of functions for working with bioinformatics data. Here we demonstrate how to use the `dmplot::Volcano()` `R6` class to plot a volcano plot.
+
+`dmplot` imposes a convention and standard for the data it expects, in exchange it offers ease of use and efficiency in plotting and analysing data.
+
+### Volcano plot
+
+A volcano plot can be generated in 3 easy steps.
+
+```{r volcano-plot}
+# 1. load the data
+data <- dt$fread("./data/volcano-differential-expression.csv")
+
+head(data)
+
+# 2. create the Volcano object
+volc <- dmplot$Volcano$new(data)
+
+# 3. plot the volcano plot
+volc$plot_volcano()
+```
+
+## Benchmarking `dmplot`'s high-performance C++ technical indicators
 
 Here we do a simple demonstration and benchmark of `dmplot`'s Bolinger Bands implementation vs the `TTR` package. Note that despite using a version not wrapped to return a `list` the `TTR` implementation is still significantly slower than `dmplot`'s C++ implementation.
 
