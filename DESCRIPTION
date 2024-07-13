@@ -1,5 +1,5 @@
 Package: dmplot
-Title: A Framework and Toolkit for Financial and Time Series Data
+Title: Framework written in high-performance C++ and ggplot2 for financial, bioinformatics, and time series data analysis
 Version: 1.7.1
 URL: https://github.com/dereckmezquita/dmplot
 Authors@R: 
@@ -9,13 +9,14 @@ Authors@R:
            email = "dereck@mezquita.io",
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
-Description: A plotting toolkit for financial and time series data. The package provides algorithms, functions, layers and outlines a framework for working with and analysing financial and time series data. The package also includes high-performance functions for calculating technical indicators written in C++.
+Description: A comprehensive framework for analysing and visualising financial, bioinformatics, and time series data. Leveraging high-performance C++ and the ggplot2 library, dmplot offers powerful data processing capabilities, including technical indicators implemented in C++ for speed. The package features stateful plotting classes (using R6) for advanced visualisations such as Monte Carlo simulations and bioinformatics data representation.
 Depends: R (>= 4.1.0)
 LinkingTo: Rcpp
 Imports:
     ggplot2 (>= 3.4.0),
     Rcpp (>= 1.0.12),
-    data.table
+    data.table,
+    R6
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
