@@ -132,7 +132,9 @@ ticker <- "BTC/USDT"
 data <- btc_1_year_hourly[
     btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
 ]
+```
 
+```{r print-data}
 head(data)
 ```
 
