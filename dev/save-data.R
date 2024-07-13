@@ -3,10 +3,21 @@ box::use(dt = data.table)
 box::use(dev/`anonymise-data`[ anonymise_data ])
 
 # 2. Feature counts genes
-feature_counts0 <- read.csv("dev/data/feature-counts-genes.csv")
+feature_counts0 <- read.csv("dev/data/original.ignore/feature-counts-genes.csv")
 dt$setDT(feature_counts0)
 
+# save original colnames
+sample_names <- colnames(feature_counts0)
+sample_names <- sample_names[!sample_names %in% c("GeneID", "GeneSymbol", "GeneBiotype")]
+sample_names <- dt$data.table(original = sample_names)
+
 feature_counts <- anonymise_data(feature_counts0)
+
+sample_names[, new_name := colnames(feature_counts)[4:ncol(feature_counts)] ]
+
+dt$fwrite(sample_names, "dev/data/original.ignore/new-names-table.csv")
+dt$fwrite(feature_counts, "dev/data/feature-counts-genes.csv")
+
 use_data(feature_counts, overwrite = TRUE)
 
 # 3. Volcano differential expression
