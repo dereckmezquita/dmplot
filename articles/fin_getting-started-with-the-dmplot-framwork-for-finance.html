@@ -235,6 +235,17 @@ new columns and thus new indicators.</p>
 <span>    to <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">now</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    frequency <span class="op">=</span> <span class="st">"1 hour"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      symbol            datetime    open    high     low   close   volume</span></span>
+<span><span class="co">#&gt;      &lt;char&gt;              &lt;POSc&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: BTC/USDT 2024-07-06 05:00:00 56057.9 56485.8 56025.2 56363.1 79.48139</span></span>
+<span><span class="co">#&gt; 2: BTC/USDT 2024-07-06 06:00:00 56363.1 56573.3 56346.6 56413.8 41.94569</span></span>
+<span><span class="co">#&gt; 3: BTC/USDT 2024-07-06 07:00:00 56413.7 56672.4 56402.5 56602.2 98.02022</span></span>
+<span><span class="co">#&gt; 4: BTC/USDT 2024-07-06 08:00:00 56602.2 56655.3 56508.8 56555.8 49.06419</span></span>
+<span><span class="co">#&gt; 5: BTC/USDT 2024-07-06 09:00:00 56555.9 56767.0 56441.6 56759.9 42.89421</span></span>
+<span><span class="co">#&gt; 6: BTC/USDT 2024-07-06 10:00:00 56757.4 56887.1 56645.3 56786.6 45.64148</span></span>
+<span><span class="co">#&gt; 1 variable(s) not shown: [turnover &lt;num&gt;]</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="calculating-financial-indicators">Calculating Financial Indicators<a class="anchor" aria-label="anchor" href="#calculating-financial-indicators"></a>
@@ -248,7 +259,7 @@ wrap them in a function which returns a named <code>list</code> of
 values.</p>
 <p>Here we demonstrate with <code>TTT::EMA</code> and
 <code>TTT::BBands</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span><span class="va">EMA</span>, <span class="va">BBands</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">[</span> <span class="va">bb</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>

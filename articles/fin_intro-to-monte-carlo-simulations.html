@@ -134,6 +134,22 @@ for details).</li>
 <span>    to <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">now</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    frequency <span class="op">=</span> <span class="st">"1 hour"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;        symbol            datetime    open    high     low   close   volume</span></span>
+<span><span class="co">#&gt; 4439 BTC/USDT 2024-01-15 05:00:00 42596.6 42814.7 42571.2 42734.3 77.96806</span></span>
+<span><span class="co">#&gt; 4440 BTC/USDT 2024-01-15 06:00:00 42740.5 42797.0 42613.8 42648.2 68.88966</span></span>
+<span><span class="co">#&gt; 4441 BTC/USDT 2024-01-15 07:00:00 42648.2 42766.3 42519.8 42709.8 84.02044</span></span>
+<span><span class="co">#&gt; 4442 BTC/USDT 2024-01-15 08:00:00 42715.1 42772.0 42641.0 42682.8 64.09779</span></span>
+<span><span class="co">#&gt; 4443 BTC/USDT 2024-01-15 09:00:00 42682.8 42756.6 42593.1 42746.8 65.64199</span></span>
+<span><span class="co">#&gt; 4444 BTC/USDT 2024-01-15 10:00:00 42746.9 42764.0 42540.6 42562.1 56.32170</span></span>
+<span><span class="co">#&gt;      turnover</span></span>
+<span><span class="co">#&gt; 4439  3330003</span></span>
+<span><span class="co">#&gt; 4440  2941701</span></span>
+<span><span class="co">#&gt; 4441  3582246</span></span>
+<span><span class="co">#&gt; 4442  2736698</span></span>
+<span><span class="co">#&gt; 4443  2801211</span></span>
+<span><span class="co">#&gt; 4444  2401779</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="what-are-monte-carlo-simulations">What are Monte Carlo Simulations?<a class="anchor" aria-label="anchor" href="#what-are-monte-carlo-simulations"></a>
@@ -169,7 +185,7 @@ investment decisions.</li>
 <p>This creates a new <code>MonteCarlo</code> object, runs 1000
 simulations for 30 days into the future, and plots the resulting price
 paths.</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">[</span> <span class="va">MonteCarlo</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">monte</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/MonteCarlo.html">MonteCarlo</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">data</span>, number_sims <span class="op">=</span> <span class="fl">2500</span>, project_days <span class="op">=</span> <span class="fl">30</span> <span class="op">*</span> <span class="fl">6</span><span class="op">)</span></span>
@@ -220,18 +236,18 @@ paths.</p>
 <p><code>dmplot</code> provides several visualisation methods to help
 interpret the results.</p>
 <p>Below we plot the simulated price paths:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fin_intro-to-monte-carlo-simulations_files/figure-html/plot-prices-1.png" width="1800" style="display: block; margin: auto;"></p>
 <p>We can also visualise the distribution as violin plots these help us
 understand the range of possible outcomes and the distribution of final
 prices:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_distribution</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fin_intro-to-monte-carlo-simulations_files/figure-html/plot-distribution-1.png" width="1800" style="display: block; margin: auto;"></p>
 <p>Finally, we can combine historical data with the simulations to see
 how the modelled scenarios compare to reality:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices_and_predictions</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="fin_intro-to-monte-carlo-simulations_files/figure-html/plot-prices-and-predictions-1.png" width="1800" style="display: block; margin: auto;"></p>
 <p>These visualisations can provide insights into the range of possible
@@ -258,7 +274,7 @@ data.</li>
 projection days.</li>
 <li>Visualise the results using the provided plotting methods.</li>
 </ol>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span> <span class="op">&lt;-</span> <span class="va"><a href="../reference/MonteCarlo.html">MonteCarlo</a></span><span class="op">$</span><span class="fu">new</span><span class="op">(</span></span>
 <span>    <span class="va">data</span>,</span>
 <span>    number_sims <span class="op">=</span> <span class="fl">2500</span>,</span>
@@ -322,42 +338,42 @@ underestimate the probability of extreme events.</li>
 <p>The core of our Monte Carlo simulation is implemented in C++ for
 optimal performance. Let’s break down the <code>monte_carlo</code>
 function:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>Rcpp<span class="op">::</span>List monte_carlo<span class="op">(</span><span class="dt">double</span> seed_price<span class="op">,</span> <span class="dt">double</span> daily_vol<span class="op">,</span> <span class="dt">int</span> num_sims<span class="op">,</span> <span class="dt">int</span> num_days<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a>    <span class="dt">int</span> total_rows <span class="op">=</span> num_sims <span class="op">*</span> num_days<span class="op">;</span></span>
-<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector close<span class="op">(</span>total_rows<span class="op">);</span></span>
-<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a>    Rcpp<span class="op">::</span>IntegerVector sim_idx<span class="op">(</span>total_rows<span class="op">);</span></span>
-<span id="cb7-5"><a href="#cb7-5" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector end_price<span class="op">(</span>num_sims<span class="op">);</span></span>
-<span id="cb7-6"><a href="#cb7-6" tabindex="-1"></a>    Rcpp<span class="op">::</span>IntegerVector end_idx<span class="op">(</span>num_sims<span class="op">);</span></span>
-<span id="cb7-7"><a href="#cb7-7" tabindex="-1"></a>    </span>
-<span id="cb7-8"><a href="#cb7-8" tabindex="-1"></a>    <span class="dt">int</span> row_index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
-<span id="cb7-9"><a href="#cb7-9" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> num_sims<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-10"><a href="#cb7-10" tabindex="-1"></a>        <span class="dt">double</span> current_price <span class="op">=</span> seed_price<span class="op">;</span></span>
-<span id="cb7-11"><a href="#cb7-11" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> num_days<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
-<span id="cb7-12"><a href="#cb7-12" tabindex="-1"></a>            current_price <span class="op">*=</span> <span class="op">(</span><span class="dv">1</span> <span class="op">+</span> R<span class="op">::</span>rnorm<span class="op">(</span><span class="dv">0</span><span class="op">,</span> daily_vol<span class="op">));</span></span>
-<span id="cb7-13"><a href="#cb7-13" tabindex="-1"></a>            close<span class="op">[</span>row_index<span class="op">]</span> <span class="op">=</span> current_price<span class="op">;</span></span>
-<span id="cb7-14"><a href="#cb7-14" tabindex="-1"></a>            sim_idx<span class="op">[</span>row_index<span class="op">]</span> <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb7-15"><a href="#cb7-15" tabindex="-1"></a>            <span class="op">++</span>row_index<span class="op">;</span></span>
-<span id="cb7-16"><a href="#cb7-16" tabindex="-1"></a>        <span class="op">}</span></span>
-<span id="cb7-17"><a href="#cb7-17" tabindex="-1"></a></span>
-<span id="cb7-18"><a href="#cb7-18" tabindex="-1"></a>        end_price<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> current_price<span class="op">;</span></span>
-<span id="cb7-19"><a href="#cb7-19" tabindex="-1"></a>        end_idx<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
-<span id="cb7-20"><a href="#cb7-20" tabindex="-1"></a>    <span class="op">}</span></span>
-<span id="cb7-21"><a href="#cb7-21" tabindex="-1"></a></span>
-<span id="cb7-22"><a href="#cb7-22" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame sim_df <span class="op">=</span> Rcpp<span class="op">::</span>DataFrame<span class="op">::</span>create<span class="op">(</span></span>
-<span id="cb7-23"><a href="#cb7-23" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"close"</span><span class="op">]</span> <span class="op">=</span> close<span class="op">,</span></span>
-<span id="cb7-24"><a href="#cb7-24" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulation"</span><span class="op">]</span> <span class="op">=</span> sim_idx</span>
-<span id="cb7-25"><a href="#cb7-25" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb7-26"><a href="#cb7-26" tabindex="-1"></a></span>
-<span id="cb7-27"><a href="#cb7-27" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame end_df <span class="op">=</span> Rcpp<span class="op">::</span>DataFrame<span class="op">::</span>create<span class="op">(</span></span>
-<span id="cb7-28"><a href="#cb7-28" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"close"</span><span class="op">]</span> <span class="op">=</span> end_price<span class="op">,</span></span>
-<span id="cb7-29"><a href="#cb7-29" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulation"</span><span class="op">]</span> <span class="op">=</span> end_idx</span>
-<span id="cb7-30"><a href="#cb7-30" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb7-31"><a href="#cb7-31" tabindex="-1"></a></span>
-<span id="cb7-32"><a href="#cb7-32" tabindex="-1"></a>    <span class="cf">return</span> Rcpp<span class="op">::</span>List<span class="op">::</span>create<span class="op">(</span></span>
-<span id="cb7-33"><a href="#cb7-33" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulations"</span><span class="op">]</span> <span class="op">=</span> sim_df<span class="op">,</span></span>
-<span id="cb7-34"><a href="#cb7-34" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"end_prices"</span><span class="op">]</span> <span class="op">=</span> end_df</span>
-<span id="cb7-35"><a href="#cb7-35" tabindex="-1"></a>    <span class="op">);</span></span>
-<span id="cb7-36"><a href="#cb7-36" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>Rcpp<span class="op">::</span>List monte_carlo<span class="op">(</span><span class="dt">double</span> seed_price<span class="op">,</span> <span class="dt">double</span> daily_vol<span class="op">,</span> <span class="dt">int</span> num_sims<span class="op">,</span> <span class="dt">int</span> num_days<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a>    <span class="dt">int</span> total_rows <span class="op">=</span> num_sims <span class="op">*</span> num_days<span class="op">;</span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector close<span class="op">(</span>total_rows<span class="op">);</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a>    Rcpp<span class="op">::</span>IntegerVector sim_idx<span class="op">(</span>total_rows<span class="op">);</span></span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>    Rcpp<span class="op">::</span>NumericVector end_price<span class="op">(</span>num_sims<span class="op">);</span></span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>    Rcpp<span class="op">::</span>IntegerVector end_idx<span class="op">(</span>num_sims<span class="op">);</span></span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>    </span>
+<span id="cb8-8"><a href="#cb8-8" tabindex="-1"></a>    <span class="dt">int</span> row_index <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb8-9"><a href="#cb8-9" tabindex="-1"></a>    <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> num_sims<span class="op">;</span> <span class="op">++</span>i<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-10"><a href="#cb8-10" tabindex="-1"></a>        <span class="dt">double</span> current_price <span class="op">=</span> seed_price<span class="op">;</span></span>
+<span id="cb8-11"><a href="#cb8-11" tabindex="-1"></a>        <span class="cf">for</span> <span class="op">(</span><span class="dt">int</span> j <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> j <span class="op">&lt;</span> num_days<span class="op">;</span> <span class="op">++</span>j<span class="op">)</span> <span class="op">{</span></span>
+<span id="cb8-12"><a href="#cb8-12" tabindex="-1"></a>            current_price <span class="op">*=</span> <span class="op">(</span><span class="dv">1</span> <span class="op">+</span> R<span class="op">::</span>rnorm<span class="op">(</span><span class="dv">0</span><span class="op">,</span> daily_vol<span class="op">));</span></span>
+<span id="cb8-13"><a href="#cb8-13" tabindex="-1"></a>            close<span class="op">[</span>row_index<span class="op">]</span> <span class="op">=</span> current_price<span class="op">;</span></span>
+<span id="cb8-14"><a href="#cb8-14" tabindex="-1"></a>            sim_idx<span class="op">[</span>row_index<span class="op">]</span> <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb8-15"><a href="#cb8-15" tabindex="-1"></a>            <span class="op">++</span>row_index<span class="op">;</span></span>
+<span id="cb8-16"><a href="#cb8-16" tabindex="-1"></a>        <span class="op">}</span></span>
+<span id="cb8-17"><a href="#cb8-17" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" tabindex="-1"></a>        end_price<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> current_price<span class="op">;</span></span>
+<span id="cb8-19"><a href="#cb8-19" tabindex="-1"></a>        end_idx<span class="op">[</span>i<span class="op">]</span> <span class="op">=</span> i <span class="op">+</span> <span class="dv">1</span><span class="op">;</span></span>
+<span id="cb8-20"><a href="#cb8-20" tabindex="-1"></a>    <span class="op">}</span></span>
+<span id="cb8-21"><a href="#cb8-21" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame sim_df <span class="op">=</span> Rcpp<span class="op">::</span>DataFrame<span class="op">::</span>create<span class="op">(</span></span>
+<span id="cb8-23"><a href="#cb8-23" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"close"</span><span class="op">]</span> <span class="op">=</span> close<span class="op">,</span></span>
+<span id="cb8-24"><a href="#cb8-24" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulation"</span><span class="op">]</span> <span class="op">=</span> sim_idx</span>
+<span id="cb8-25"><a href="#cb8-25" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb8-26"><a href="#cb8-26" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" tabindex="-1"></a>    Rcpp<span class="op">::</span>DataFrame end_df <span class="op">=</span> Rcpp<span class="op">::</span>DataFrame<span class="op">::</span>create<span class="op">(</span></span>
+<span id="cb8-28"><a href="#cb8-28" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"close"</span><span class="op">]</span> <span class="op">=</span> end_price<span class="op">,</span></span>
+<span id="cb8-29"><a href="#cb8-29" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulation"</span><span class="op">]</span> <span class="op">=</span> end_idx</span>
+<span id="cb8-30"><a href="#cb8-30" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb8-31"><a href="#cb8-31" tabindex="-1"></a></span>
+<span id="cb8-32"><a href="#cb8-32" tabindex="-1"></a>    <span class="cf">return</span> Rcpp<span class="op">::</span>List<span class="op">::</span>create<span class="op">(</span></span>
+<span id="cb8-33"><a href="#cb8-33" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"simulations"</span><span class="op">]</span> <span class="op">=</span> sim_df<span class="op">,</span></span>
+<span id="cb8-34"><a href="#cb8-34" tabindex="-1"></a>        Rcpp<span class="op">::</span>_<span class="op">[</span><span class="st">"end_prices"</span><span class="op">]</span> <span class="op">=</span> end_df</span>
+<span id="cb8-35"><a href="#cb8-35" tabindex="-1"></a>    <span class="op">);</span></span>
+<span id="cb8-36"><a href="#cb8-36" tabindex="-1"></a><span class="op">}</span></span></code></pre></div>
 <ol style="list-style-type: decimal">
 <li><p><strong>Initialisation</strong>: We create vectors to store the
 simulated prices (<code>close</code>), simulation indices
@@ -372,7 +388,7 @@ start with the <code>seed_price</code> and generate
 <li>
 <p><strong>Daily Price Movement</strong>: Each day’s price is
 calculated using the formula:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>current_price <span class="op">*=</span> <span class="op">(</span><span class="dv">1</span> <span class="op">+</span> R<span class="op">::</span>rnorm<span class="op">(</span><span class="dv">0</span><span class="op">,</span> daily_vol<span class="op">));</span></span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode cpp"><code class="sourceCode cpp"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a>current_price <span class="op">*=</span> <span class="op">(</span><span class="dv">1</span> <span class="op">+</span> R<span class="op">::</span>rnorm<span class="op">(</span><span class="dv">0</span><span class="op">,</span> daily_vol<span class="op">));</span></span></code></pre></div>
 <p>This implements a geometric Brownian motion, where:</p>
 <ul>
 <li>
@@ -448,80 +464,80 @@ visualise the simulation results.</li>
 </ol>
 <p>Here’s a quick overview of the public methods available in the
 <code>MonteCarlo</code> class:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co">#' Monte Carlo Simulation R6 Class</span></span>
-<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a><span class="co">#' @description</span></span>
-<span id="cb9-4"><a href="#cb9-4" tabindex="-1"></a><span class="co">#' An R6 class for performing Monte Carlo simulations on financial time series data.</span></span>
-<span id="cb9-5"><a href="#cb9-5" tabindex="-1"></a><span class="co">#' This class provides methods for data preparation, simulation execution, and result visualization.</span></span>
-<span id="cb9-6"><a href="#cb9-6" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb9-7"><a href="#cb9-7" tabindex="-1"></a><span class="co">#' @details</span></span>
-<span id="cb9-8"><a href="#cb9-8" tabindex="-1"></a><span class="co">#' The MonteCarlo class uses historical price data to calculate volatility and perform</span></span>
-<span id="cb9-9"><a href="#cb9-9" tabindex="-1"></a><span class="co">#' Monte Carlo simulations for future price movements. It leverages the C++ implementation</span></span>
-<span id="cb9-10"><a href="#cb9-10" tabindex="-1"></a><span class="co">#' of the Monte Carlo algorithm for efficiency.</span></span>
-<span id="cb9-11"><a href="#cb9-11" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb9-12"><a href="#cb9-12" tabindex="-1"></a><span class="co">#' @field data A data.table containing the historical price data.</span></span>
-<span id="cb9-13"><a href="#cb9-13" tabindex="-1"></a><span class="co">#' @field simulation_results A data.table containing the results of the Monte Carlo simulation.</span></span>
-<span id="cb9-14"><a href="#cb9-14" tabindex="-1"></a><span class="co">#' @field end_prices A data.table containing the final prices from each simulation path.</span></span>
-<span id="cb9-15"><a href="#cb9-15" tabindex="-1"></a><span class="co">#' @field log_historical Logical. Whether to use log returns for historical volatility calculation.</span></span>
-<span id="cb9-16"><a href="#cb9-16" tabindex="-1"></a><span class="co">#' @field number_sims Integer. The number of simulation paths to generate.</span></span>
-<span id="cb9-17"><a href="#cb9-17" tabindex="-1"></a><span class="co">#' @field project_days Integer. The number of days to project into the future.</span></span>
-<span id="cb9-18"><a href="#cb9-18" tabindex="-1"></a><span class="co">#' @field start_date POSIXct. The start date for the simulation (last date of historical data).</span></span>
-<span id="cb9-19"><a href="#cb9-19" tabindex="-1"></a><span class="co">#' @field verbose Logical. Whether to print progress messages.</span></span>
-<span id="cb9-20"><a href="#cb9-20" tabindex="-1"></a><span class="co">#'</span></span>
-<span id="cb9-21"><a href="#cb9-21" tabindex="-1"></a><span class="co">#' @export</span></span>
-<span id="cb9-22"><a href="#cb9-22" tabindex="-1"></a>MonteCarlo <span class="ot">&lt;-</span> R6<span class="sc">::</span><span class="fu">R6Class</span>(</span>
-<span id="cb9-23"><a href="#cb9-23" tabindex="-1"></a>    <span class="st">"MonteCarlo"</span>,</span>
-<span id="cb9-24"><a href="#cb9-24" tabindex="-1"></a>    <span class="at">private =</span> <span class="fu">list</span>(</span>
-<span id="cb9-25"><a href="#cb9-25" tabindex="-1"></a>        <span class="at">validate_data =</span> \()</span>
-<span id="cb9-26"><a href="#cb9-26" tabindex="-1"></a></span>
-<span id="cb9-27"><a href="#cb9-27" tabindex="-1"></a>        <span class="at">prepare =</span> \(<span class="at">log_historical =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-28"><a href="#cb9-28" tabindex="-1"></a></span>
-<span id="cb9-29"><a href="#cb9-29" tabindex="-1"></a>        <span class="at">seed_price =</span> <span class="cn">NA_real_</span>,</span>
-<span id="cb9-30"><a href="#cb9-30" tabindex="-1"></a>        <span class="at">daily_vol =</span> <span class="cn">NA_real_</span></span>
-<span id="cb9-31"><a href="#cb9-31" tabindex="-1"></a>    ),</span>
-<span id="cb9-32"><a href="#cb9-32" tabindex="-1"></a>    <span class="at">active =</span> <span class="fu">list</span>(</span>
-<span id="cb9-33"><a href="#cb9-33" tabindex="-1"></a>        <span class="co">#' @field results A list containing simulation results and end prices.</span></span>
-<span id="cb9-34"><a href="#cb9-34" tabindex="-1"></a>        <span class="at">results =</span> \()</span>
-<span id="cb9-35"><a href="#cb9-35" tabindex="-1"></a>    ),</span>
-<span id="cb9-36"><a href="#cb9-36" tabindex="-1"></a>    <span class="at">public =</span> <span class="fu">list</span>(</span>
-<span id="cb9-37"><a href="#cb9-37" tabindex="-1"></a>        <span class="at">data =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-38"><a href="#cb9-38" tabindex="-1"></a>        <span class="at">simulation_results =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-39"><a href="#cb9-39" tabindex="-1"></a>        <span class="at">end_prices =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-40"><a href="#cb9-40" tabindex="-1"></a>        <span class="at">log_historical =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-41"><a href="#cb9-41" tabindex="-1"></a>        <span class="at">number_sims =</span> <span class="dv">1000</span>,</span>
-<span id="cb9-42"><a href="#cb9-42" tabindex="-1"></a>        <span class="at">project_days =</span> <span class="dv">30</span>,</span>
-<span id="cb9-43"><a href="#cb9-43" tabindex="-1"></a>        <span class="at">start_date =</span> <span class="cn">NULL</span>,</span>
-<span id="cb9-44"><a href="#cb9-44" tabindex="-1"></a>        <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
-<span id="cb9-45"><a href="#cb9-45" tabindex="-1"></a></span>
-<span id="cb9-46"><a href="#cb9-46" tabindex="-1"></a>        <span class="co">#' @description</span></span>
-<span id="cb9-47"><a href="#cb9-47" tabindex="-1"></a>        <span class="co">#' Create a new MonteCarlo object.</span></span>
-<span id="cb9-48"><a href="#cb9-48" tabindex="-1"></a>        <span class="co">#' @param dt A data.table containing historical price data.</span></span>
-<span id="cb9-49"><a href="#cb9-49" tabindex="-1"></a>        <span class="co">#' @param log_historical Logical. Whether to use log returns for historical volatility calculation.</span></span>
-<span id="cb9-50"><a href="#cb9-50" tabindex="-1"></a>        <span class="co">#' @param number_sims Integer. The number of simulation paths to generate.</span></span>
-<span id="cb9-51"><a href="#cb9-51" tabindex="-1"></a>        <span class="co">#' @param project_days Integer. The number of days to project into the future.</span></span>
-<span id="cb9-52"><a href="#cb9-52" tabindex="-1"></a>        <span class="co">#' @param verbose Logical. Whether to print progress messages.</span></span>
-<span id="cb9-53"><a href="#cb9-53" tabindex="-1"></a>        <span class="at">initialize =</span> \(dt, <span class="at">log_historical =</span> <span class="cn">FALSE</span>, <span class="at">number_sims =</span> <span class="dv">1000</span>, <span class="at">project_days =</span> <span class="dv">30</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb9-54"><a href="#cb9-54" tabindex="-1"></a></span>
-<span id="cb9-55"><a href="#cb9-55" tabindex="-1"></a>        <span class="co">#' @description</span></span>
-<span id="cb9-56"><a href="#cb9-56" tabindex="-1"></a>        <span class="co">#' Run the Monte Carlo simulation.</span></span>
-<span id="cb9-57"><a href="#cb9-57" tabindex="-1"></a>        <span class="at">carlo =</span> \()</span>
-<span id="cb9-58"><a href="#cb9-58" tabindex="-1"></a></span>
-<span id="cb9-59"><a href="#cb9-59" tabindex="-1"></a>        <span class="co">#' @description</span></span>
-<span id="cb9-60"><a href="#cb9-60" tabindex="-1"></a>        <span class="co">#' Plot the simulated price paths.</span></span>
-<span id="cb9-61"><a href="#cb9-61" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing the simulated price paths.</span></span>
-<span id="cb9-62"><a href="#cb9-62" tabindex="-1"></a>        <span class="at">plot_prices =</span> \()</span>
-<span id="cb9-63"><a href="#cb9-63" tabindex="-1"></a></span>
-<span id="cb9-64"><a href="#cb9-64" tabindex="-1"></a>        <span class="co">#' @description</span></span>
-<span id="cb9-65"><a href="#cb9-65" tabindex="-1"></a>        <span class="co">#' Plot the distribution of final prices.</span></span>
-<span id="cb9-66"><a href="#cb9-66" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing the distribution of final prices.</span></span>
-<span id="cb9-67"><a href="#cb9-67" tabindex="-1"></a>        <span class="at">plot_distribution =</span> \()</span>
-<span id="cb9-68"><a href="#cb9-68" tabindex="-1"></a></span>
-<span id="cb9-69"><a href="#cb9-69" tabindex="-1"></a>        <span class="co">#' @description</span></span>
-<span id="cb9-70"><a href="#cb9-70" tabindex="-1"></a>        <span class="co">#' Plot historical prices and simulated future prices.</span></span>
-<span id="cb9-71"><a href="#cb9-71" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing historical and simulated prices.</span></span>
-<span id="cb9-72"><a href="#cb9-72" tabindex="-1"></a>        <span class="at">plot_prices_and_predictions =</span> \()</span>
-<span id="cb9-73"><a href="#cb9-73" tabindex="-1"></a>    )</span>
-<span id="cb9-74"><a href="#cb9-74" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="co">#' Monte Carlo Simulation R6 Class</span></span>
+<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="co">#' @description</span></span>
+<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="co">#' An R6 class for performing Monte Carlo simulations on financial time series data.</span></span>
+<span id="cb10-5"><a href="#cb10-5" tabindex="-1"></a><span class="co">#' This class provides methods for data preparation, simulation execution, and result visualization.</span></span>
+<span id="cb10-6"><a href="#cb10-6" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-7"><a href="#cb10-7" tabindex="-1"></a><span class="co">#' @details</span></span>
+<span id="cb10-8"><a href="#cb10-8" tabindex="-1"></a><span class="co">#' The MonteCarlo class uses historical price data to calculate volatility and perform</span></span>
+<span id="cb10-9"><a href="#cb10-9" tabindex="-1"></a><span class="co">#' Monte Carlo simulations for future price movements. It leverages the C++ implementation</span></span>
+<span id="cb10-10"><a href="#cb10-10" tabindex="-1"></a><span class="co">#' of the Monte Carlo algorithm for efficiency.</span></span>
+<span id="cb10-11"><a href="#cb10-11" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-12"><a href="#cb10-12" tabindex="-1"></a><span class="co">#' @field data A data.table containing the historical price data.</span></span>
+<span id="cb10-13"><a href="#cb10-13" tabindex="-1"></a><span class="co">#' @field simulation_results A data.table containing the results of the Monte Carlo simulation.</span></span>
+<span id="cb10-14"><a href="#cb10-14" tabindex="-1"></a><span class="co">#' @field end_prices A data.table containing the final prices from each simulation path.</span></span>
+<span id="cb10-15"><a href="#cb10-15" tabindex="-1"></a><span class="co">#' @field log_historical Logical. Whether to use log returns for historical volatility calculation.</span></span>
+<span id="cb10-16"><a href="#cb10-16" tabindex="-1"></a><span class="co">#' @field number_sims Integer. The number of simulation paths to generate.</span></span>
+<span id="cb10-17"><a href="#cb10-17" tabindex="-1"></a><span class="co">#' @field project_days Integer. The number of days to project into the future.</span></span>
+<span id="cb10-18"><a href="#cb10-18" tabindex="-1"></a><span class="co">#' @field start_date POSIXct. The start date for the simulation (last date of historical data).</span></span>
+<span id="cb10-19"><a href="#cb10-19" tabindex="-1"></a><span class="co">#' @field verbose Logical. Whether to print progress messages.</span></span>
+<span id="cb10-20"><a href="#cb10-20" tabindex="-1"></a><span class="co">#'</span></span>
+<span id="cb10-21"><a href="#cb10-21" tabindex="-1"></a><span class="co">#' @export</span></span>
+<span id="cb10-22"><a href="#cb10-22" tabindex="-1"></a>MonteCarlo <span class="ot">&lt;-</span> R6<span class="sc">::</span><span class="fu">R6Class</span>(</span>
+<span id="cb10-23"><a href="#cb10-23" tabindex="-1"></a>    <span class="st">"MonteCarlo"</span>,</span>
+<span id="cb10-24"><a href="#cb10-24" tabindex="-1"></a>    <span class="at">private =</span> <span class="fu">list</span>(</span>
+<span id="cb10-25"><a href="#cb10-25" tabindex="-1"></a>        <span class="at">validate_data =</span> \()</span>
+<span id="cb10-26"><a href="#cb10-26" tabindex="-1"></a></span>
+<span id="cb10-27"><a href="#cb10-27" tabindex="-1"></a>        <span class="at">prepare =</span> \(<span class="at">log_historical =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" tabindex="-1"></a>        <span class="at">seed_price =</span> <span class="cn">NA_real_</span>,</span>
+<span id="cb10-30"><a href="#cb10-30" tabindex="-1"></a>        <span class="at">daily_vol =</span> <span class="cn">NA_real_</span></span>
+<span id="cb10-31"><a href="#cb10-31" tabindex="-1"></a>    ),</span>
+<span id="cb10-32"><a href="#cb10-32" tabindex="-1"></a>    <span class="at">active =</span> <span class="fu">list</span>(</span>
+<span id="cb10-33"><a href="#cb10-33" tabindex="-1"></a>        <span class="co">#' @field results A list containing simulation results and end prices.</span></span>
+<span id="cb10-34"><a href="#cb10-34" tabindex="-1"></a>        <span class="at">results =</span> \()</span>
+<span id="cb10-35"><a href="#cb10-35" tabindex="-1"></a>    ),</span>
+<span id="cb10-36"><a href="#cb10-36" tabindex="-1"></a>    <span class="at">public =</span> <span class="fu">list</span>(</span>
+<span id="cb10-37"><a href="#cb10-37" tabindex="-1"></a>        <span class="at">data =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-38"><a href="#cb10-38" tabindex="-1"></a>        <span class="at">simulation_results =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-39"><a href="#cb10-39" tabindex="-1"></a>        <span class="at">end_prices =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-40"><a href="#cb10-40" tabindex="-1"></a>        <span class="at">log_historical =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-41"><a href="#cb10-41" tabindex="-1"></a>        <span class="at">number_sims =</span> <span class="dv">1000</span>,</span>
+<span id="cb10-42"><a href="#cb10-42" tabindex="-1"></a>        <span class="at">project_days =</span> <span class="dv">30</span>,</span>
+<span id="cb10-43"><a href="#cb10-43" tabindex="-1"></a>        <span class="at">start_date =</span> <span class="cn">NULL</span>,</span>
+<span id="cb10-44"><a href="#cb10-44" tabindex="-1"></a>        <span class="at">verbose =</span> <span class="cn">FALSE</span>,</span>
+<span id="cb10-45"><a href="#cb10-45" tabindex="-1"></a></span>
+<span id="cb10-46"><a href="#cb10-46" tabindex="-1"></a>        <span class="co">#' @description</span></span>
+<span id="cb10-47"><a href="#cb10-47" tabindex="-1"></a>        <span class="co">#' Create a new MonteCarlo object.</span></span>
+<span id="cb10-48"><a href="#cb10-48" tabindex="-1"></a>        <span class="co">#' @param dt A data.table containing historical price data.</span></span>
+<span id="cb10-49"><a href="#cb10-49" tabindex="-1"></a>        <span class="co">#' @param log_historical Logical. Whether to use log returns for historical volatility calculation.</span></span>
+<span id="cb10-50"><a href="#cb10-50" tabindex="-1"></a>        <span class="co">#' @param number_sims Integer. The number of simulation paths to generate.</span></span>
+<span id="cb10-51"><a href="#cb10-51" tabindex="-1"></a>        <span class="co">#' @param project_days Integer. The number of days to project into the future.</span></span>
+<span id="cb10-52"><a href="#cb10-52" tabindex="-1"></a>        <span class="co">#' @param verbose Logical. Whether to print progress messages.</span></span>
+<span id="cb10-53"><a href="#cb10-53" tabindex="-1"></a>        <span class="at">initialize =</span> \(dt, <span class="at">log_historical =</span> <span class="cn">FALSE</span>, <span class="at">number_sims =</span> <span class="dv">1000</span>, <span class="at">project_days =</span> <span class="dv">30</span>, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-54"><a href="#cb10-54" tabindex="-1"></a></span>
+<span id="cb10-55"><a href="#cb10-55" tabindex="-1"></a>        <span class="co">#' @description</span></span>
+<span id="cb10-56"><a href="#cb10-56" tabindex="-1"></a>        <span class="co">#' Run the Monte Carlo simulation.</span></span>
+<span id="cb10-57"><a href="#cb10-57" tabindex="-1"></a>        <span class="at">carlo =</span> \()</span>
+<span id="cb10-58"><a href="#cb10-58" tabindex="-1"></a></span>
+<span id="cb10-59"><a href="#cb10-59" tabindex="-1"></a>        <span class="co">#' @description</span></span>
+<span id="cb10-60"><a href="#cb10-60" tabindex="-1"></a>        <span class="co">#' Plot the simulated price paths.</span></span>
+<span id="cb10-61"><a href="#cb10-61" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing the simulated price paths.</span></span>
+<span id="cb10-62"><a href="#cb10-62" tabindex="-1"></a>        <span class="at">plot_prices =</span> \()</span>
+<span id="cb10-63"><a href="#cb10-63" tabindex="-1"></a></span>
+<span id="cb10-64"><a href="#cb10-64" tabindex="-1"></a>        <span class="co">#' @description</span></span>
+<span id="cb10-65"><a href="#cb10-65" tabindex="-1"></a>        <span class="co">#' Plot the distribution of final prices.</span></span>
+<span id="cb10-66"><a href="#cb10-66" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing the distribution of final prices.</span></span>
+<span id="cb10-67"><a href="#cb10-67" tabindex="-1"></a>        <span class="at">plot_distribution =</span> \()</span>
+<span id="cb10-68"><a href="#cb10-68" tabindex="-1"></a></span>
+<span id="cb10-69"><a href="#cb10-69" tabindex="-1"></a>        <span class="co">#' @description</span></span>
+<span id="cb10-70"><a href="#cb10-70" tabindex="-1"></a>        <span class="co">#' Plot historical prices and simulated future prices.</span></span>
+<span id="cb10-71"><a href="#cb10-71" tabindex="-1"></a>        <span class="co">#' @return A ggplot object showing historical and simulated prices.</span></span>
+<span id="cb10-72"><a href="#cb10-72" tabindex="-1"></a>        <span class="at">plot_prices_and_predictions =</span> \()</span>
+<span id="cb10-73"><a href="#cb10-73" tabindex="-1"></a>    )</span>
+<span id="cb10-74"><a href="#cb10-74" tabindex="-1"></a>)</span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
