@@ -121,6 +121,17 @@
 <span>    to <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">now</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    frequency <span class="op">=</span> <span class="st">"1 hour"</span></span>
 <span><span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
+<span><span class="co">#&gt;      symbol            datetime    open    high     low   close   volume</span></span>
+<span><span class="co">#&gt;      &lt;char&gt;              &lt;POSc&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: BTC/USDT 2024-07-06 05:00:00 56057.9 56485.8 56025.2 56363.1 79.48139</span></span>
+<span><span class="co">#&gt; 2: BTC/USDT 2024-07-06 06:00:00 56363.1 56573.3 56346.6 56413.8 41.94569</span></span>
+<span><span class="co">#&gt; 3: BTC/USDT 2024-07-06 07:00:00 56413.7 56672.4 56402.5 56602.2 98.02022</span></span>
+<span><span class="co">#&gt; 4: BTC/USDT 2024-07-06 08:00:00 56602.2 56655.3 56508.8 56555.8 49.06419</span></span>
+<span><span class="co">#&gt; 5: BTC/USDT 2024-07-06 09:00:00 56555.9 56767.0 56441.6 56759.9 42.89421</span></span>
+<span><span class="co">#&gt; 6: BTC/USDT 2024-07-06 10:00:00 56757.4 56887.1 56645.3 56786.6 45.64148</span></span>
+<span><span class="co">#&gt; 1 variable(s) not shown: [turnover &lt;num&gt;]</span></span></code></pre></div>
 <p>NOTE: a demo dataset is included in the <code>demo/data/</code> directory.</p>
 </div>
 <div class="section level3">
@@ -164,7 +175,7 @@
 <h4 id="ema-and-bollinger-bands">EMA and Bollinger Bands<a class="anchor" aria-label="anchor" href="#ema-and-bollinger-bands"></a>
 </h4>
 <p>Here we demonstrate how one might use an external package to calculate an indicator such as EMA (<code>TTR</code>). <code>dmplot</code> also provides a high-performance <code>C++</code> implmentation of <code>ema</code> and <code>bb</code> which can be used directly in the <code>data.table</code> <code>:=</code> operator.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span> <span class="va">EMA</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -193,7 +204,7 @@
 <span><span class="co">#&gt; 5: 2024-07-13 04:00:00 57779.8  57754.91 57618.87 57501.74 57767.08 58032.42</span></span>
 <span><span class="co">#&gt; 6: 2024-07-13 05:00:00 57820.6  57761.48 57622.90 57551.86 57790.19 58028.52</span></span></code></pre></div>
 <p>Because of the <code>dmplot</code> framework we can build our analyses and plots in layers. First we create the candlestick plot and then add the EMA and Bollinger Bands in separate layers. This would allow us to dynamically overlay different indicators and analyses.</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">candle_plot</span> <span class="op">&lt;-</span> <span class="va">data2</span> <span class="op">|&gt;</span></span>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">ggplot</span><span class="op">(</span><span class="va">ggplot2</span><span class="op">$</span><span class="fu">aes</span><span class="op">(</span></span>
 <span>        x <span class="op">=</span> <span class="va">datetime</span>,</span>
@@ -232,7 +243,7 @@
 <h4 id="macd">MACD<a class="anchor" aria-label="anchor" href="#macd"></a>
 </h4>
 <p>Plotting the MACD (moving average convergence divergence) indicator:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data2</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"macd"</span>, <span class="st">"macd_signal"</span><span class="op">)</span> <span class="op">:=</span> <span class="va">dmplot</span><span class="op">$</span><span class="fu">macd</span><span class="op">(</span><span class="va">close</span>, s <span class="op">=</span> <span class="fl">12</span>, l <span class="op">=</span> <span class="fl">26</span>, k <span class="op">=</span> <span class="fl">9</span><span class="op">)</span><span class="op">]</span></span>
@@ -247,7 +258,7 @@
 <span><span class="co">#&gt; 4: 2024-07-13 03:00:00 57818.5 0.1492232   0.1259318  0.0232913873</span></span>
 <span><span class="co">#&gt; 5: 2024-07-13 04:00:00 57779.8 0.1344384   0.1276331  0.0068052725</span></span>
 <span><span class="co">#&gt; 6: 2024-07-13 05:00:00 57820.6 0.1269544   0.1274974 -0.0005429806</span></span></code></pre></div>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">macd_plot</span> <span class="op">&lt;-</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">ggplot</span><span class="op">(</span><span class="va">data2</span>, <span class="va">ggplot2</span><span class="op">$</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">datetime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="co">## ------------------------------------</span></span>
 <span>    <span class="va">dmplot</span><span class="op">$</span><span class="fu">stat_macd</span><span class="op">(</span></span>
@@ -271,7 +282,7 @@
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html" class="external-link">print</a></span><span class="op">(</span><span class="va">macd_plot</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-plot-macd-1.png" style="display: block; margin: auto;"></p>
 <p>Now let’s do the same plot in a light theme:</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">macd_plot</span> <span class="op">+</span></span>
 <span>    <span class="va">dmplot</span><span class="op">$</span><span class="fu">theme_dereck_light</span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span></span>
@@ -290,7 +301,7 @@
 <li>Run the simulation</li>
 <li>Plot the results</li>
 </ol>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">[</span> <span class="va">MonteCarlo</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data2</span> <span class="op">&lt;-</span> <span class="va">dt</span><span class="op">$</span><span class="fu">copy</span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
@@ -302,10 +313,10 @@
 <span></span>
 <span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-monte-carlo-simulation-1.png" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_distribution</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-monte-carlo-simulation-2.png" style="display: block; margin: auto;"></p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices_and_predictions</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-monte-carlo-simulation-3.png" style="display: block; margin: auto;"></p>
 </div>
@@ -319,7 +330,7 @@
 <h3 id="volcano-plot">Volcano plot<a class="anchor" aria-label="anchor" href="#volcano-plot"></a>
 </h3>
 <p>A volcano plot can be generated in 3 easy steps.</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># 1. load the data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">diff_expr_res</span>, package <span class="op">=</span> <span class="st">"dmplot"</span><span class="op">)</span></span>
 <span></span>
@@ -345,7 +356,7 @@
 <h2 id="benchmarking-dmplots-high-performance-c-technical-indicators">Benchmarking <code>dmplot</code>’s high-performance C++ technical indicators<a class="anchor" aria-label="anchor" href="#benchmarking-dmplots-high-performance-c-technical-indicators"></a>
 </h2>
 <p>Here we do a simple demonstration and benchmark of <code>dmplot</code>’s Bolinger Bands implementation vs the <code>TTR</code> package. Note that despite using a version not wrapped to return a <code>list</code> the <code>TTR</code> implementation is still significantly slower than <code>dmplot</code>’s C++ implementation.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">microbenchmark</span><span class="op">[</span> <span class="va">microbenchmark</span> <span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span> <span class="va">BBands</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
