@@ -84,8 +84,9 @@
 </h2>
 <!-- badges: start -->
 
-<p><code>R</code> framework written in high-performance <code>C++</code> and <code>ggplot2</code> for financial and time series data analysis.</p>
-<p>The package provides algorithms, functions, <code>ggplot2</code> layers and most importantly a framework for working with and analysing financial and time series data.</p>
+<p><code>R</code> framework written in high-performance <code>C++</code> and <code>ggplot2</code> for financial, bioinformatics, and time series data analysis.</p>
+<p>The package provides algorithms, functions, <code>ggplot2</code> layers and most importantly a framework for working with and analysing financial, bioinformatics, and time series data.</p>
+<p>In short this package is a condensation and accumulation of all of all the knowledge I’ve gathered over the years spurred on by personal curiosity and framed by the need for order with a comprehensive framework.</p>
 </div>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -105,7 +106,7 @@
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">dmplot</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
-<h2 id="getting-started">Getting started<a class="anchor" aria-label="anchor" href="#getting-started"></a>
+<h2 id="getting-started---finance">Getting started - Finance<a class="anchor" aria-label="anchor" href="#getting-started---finance"></a>
 </h2>
 <div class="section level3">
 <h3 id="get-financial-data">Get financial data<a class="anchor" aria-label="anchor" href="#get-financial-data"></a>
@@ -116,21 +117,10 @@
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu">get_market_data</span><span class="op">(</span></span>
 <span>    symbols <span class="op">=</span> <span class="va">ticker</span>,</span>
-<span>    from <span class="op">=</span> <span class="st">"2024-07-01 10:36:50 EST"</span>, <span class="co"># lubridate::now() - lubridate::days(7),</span></span>
-<span>    to <span class="op">=</span> <span class="st">"2024-07-08 10:36:53 EST"</span>, <span class="co"># lubridate::now(),</span></span>
+<span>    from <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">now</a></span><span class="op">(</span><span class="op">)</span> <span class="op">-</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/period.html" class="external-link">days</a></span><span class="op">(</span><span class="fl">7</span><span class="op">)</span>,</span>
+<span>    to <span class="op">=</span> <span class="fu">lubridate</span><span class="fu">::</span><span class="fu"><a href="https://lubridate.tidyverse.org/reference/now.html" class="external-link">now</a></span><span class="op">(</span><span class="op">)</span>,</span>
 <span>    frequency <span class="op">=</span> <span class="st">"1 hour"</span></span>
-<span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;      symbol            datetime    open    high     low   close    volume</span></span>
-<span><span class="co">#&gt;      &lt;char&gt;              &lt;POSc&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;   &lt;num&gt;     &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: BTC/USDT 2024-07-01 10:00:00 62942.7 62978.1 62779.0 62851.0  52.82884</span></span>
-<span><span class="co">#&gt; 2: BTC/USDT 2024-07-01 11:00:00 62850.9 62862.5 62599.7 62663.7  81.03310</span></span>
-<span><span class="co">#&gt; 3: BTC/USDT 2024-07-01 12:00:00 62663.8 62914.7 62643.8 62880.5  69.31822</span></span>
-<span><span class="co">#&gt; 4: BTC/USDT 2024-07-01 13:00:00 62880.6 63084.0 62520.6 62687.4 125.46135</span></span>
-<span><span class="co">#&gt; 5: BTC/USDT 2024-07-01 14:00:00 62687.5 62941.5 62605.0 62822.6 111.57547</span></span>
-<span><span class="co">#&gt; 6: BTC/USDT 2024-07-01 15:00:00 62818.8 63147.5 62817.9 63126.9  79.18494</span></span>
-<span><span class="co">#&gt; 1 variable(s) not shown: [turnover &lt;num&gt;]</span></span></code></pre></div>
+<span><span class="op">)</span></span></code></pre></div>
 <p>NOTE: a demo dataset is included in the <code>demo/data/</code> directory.</p>
 </div>
 <div class="section level3">
@@ -196,12 +186,12 @@
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">data2</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">datetime</span>, <span class="va">close</span>, <span class="va">ema_short</span>, <span class="va">ema_long</span>, <span class="va">bb_lower</span>, <span class="va">bb_mavg</span>, <span class="va">bb_upper</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="co">#&gt;               datetime   close ema_short ema_long bb_lower  bb_mavg bb_upper</span></span>
 <span><span class="co">#&gt;                 &lt;POSc&gt;   &lt;num&gt;     &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: 2024-07-08 05:00:00 55479.1  56208.32 57477.51 54344.97 55769.94 57194.91</span></span>
-<span><span class="co">#&gt; 2: 2024-07-08 06:00:00 55629.8  56150.47 57440.56 54589.01 55606.22 56623.43</span></span>
-<span><span class="co">#&gt; 3: 2024-07-08 07:00:00 55843.9  56119.81 57408.62 54726.81 55531.58 56336.35</span></span>
-<span><span class="co">#&gt; 4: 2024-07-08 08:00:00 57773.6  56285.19 57415.92 54157.92 55669.65 57181.38</span></span>
-<span><span class="co">#&gt; 5: 2024-07-08 09:00:00 57514.7  56408.14 57417.90 53958.81 55835.80 57712.79</span></span>
-<span><span class="co">#&gt; 6: 2024-07-08 10:00:00 56817.6  56449.09 57405.89 54113.75 56006.43 57899.11</span></span></code></pre></div>
+<span><span class="co">#&gt; 1: 2024-07-13 00:00:00 57835.5  57705.34 57599.07 57373.50 57904.35 58435.20</span></span>
+<span><span class="co">#&gt; 2: 2024-07-13 01:00:00 57879.7  57722.77 57604.68 57381.80 57870.93 58360.06</span></span>
+<span><span class="co">#&gt; 3: 2024-07-13 02:00:00 57942.8  57744.78 57611.44 57388.49 57853.82 58319.15</span></span>
+<span><span class="co">#&gt; 4: 2024-07-13 03:00:00 57818.5  57752.15 57615.58 57402.41 57819.27 58236.13</span></span>
+<span><span class="co">#&gt; 5: 2024-07-13 04:00:00 57779.8  57754.91 57618.87 57501.74 57767.08 58032.42</span></span>
+<span><span class="co">#&gt; 6: 2024-07-13 05:00:00 57820.6  57761.48 57622.90 57551.86 57790.19 58028.52</span></span></code></pre></div>
 <p>Because of the <code>dmplot</code> framework we can build our analyses and plots in layers. First we create the candlestick plot and then add the EMA and Bollinger Bands in separate layers. This would allow us to dynamically overlay different indicators and analyses.</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">candle_plot</span> <span class="op">&lt;-</span> <span class="va">data2</span> <span class="op">|&gt;</span></span>
@@ -249,14 +239,14 @@
 <span><span class="va">data2</span><span class="op">[</span>, <span class="va">macd_diff</span> <span class="op">:=</span> <span class="va">macd</span> <span class="op">-</span> <span class="va">macd_signal</span><span class="op">]</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">tail</a></span><span class="op">(</span><span class="va">data2</span><span class="op">[</span>, <span class="fu">.</span><span class="op">(</span><span class="va">datetime</span>, <span class="va">close</span>, <span class="va">macd</span>, <span class="va">macd_signal</span>, <span class="va">macd_diff</span><span class="op">)</span><span class="op">]</span><span class="op">)</span></span>
-<span><span class="co">#&gt;               datetime   close       macd macd_signal   macd_diff</span></span>
-<span><span class="co">#&gt;                 &lt;POSc&gt;   &lt;num&gt;      &lt;num&gt;       &lt;num&gt;       &lt;num&gt;</span></span>
-<span><span class="co">#&gt; 1: 2024-07-08 05:00:00 55479.1 -0.9768488  -0.7276772 -0.24917161</span></span>
-<span><span class="co">#&gt; 2: 2024-07-08 06:00:00 55629.8 -0.9398049  -0.7701027 -0.16970222</span></span>
-<span><span class="co">#&gt; 3: 2024-07-08 07:00:00 55843.9 -0.8695678  -0.7899957 -0.07957204</span></span>
-<span><span class="co">#&gt; 4: 2024-07-08 08:00:00 57773.6 -0.5298231  -0.7379612  0.20813814</span></span>
-<span><span class="co">#&gt; 5: 2024-07-08 09:00:00 57514.7 -0.2950758  -0.6493841  0.35430831</span></span>
-<span><span class="co">#&gt; 6: 2024-07-08 10:00:00 56817.6 -0.2066996  -0.5608472  0.35414763</span></span></code></pre></div>
+<span><span class="co">#&gt;               datetime   close      macd macd_signal     macd_diff</span></span>
+<span><span class="co">#&gt;                 &lt;POSc&gt;   &lt;num&gt;     &lt;num&gt;       &lt;num&gt;         &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: 2024-07-13 00:00:00 57835.5 0.1416409   0.1010757  0.0405651391</span></span>
+<span><span class="co">#&gt; 2: 2024-07-13 01:00:00 57879.7 0.1474963   0.1103599  0.0371364367</span></span>
+<span><span class="co">#&gt; 3: 2024-07-13 02:00:00 57942.8 0.1591054   0.1201090  0.0389964272</span></span>
+<span><span class="co">#&gt; 4: 2024-07-13 03:00:00 57818.5 0.1492232   0.1259318  0.0232913873</span></span>
+<span><span class="co">#&gt; 5: 2024-07-13 04:00:00 57779.8 0.1344384   0.1276331  0.0068052725</span></span>
+<span><span class="co">#&gt; 6: 2024-07-13 05:00:00 57820.6 0.1269544   0.1274974 -0.0005429806</span></span></code></pre></div>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">macd_plot</span> <span class="op">&lt;-</span> <span class="va">ggplot2</span><span class="op">$</span><span class="fu">ggplot</span><span class="op">(</span><span class="va">data2</span>, <span class="va">ggplot2</span><span class="op">$</span><span class="fu">aes</span><span class="op">(</span>x <span class="op">=</span> <span class="va">datetime</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="co">## ------------------------------------</span></span>
@@ -319,11 +309,43 @@
 <code class="sourceCode R"><span><span class="va">monte</span><span class="op">$</span><span class="fu">plot_prices_and_predictions</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-monte-carlo-simulation-3.png" style="display: block; margin: auto;"></p>
 </div>
+</div>
+<div class="section level2">
+<h2 id="getting-started---bioinformatics">Getting started - Bioinformatics<a class="anchor" aria-label="anchor" href="#getting-started---bioinformatics"></a>
+</h2>
+<p><code>dmplot</code> offers a host of functions for working with bioinformatics data. Here we demonstrate how to use the <code><a href="reference/Volcano.html">dmplot::Volcano()</a></code> <code>R6</code> class to plot a volcano plot.</p>
+<p><code>dmplot</code> imposes a convention and standard for the data it expects, in exchange it offers ease of use and efficiency in plotting and analysing data.</p>
 <div class="section level3">
-<h3 id="benchmarking-dmplots-high-performance-c-technical-indicators">Benchmarking <code>dmplot</code>’s high-performance C++ technical indicators<a class="anchor" aria-label="anchor" href="#benchmarking-dmplots-high-performance-c-technical-indicators"></a>
+<h3 id="volcano-plot">Volcano plot<a class="anchor" aria-label="anchor" href="#volcano-plot"></a>
 </h3>
-<p>Here we do a simple demonstration and benchmark of <code>dmplot</code>’s Bolinger Bands implementation vs the <code>TTR</code> package. Note that despite using a version not wrapped to return a <code>list</code> the <code>TTR</code> implementation is still significantly slower than <code>dmplot</code>’s C++ implementation.</p>
+<p>A volcano plot can be generated in 3 easy steps.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># 1. load the data</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="va">diff_expr_res</span>, package <span class="op">=</span> <span class="st">"dmplot"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">diff_expr_res</span><span class="op">)</span></span>
+<span><span class="co">#&gt;       feature     log2FC  p_value      fdr</span></span>
+<span><span class="co">#&gt;        &lt;char&gt;      &lt;num&gt;    &lt;num&gt;    &lt;num&gt;</span></span>
+<span><span class="co">#&gt; 1: nCvahjxZZe -4.4653827 1.84e-12 2.95e-08</span></span>
+<span><span class="co">#&gt; 2: xokTmQulss -4.1254298 2.77e-10 2.23e-06</span></span>
+<span><span class="co">#&gt; 3: EsqEEnrrMA -0.7639582 6.92e-10 3.70e-06</span></span>
+<span><span class="co">#&gt; 4: MesqnUNFSM -1.3692713 1.79e-09 7.20e-06</span></span>
+<span><span class="co">#&gt; 5: vHRmtdhRnW -0.6481394 3.48e-09 1.12e-05</span></span>
+<span><span class="co">#&gt; 6: HHvlskYCEL -3.1067641 9.15e-09 2.45e-05</span></span>
+<span></span>
+<span><span class="co"># 2. create the Volcano object</span></span>
+<span><span class="va">volc</span> <span class="op">&lt;-</span> <span class="va">dmplot</span><span class="op">$</span><span class="va">Volcano</span><span class="op">$</span><span class="fu">new</span><span class="op">(</span><span class="va">diff_expr_res</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># 3. plot the volcano plot</span></span>
+<span><span class="va">volc</span><span class="op">$</span><span class="fu">plot_volcano</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><img src="./reference/figures/README-volcano-plot-1.png" style="display: block; margin: auto;"></p>
+</div>
+</div>
+<div class="section level2">
+<h2 id="benchmarking-dmplots-high-performance-c-technical-indicators">Benchmarking <code>dmplot</code>’s high-performance C++ technical indicators<a class="anchor" aria-label="anchor" href="#benchmarking-dmplots-high-performance-c-technical-indicators"></a>
+</h2>
+<p>Here we do a simple demonstration and benchmark of <code>dmplot</code>’s Bolinger Bands implementation vs the <code>TTR</code> package. Note that despite using a version not wrapped to return a <code>list</code> the <code>TTR</code> implementation is still significantly slower than <code>dmplot</code>’s C++ implementation.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">microbenchmark</span><span class="op">[</span> <span class="va">microbenchmark</span> <span class="op">]</span><span class="op">)</span></span>
 <span><span class="fu">box</span><span class="fu">::</span><span class="fu"><a href="http://klmr.me/box/reference/use.html" class="external-link">use</a></span><span class="op">(</span><span class="va">TTR</span><span class="op">[</span> <span class="va">BBands</span> <span class="op">]</span><span class="op">)</span></span>
 <span></span>
@@ -355,7 +377,6 @@
 <span>    <span class="op">)</span> <span class="op">+</span></span>
 <span>    <span class="va">ggplot2</span><span class="op">$</span><span class="fu">theme</span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span></span></code></pre></div>
 <p><img src="./reference/figures/README-benchmark-bollinger-bands-1.png" style="display: block; margin: auto;"></p>
-</div>
 </div>
 
   </main><aside class="col-md-3"><div class="links">
