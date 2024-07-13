@@ -1,22 +1,21 @@
-box::use(R6)
-box::use(rlang)
-box::use(stringr[ str_interp ])
-box::use(utils[ head ])
-
-#' @import 
 #' @importFrom R6 R6Class
 #' @importFrom ggrepel geom_text_repel
+#' @import ggplot2
+#' @import data.table
+#' @importFrom stringr str_interp
+#' @importFrom utils head
+#' @importFrom scales label_number
 #' @export
 Volcano <- R6Class(
     "Volcano",
     private = list(
-        validate = function() {
+        validate = \() {
             if(!all(c("feature", "log2FC") %in% colnames(self$data))) {
-                rlang$abort(str_interp('The data must contain columns "feature", and "log2FC"; received ${colnames(self$data)}'))
+                stop(str_interp('The data must contain columns "feature", and "log2FC"; received ${colnames(self$data)}'))
             }
 
             if(sum(c("fdr", "p_value") %in% colnames(self$data)) != 2) {
-                rlang$abort(paste('The data must contain columns "fdr", and or "p_value"; received ', paste(colnames(self$data), collapse = ", ")))
+                stop(paste('The data must contain columns "fdr", and or "p_value"; received ', paste(colnames(self$data), collapse = ", ")))
             }
         }
     ),
@@ -26,14 +25,14 @@ Volcano <- R6Class(
         statistic_cutoff = 0.25,
         log2_cutoff = log2(1.5),
         head_labels = 10,
-        initialize = function(
-            data = data.table$data.table(),
+        initialize = \(
+            data = data.table(),
             statistic = "fdr",
             statistic_cutoff = 0.25,
             log2_cutoff = log2(1.5),
             head_labels = 10
         ) {
-            self$data <- data.table$as.data.table(data)
+            self$data <- as.data.table(data)
             self$statistic <- statistic
             self$statistic_cutoff <- statistic_cutoff
             self$log2_cutoff <- log2_cutoff
@@ -41,17 +40,16 @@ Volcano <- R6Class(
             private$validate()
             self$process_data()
         },
-        process_data = function() {
-            copy <- self$data
+        process = \() {
+            copy <- data.table::copy(self$data)
 
             copy <- copy[
-                base::order(abs(log2FC), -get(self$statistic), decreasing = c(TRUE, FALSE)),
+                order(abs(log2FC), -get(self$statistic), decreasing = c(TRUE, FALSE)),
             ]
 
-            # TODO: error handling if the data is less than the head_labels - results in negative number
-            copy[, sig_label := c(head(feature, self$head_labels), rep(NA_character_, nrow(copy) - self$head_labels))]
+            copy[, sig_label := c(utils::head(feature, self$head_labels), rep(NA_character_, nrow(copy) - self$head_labels))]
 
-            copy[, highlight := data.table$fcase(
+            copy[, highlight := fcase(
                 log2FC < -self$log2_cutoff & get(self$statistic) < self$statistic_cutoff, "blue",
                 log2FC > self$log2_cutoff & get(self$statistic) < self$statistic_cutoff, "red",
                 default = "black"
@@ -125,9 +123,9 @@ Volcano <- R6Class(
                     y = plot_y_lab
                 ) +
                 {if (plot_theme == "light") {
-                    dmplot::theme_dereck_light()
+                    theme_dereck_light()
                 } else if (plot_theme == "dark") {
-                    dmplot::theme_dereck_dark()
+                    theme_dereck_dark()
                 } else if (plot_theme == "minimal") {
                     ggplot2::theme_minimal()
                 }} +
