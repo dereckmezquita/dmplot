@@ -7,22 +7,25 @@
     <loc>https://dereckmezquita.github.io/dmplot/LICENSE-text.html</loc>
   </url>
   <url>
-    <loc>https://dereckmezquita.github.io/dmplot/articles/cpp-high-performance-technical-indicators.html</loc>
+    <loc>https://dereckmezquita.github.io/dmplot/articles/bio_review-differential-expression-analysis-volcano-plots.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/articles/donate.html</loc>
   </url>
   <url>
-    <loc>https://dereckmezquita.github.io/dmplot/articles/getting-started-with-the-dmplot-framwork.html</loc>
+    <loc>https://dereckmezquita.github.io/dmplot/articles/fin_cpp-high-performance-technical-indicators.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/articles/fin_getting-started-with-the-dmplot-framwork-for-finance.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/articles/fin_intro-to-financial-indicators-with-dmplot.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/articles/fin_intro-to-monte-carlo-simulations.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/articles/index.html</loc>
-  </url>
-  <url>
-    <loc>https://dereckmezquita.github.io/dmplot/articles/intro-to-financial-indicators-with-dmplot.html</loc>
-  </url>
-  <url>
-    <loc>https://dereckmezquita.github.io/dmplot/articles/intro-to-monte-carlo-simulations.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/authors.html</loc>
@@ -34,13 +37,25 @@
     <loc>https://dereckmezquita.github.io/dmplot/reference/MonteCarlo.html</loc>
   </url>
   <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/Volcano.html</loc>
+  </url>
+  <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/bb.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/btc_1_year_hourly.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/cite_package.html</loc>
   </url>
   <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/diff_expr_res.html</loc>
+  </url>
+  <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/ema.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/feature_counts.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/fib.html</loc>
