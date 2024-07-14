@@ -1,6 +1,6 @@
 Package: dmplot
 Title: Framework written in high-performance C++ and ggplot2 for financial, bioinformatics, and time series data analysis
-Version: 1.8.0
+Version: 1.8.1
 URL: https://github.com/dereckmezquita/dmplot
 Authors@R: 
     person(given = "Dereck",
