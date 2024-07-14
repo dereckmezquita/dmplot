@@ -27,8 +27,6 @@ options(
 )
 ```
 
-# Understanding and Using the Comparison Class
-
 ## Introduction
 
 The `Comparison` class is a fundamental component of our package, designed to facilitate the analysis of grouped data across various domains, including bioinformatics, finance, and general statistical applications. This vignette will provide a comprehensive overview of the `Comparison` class, its purpose, and how to effectively use it in your analyses.
@@ -47,15 +45,15 @@ This structure allows for clear organization of experimental designs and streaml
 
 The `Comparison` class serves several crucial purposes:
 
-1. **Standardisation**: It provides a consistent format for specifying comparisons across different types of experiments and data sources.
-2. **Clarity**: By explicitly defining the groups and their order, it eliminates ambiguity in the experimental design.
-3. **Flexibility**: It can be used in various contexts, from gene expression studies in bioinformatics to time series comparisons in finance.
-4. **Integration**: The class is designed to work seamlessly with other components of the package, facilitating complex analyses.
-5. **Reproducibility**: By encapsulating all relevant information about a comparison, it enhances the reproducibility of analyses.
+1. **Experimental Design**: It provides a structured way to define the groups in your experiment, which is crucial for many statistical tests (e.g., t-tests, ANOVA).
+1. **Hypothesis Testing**: By explicitly defining the groups and their order, it clarifies the null and alternative hypotheses in your statistical tests.
+1. **Reproducibility**: Encapsulating all relevant information about a comparison enhances the reproducibility of statistical analyses.
+1. **Flexibility**: It can be used in various statistical contexts, from simple two-group comparisons to more complex experimental designs.
+1. **Integration**: The class is designed to work seamlessly with other statistical components of the package, facilitating complex analyses.
 
 In essence the `Comparison` class is a formal representation of the experimental design, providing a structured way to define and work with comparisons in statistical analyses.
 
-## Understanding the Comparison Class
+## Creating a Comparison Object for Statistical Analysis
 
 To create a `Comparison` object, you need to provide three key pieces of information:
 
@@ -70,7 +68,7 @@ box::use(dt = data.table)
 box::use(dmplot[ Comparison ])
 
 comparison <- Comparison$new(
-    comparison_name = "Treatment vs Control",
+    comparison_name = "Treatment over Control",
     group_order = c("Control", "Treatment"),
     comparison_table = dt$data.table(
         group = c("Control", "Control", "Treatment", "Treatment"),
@@ -78,6 +76,8 @@ comparison <- Comparison$new(
     )
 )
 ```
+
+I want you to pay close attention the language used above when describing a comparison. We always use the word "over" instead of "vs" to describe the comparison. This is because "over" is more descriptive and explicit in conveying which group is the control or baseline group; mathematically speaking the control is the denominator in the comparison.
 
 In this example, we're setting up a comparison between a "Treatment" group and a "Control" group, with two samples in each group.
 
@@ -87,59 +87,16 @@ Once created, a `Comparison` object contains several important pieces of informa
 print(comparison)
 ```
 
-Note that the `Comparison` class automatically adds a `condition` column to the comparison table, designating the first group in `group_order` as "control" and the second as "test".
+Note that the `Comparison` class automatically adds a `condition` column to the comparison table, designating the first group in `group_order` as "control" and the second as "test". This is crucial for many statistical tests where one group is considered the baseline or control condition.
 
-### Applications of the Comparison Class
+## Best Practices for Statistical Applications
 
-The `Comparison` class is particularly useful in bioinformatics for tasks such as differential expression analysis. Here's an expanded example:
-
-```{r bioinformatics-example}
-# Create a comparison for a gene expression study
-gene_expression_comparison <- Comparison$new(
-    comparison_name = "Wild Type vs Mutant",
-    group_order = c("WildType", "Mutant"),
-    comparison_table = dt$data.table(
-        group = c(rep("WildType", 3), rep("Mutant", 3)),
-        sample = c("WT1", "WT2", "WT3", "MUT1", "MUT2", "MUT3")
-    )
-)
-
-# Print the comparison object
-print(gene_expression_comparison)
-```
-
-The `Comparison` class can also be applied to financial time series analysis. Here's an example:
-
-```{r finance-example}
-# Create a comparison for analysing stock performance
-stock_comparison <- Comparison$new(
-    comparison_name = "Tech vs Energy Stocks",
-    group_order = c("Tech", "Energy"),
-    comparison_table = data.table(
-        group = c(rep("Tech", 3), rep("Energy", 3)),
-        sample = c("AAPL", "GOOGL", "MSFT", "XOM", "CVX", "BP")
-    )
-)
-
-# Print the comparison object
-print(stock_comparison)
-
-# Use the comparison in a hypothetical stock performance analysis
-analyze_stock_performance <- function(comparison, stock_data) {
-    # ... (actual analysis code would go here)
-}
-```
-
-## Advanced Usage and Best Practices
-
-1. **Consistent Naming**: Use clear, consistent naming conventions for your comparisons. This enhances readability and helps prevent errors.
-2. **Group Order**: The order of groups in `group_order` is important. The first group is treated as the control or reference group.
-3. **Sample Uniqueness**: Ensure that sample names are unique across all groups in your comparison.
-4. **Integration with Other Classes**: The `Comparison` class is designed to work well with other classes in the package. For example, it can be used in conjunction with classes for data normalization, statistical testing, or visualization.
-5. **Error Handling**: The class includes built-in validation to catch common errors. Pay attention to any warnings or error messages.
+1. **Clear Hypotheses**: Use the `comparison_name` to clearly state your statistical hypothesis.
+2. **Group Order**: In two-group comparisons, typically set the control or baseline group as the first in `group_order`.
+3. **Sample Size**: Ensure balanced sample sizes when possible for robust statistical comparisons.
+4. **Data Assumptions**: Remember that the `Comparison` class doesn't check for the assumptions of your statistical tests (e.g., normality for t-tests). Always verify these separately.
+5. **Multiple Testing**: When performing multiple comparisons, consider corrections for multiple testing (e.g., Bonferroni correction).
 
 ## Conclusion
 
-The `Comparison` class provides a robust and flexible framework for defining and working with comparative analyses across various domains. By encapsulating the key elements of a comparison - its name, group order, and sample information - it simplifies downstream analyses and promotes reproducible research practices.
-
-Whether you're working in bioinformatics, finance, or any field that involves comparing groups of samples, the `Comparison` class offers a standardized approach to organizing your experimental design. As you become more familiar with its use, you'll find it to be an invaluable tool in your data analysis toolkit.
+The `Comparison` class provides a robust and flexible framework for defining and working with statistical comparisons across various domains. By encapsulating the key elements of a comparison - its name, group order, and sample information - it simplifies the process of conducting statistical analyses and promotes reproducible research practices.
