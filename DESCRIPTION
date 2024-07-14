@@ -34,7 +34,8 @@ Suggests:
     gridExtra,
     testthat (>= 3.0.0),
     microbenchmark,
-    lubridate
+    lubridate,
+    crayon
 Remotes:
     dereckmezquita/kucoin
 Config/testthat/edition: 3
