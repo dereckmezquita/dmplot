@@ -10,6 +10,11 @@ Authors@R:
            comment = c(ORCID = "0000-0002-9307-6762"))
 Maintainer: Dereck Mezquita <dereck@mezquita.io>
 Description: A comprehensive framework for analysing and visualising financial, bioinformatics, and time series data. Leveraging high-performance C++ and the ggplot2 library, dmplot offers powerful data processing capabilities, including technical indicators implemented in C++ for speed. The package features stateful plotting classes (using R6) for advanced visualisations such as Monte Carlo simulations and bioinformatics data representation.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
 Depends: R (>= 4.1.0)
 LinkingTo: Rcpp
 Imports:
@@ -19,11 +24,6 @@ Imports:
     R6,
     stringr,
     rlang
-License: MIT + file LICENSE
-Encoding: UTF-8
-LazyData: true
-VignetteBuilder: knitr
-RoxygenNote: 7.3.2
 Suggests:
     knitr,
     rmarkdown,
