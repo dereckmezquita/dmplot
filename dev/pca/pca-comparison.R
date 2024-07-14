@@ -1,12 +1,8 @@
 box::use(dt = data.table)
-box::use(./R/Comparisons[ Comparison ])
-box::use(./R/Pca[ Pca ])
+box::use(dmplot[ Pca, Comparison ])
+data(feature_counts, package = "dmplot")
 
-data <- dt$fread("dev/data/feature-counts-genes.csv")
-
-# config <- R$parse_comparisons("./dev-data/comparisons.xlsx")
-
-data <- data[GeneBiotype == "protein_coding", ]
+data <- feature_counts[GeneBiotype == "protein_coding", ]
 
 colnames(data)[1] <- "feature"
 
