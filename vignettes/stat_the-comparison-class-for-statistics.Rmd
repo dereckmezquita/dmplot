@@ -1,0 +1,145 @@
+---
+title: "The Comparison class for statistics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The Comparison class for statistics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    fig.width = 12,
+    fig.height = 10,
+    dpi = 150,
+    collapse = TRUE,
+    comment = "#>"
+)
+
+options(
+    "datatable.print.topn" = 3,
+    "datatable.print.nrows" = 50,
+    "datatable.print.class" = TRUE,
+    "datatable.print.trunc.cols" = TRUE
+)
+```
+
+# Understanding and Using the Comparison Class
+
+## Introduction
+
+The `Comparison` class is a fundamental component of our package, designed to facilitate the analysis of grouped data across various domains, including bioinformatics, finance, and general statistical applications. This vignette will provide a comprehensive overview of the `Comparison` class, its purpose, and how to effectively use it in your analyses.
+
+## What is the Comparison Class?
+
+The `Comparison` class is an R6 class that represents a comparison between two groups of samples. It encapsulates the essential information needed to perform comparative analyses, including:
+
+1. The name of the comparison
+2. The order of groups being compared
+3. A table containing sample information for each group
+
+This structure allows for clear organization of experimental designs and streamlines subsequent analyses.
+
+## Why is the Comparison Class Important?
+
+The `Comparison` class serves several crucial purposes:
+
+1. **Standardisation**: It provides a consistent format for specifying comparisons across different types of experiments and data sources.
+2. **Clarity**: By explicitly defining the groups and their order, it eliminates ambiguity in the experimental design.
+3. **Flexibility**: It can be used in various contexts, from gene expression studies in bioinformatics to time series comparisons in finance.
+4. **Integration**: The class is designed to work seamlessly with other components of the package, facilitating complex analyses.
+5. **Reproducibility**: By encapsulating all relevant information about a comparison, it enhances the reproducibility of analyses.
+
+In essence the `Comparison` class is a formal representation of the experimental design, providing a structured way to define and work with comparisons in statistical analyses.
+
+## Understanding the Comparison Class
+
+To create a `Comparison` object, you need to provide three key pieces of information:
+
+1. `comparison_name`: A string that describes the comparison.
+2. `group_order`: A vector of two group names, specifying the order of comparison.
+3. `comparison_table`: A data.table containing the sample information.
+
+Here's a basic example:
+
+```{r create-comparison}
+box::use(dt = data.table)
+box::use(dmplot[ Comparison ])
+
+comparison <- Comparison$new(
+    comparison_name = "Treatment vs Control",
+    group_order = c("Control", "Treatment"),
+    comparison_table = dt$data.table(
+        group = c("Control", "Control", "Treatment", "Treatment"),
+        sample = c("Sample1", "Sample2", "Sample3", "Sample4")
+    )
+)
+```
+
+In this example, we're setting up a comparison between a "Treatment" group and a "Control" group, with two samples in each group.
+
+Once created, a `Comparison` object contains several important pieces of information:
+
+```{r print-comparison}
+print(comparison)
+```
+
+Note that the `Comparison` class automatically adds a `condition` column to the comparison table, designating the first group in `group_order` as "control" and the second as "test".
+
+### Applications of the Comparison Class
+
+The `Comparison` class is particularly useful in bioinformatics for tasks such as differential expression analysis. Here's an expanded example:
+
+```{r bioinformatics-example}
+# Create a comparison for a gene expression study
+gene_expression_comparison <- Comparison$new(
+    comparison_name = "Wild Type vs Mutant",
+    group_order = c("WildType", "Mutant"),
+    comparison_table = dt$data.table(
+        group = c(rep("WildType", 3), rep("Mutant", 3)),
+        sample = c("WT1", "WT2", "WT3", "MUT1", "MUT2", "MUT3")
+    )
+)
+
+# Print the comparison object
+print(gene_expression_comparison)
+```
+
+The `Comparison` class can also be applied to financial time series analysis. Here's an example:
+
+```{r finance-example}
+# Create a comparison for analysing stock performance
+stock_comparison <- Comparison$new(
+    comparison_name = "Tech vs Energy Stocks",
+    group_order = c("Tech", "Energy"),
+    comparison_table = data.table(
+        group = c(rep("Tech", 3), rep("Energy", 3)),
+        sample = c("AAPL", "GOOGL", "MSFT", "XOM", "CVX", "BP")
+    )
+)
+
+# Print the comparison object
+print(stock_comparison)
+
+# Use the comparison in a hypothetical stock performance analysis
+analyze_stock_performance <- function(comparison, stock_data) {
+    # ... (actual analysis code would go here)
+}
+```
+
+## Advanced Usage and Best Practices
+
+1. **Consistent Naming**: Use clear, consistent naming conventions for your comparisons. This enhances readability and helps prevent errors.
+2. **Group Order**: The order of groups in `group_order` is important. The first group is treated as the control or reference group.
+3. **Sample Uniqueness**: Ensure that sample names are unique across all groups in your comparison.
+4. **Integration with Other Classes**: The `Comparison` class is designed to work well with other classes in the package. For example, it can be used in conjunction with classes for data normalization, statistical testing, or visualization.
+5. **Error Handling**: The class includes built-in validation to catch common errors. Pay attention to any warnings or error messages.
+
+## Conclusion
+
+The `Comparison` class provides a robust and flexible framework for defining and working with comparative analyses across various domains. By encapsulating the key elements of a comparison - its name, group order, and sample information - it simplifies downstream analyses and promotes reproducible research practices.
+
+Whether you're working in bioinformatics, finance, or any field that involves comparing groups of samples, the `Comparison` class offers a standardized approach to organizing your experimental design. As you become more familiar with its use, you'll find it to be an invaluable tool in your data analysis toolkit.
