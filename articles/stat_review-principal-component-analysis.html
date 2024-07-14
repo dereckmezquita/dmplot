@@ -156,25 +156,27 @@ data with the fewest number of principal components.</p>
 <p>PCA involves several mathematical steps:</p>
 <ol style="list-style-type: decimal">
 <li>
-<p><strong>Standardisation</strong>: PCA begins with a dataset of
+<strong>Standardisation</strong>: PCA begins with a dataset of
 n-dimensions. In our implementation, genes are dimensions and samples
 are observations. The data is standardised, transforming each dimension
 to have a mean of 0 and a standard deviation of 1. This step is crucial
 because PCA is sensitive to the relative scaling of the original
-variables.</p>
+variables.</li>
+</ol>
 <p>Mathematically, for each feature x, we compute:</p>
 <p><span class="math display">\[
-x_standardised = (x - μ) / σ
+x_{standardised} = (x - μ) / σ
 \]</span></p>
 <p>where μ is the mean and σ is the standard deviation of the
 feature.</p>
-</li>
+<ol start="2" style="list-style-type: decimal">
 <li>
-<p><strong>Covariance Matrix Computation</strong>: A covariance
-matrix is computed. This matrix indicates the covariance (shared
-variance) between each pair of dimensions. The covariance between
-different dimensions is used to understand the correlation structure of
-the original dimensions.</p>
+<strong>Covariance Matrix Computation</strong>: A covariance matrix
+is computed. This matrix indicates the covariance (shared variance)
+between each pair of dimensions. The covariance between different
+dimensions is used to understand the correlation structure of the
+original dimensions.</li>
+</ol>
 <p>For a dataset X with m features, the covariance matrix C is computed
 as:</p>
 <p><span class="math display">\[
@@ -182,13 +184,14 @@ C = (1 / (n-1)) * (X^T * X)
 \]</span></p>
 <p>where n is the number of observations and X^T is the transpose of
 X.</p>
-</li>
+<ol start="3" style="list-style-type: decimal">
 <li>
-<p><strong>Eigendecomposition</strong>: The covariance matrix is
-then decomposed into its eigenvectors and eigenvalues. Each eigenvector
+<strong>Eigendecomposition</strong>: The covariance matrix is then
+decomposed into its eigenvectors and eigenvalues. Each eigenvector
 represents a principal component, which is a linear combination of the
 original dimensions. The associated eigenvalue represents the amount of
-variance explained by the principal component.</p>
+variance explained by the principal component.</li>
+</ol>
 <p>We solve the equation:</p>
 <p><span class="math display">\[
 C * v = λ * v
@@ -197,7 +200,7 @@ C * v = λ * v
 <p>The eigenvectors are ordered by their corresponding eigenvalues, so
 the first principal component (PC1) explains the most variance, followed
 by PC2, and so on.</p>
-</li>
+<ol start="4" style="list-style-type: decimal">
 <li><p><strong>Selection of Principal Components</strong>: Depending on
 the goal of the analysis, some or all of the principal components can be
 selected for further analysis. The ‘elbow method’ is commonly used,
@@ -315,38 +318,15 @@ performs eigendecomposition, and stores the results.</p>
 <span><span class="co">#&gt; 8:    PC8              0.00 -7.304681e-10  1.467666e-10 -7.570011e-10</span></span>
 <span><span class="co">#&gt; 5 variable(s) not shown: [T64546 &lt;num&gt;, T64548 &lt;num&gt;, T64553 &lt;num&gt;, T64549 &lt;num&gt;, T64552 &lt;num&gt;]</span></span>
 <span><span class="co"># View the top contributors to each PC</span></span>
-<span><span class="va">pca_obj2</span><span class="op">$</span><span class="va">top_rotations</span></span>
-<span><span class="co">#&gt; $PC1</span></span>
-<span><span class="co">#&gt; ENSMUSG00000024146 ENSMUSG00000022397 ENSMUSG00000025537 </span></span>
-<span><span class="co">#&gt;          0.9672892          0.1567412          0.1003282 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC2</span></span>
-<span><span class="co">#&gt; ENSMUSG00000022397 ENSMUSG00000069157 ENSMUSG00000027499 </span></span>
-<span><span class="co">#&gt;          0.6915537          0.3600379          0.2865109 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC3</span></span>
-<span><span class="co">#&gt; ENSMUSG00000027499 ENSMUSG00000022397 ENSMUSG00000052379 </span></span>
-<span><span class="co">#&gt;          0.5656072          0.4217036          0.2603293 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC4</span></span>
-<span><span class="co">#&gt; ENSMUSG00000069157 ENSMUSG00000031071 ENSMUSG00000027499 </span></span>
-<span><span class="co">#&gt;          0.2599749          0.2594879          0.2519562 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC5</span></span>
-<span><span class="co">#&gt; ENSMUSG00000035083 ENSMUSG00000052744 ENSMUSG00000026523 </span></span>
-<span><span class="co">#&gt;          0.3565922          0.2230975          0.1597955 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC6</span></span>
-<span><span class="co">#&gt; ENSMUSG00000035083 ENSMUSG00000055212 ENSMUSG00000069157 </span></span>
-<span><span class="co">#&gt;          0.3526967          0.2379434          0.2237858 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC7</span></span>
-<span><span class="co">#&gt; ENSMUSG00000025537 ENSMUSG00000003251 ENSMUSG00000026523 </span></span>
-<span><span class="co">#&gt;          0.3229935          0.2872070          0.2769927 </span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $PC8</span></span>
-<span><span class="co">#&gt; ENSMUSG00000051845 ENSMUSG00000025916 ENSMUSG00000033093 </span></span>
-<span><span class="co">#&gt;         0.99589674         0.06659177         0.05689562</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html" class="external-link">as.data.frame</a></span><span class="op">(</span><span class="va">pca_obj2</span><span class="op">$</span><span class="va">top_rotations</span><span class="op">)</span></span>
+<span><span class="co">#&gt;                          PC1       PC2       PC3       PC4       PC5       PC6</span></span>
+<span><span class="co">#&gt; ENSMUSG00000024146 0.9672892 0.6915537 0.5656072 0.2599749 0.3565922 0.3526967</span></span>
+<span><span class="co">#&gt; ENSMUSG00000022397 0.1567412 0.3600379 0.4217036 0.2594879 0.2230975 0.2379434</span></span>
+<span><span class="co">#&gt; ENSMUSG00000025537 0.1003282 0.2865109 0.2603293 0.2519562 0.1597955 0.2237858</span></span>
+<span><span class="co">#&gt;                          PC7        PC8</span></span>
+<span><span class="co">#&gt; ENSMUSG00000024146 0.3229935 0.99589674</span></span>
+<span><span class="co">#&gt; ENSMUSG00000022397 0.2872070 0.06659177</span></span>
+<span><span class="co">#&gt; ENSMUSG00000025537 0.2769927 0.05689562</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="visualising-pca-results">Visualising PCA Results<a class="anchor" aria-label="anchor" href="#visualising-pca-results"></a>
