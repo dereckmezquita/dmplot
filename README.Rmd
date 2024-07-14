@@ -114,7 +114,7 @@ One can easily use external packages to calculate indicators as long as they ret
 
 The reason for this is that we want to impose the use of "Tidy Data" principles, as this is the convention that `ggplot2` follows and would allow us to easily build our analyses and plots in layers.
 
-For more information on working with `dmplot` see [Getting started with the dmplot framework](articles/getting-started-with-the-dmplot-framwork.html).
+For more information on working with `dmplot` see [Getting started with the dmplot framework](articles/getting-started-with-the-dmplot-framework.html).
 
 #### EMA and Bollinger Bands
 

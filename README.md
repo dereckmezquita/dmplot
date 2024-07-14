@@ -112,7 +112,7 @@ allow us to easily build our analyses and plots in layers.
 
 For more information on working with `dmplot` see [Getting started with
 the dmplot
-framework](articles/getting-started-with-the-dmplot-framwork.html).
+framework](articles/getting-started-with-the-dmplot-framework.html).
 
 #### EMA and Bollinger Bands
 
