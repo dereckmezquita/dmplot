@@ -23,7 +23,7 @@ options(
 )
 ```
 
-## dmplot
+# dmplot <a href="https://dereckmezquita.github.io/dmplot"><img src="./.graphics/512-20240628_dmplot-logo.png" align="right" height="140" /></a>
 
 <!-- badges: start -->
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
@@ -350,7 +350,7 @@ ggplot2$autoplot(micro) +
         values = c("ttr_bb_naked" = "red", "ttr_bb_wrapped" = "red", "dmplot_bb" = "green")
     ) +
     ggplot2$labs(
-        title = "dmpplot vs TTR BBands"
+        title = "dmplot::bb vs TTR::BBands"
     ) +
     ggplot2$theme(legend.position = "none")
 
