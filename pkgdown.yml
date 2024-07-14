@@ -5,12 +5,12 @@ articles:
   bio_review-differential-expression-analysis-volcano-plots: bio_review-differential-expression-analysis-volcano-plots.html
   donate: donate.html
   fin_cpp-high-performance-technical-indicators: fin_cpp-high-performance-technical-indicators.html
-  fin_getting-started-with-the-dmplot-framwork-for-finance: fin_getting-started-with-the-dmplot-framwork-for-finance.html
+  fin_getting-started-with-the-dmplot-framework-for-finance: fin_getting-started-with-the-dmplot-framework-for-finance.html
   fin_intro-to-financial-indicators-with-dmplot: fin_intro-to-financial-indicators-with-dmplot.html
   fin_intro-to-monte-carlo-simulations: fin_intro-to-monte-carlo-simulations.html
   stat_review-principal-component-analysis: stat_review-principal-component-analysis.html
   stat_the-comparison-class-for-statistics: stat_the-comparison-class-for-statistics.html
-last_built: 2024-07-14T21:42Z
+last_built: 2024-07-14T21:51Z
 urls:
   reference: https://dereckmezquita.github.io/dmplot/reference
   article: https://dereckmezquita.github.io/dmplot/articles
