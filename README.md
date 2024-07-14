@@ -1,5 +1,5 @@
 
-## dmplot
+# dmplot <a href="https://dereckmezquita.github.io/dmplot"><img src="./.graphics/512-20240628_dmplot-logo.png" align="right" height="140" /></a>
 
 <!-- badges: start -->
 
@@ -112,7 +112,7 @@ allow us to easily build our analyses and plots in layers.
 
 For more information on working with `dmplot` see [Getting started with
 the dmplot
-framework](articles/getting-started-with-the-dmplot-framwork.html).
+framework](articles/getting-started-with-the-dmplot-framework.html).
 
 #### EMA and Bollinger Bands
 
@@ -443,7 +443,7 @@ ggplot2$autoplot(micro) +
         values = c("ttr_bb_naked" = "red", "ttr_bb_wrapped" = "red", "dmplot_bb" = "green")
     ) +
     ggplot2$labs(
-        title = "dmpplot vs TTR BBands"
+        title = "dmplot::bb vs TTR::BBands"
     ) +
     ggplot2$theme(legend.position = "none")
 ```
@@ -454,8 +454,8 @@ ggplot2$autoplot(micro) +
 
 print(micro)
 #> Unit: microseconds
-#>            expr     min      lq     mean  median       uq      max neval
-#>    ttr_bb_naked 534.640 576.583 595.2441 596.509 604.4425  667.890    20
-#>  ttr_bb_wrapped 704.134 723.404 819.9221 736.196 764.5270 1993.994    20
-#>       dmplot_bb  86.182  96.842 211.4596 108.445 133.0860 2066.195    20
+#>            expr     min       lq      mean   median       uq       max neval
+#>    ttr_bb_naked 468.261 535.7060  791.4271 577.5670 637.8985  4237.104    20
+#>  ttr_bb_wrapped 600.035 663.9950 1310.0751 672.9125 722.3790  5482.561    20
+#>       dmplot_bb  94.259 111.2945  841.5270 127.1205 159.2235 12897.411    20
 ```

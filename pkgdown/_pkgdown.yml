@@ -16,7 +16,7 @@ navbar:
       text: Articles
       menu:
       - text: "Getting Started with the dmplot framework for finance"
-        href: articles/fin_getting-started-with-the-dmplot-framwork-for-finance.html
+        href: articles/fin_getting-started-with-the-dmplot-framework-for-finance.html
       - text: "Intro to Financial Indicators with dmplot"
         href: articles/fin_intro-to-financial-indicators-with-dmplot.html
       - text: "C++ high-performance technical indicators"
