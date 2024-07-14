@@ -26,7 +26,7 @@ Pca <- R6::R6Class(
             refined <- merge(
                 var_explained,
                 data.table::transpose(
-                    data.table::data.table(self$prcomp_results$x, keep.rownames = "sample"),
+                    self$prcomp_results$x,
                     keep.names = "PC",
                     make.names = "sample"
                 ),
@@ -98,26 +98,24 @@ Pca <- R6::R6Class(
             data,
             comparison = NULL
         ) {
+            data <- data.table::copy(data)
+
             private$check_data(data)
 
             if (!is.null(comparison)) {
                 private$check_comparison(comparison)
-            }
 
-            self$data <- private$prepare_data(data)
-            self$comparison <- comparison
-        },
-        prcomp = function(comparison = NULL, ...) {
-            data <- data.table::copy(self$data)
-
-            private$check_comparison(comparison)
-
-            if (!is.null(comparison)) {
                 data <- private$filter_comparison_samples(
                     data,
                     comparison
                 )
             }
+
+            self$data <- private$prepare_data(data)
+            self$comparison <- comparison
+        },
+        prcomp = function(...) {
+            data <- data.table::copy(self$data)
 
             data <- to.data.frame(data.table::transpose(
                 data,
@@ -135,7 +133,7 @@ Pca <- R6::R6Class(
             # get the name of the top 3 measurements (features) that contribute most to pc1
             # "rotation" are the principal components (the eigenvectors of the covariance matrix), in the original coordinate system. Typically a square matrix (unless you truncate it by introducing tolerance) with the same number of dimensions your original data had. E.g. if you had a 3D data set, your rotation matrix will be 3-by-3.
             # get names only of top contributors per PC
-            top_rotations <- (\(pcs) {
+            self$top_rotations <- (\(pcs) {
                 annotated_rotations <- lapply(pcs, \(pc) {
                     # take top 3 contributors; abs, sort, head
                     return(head(sort(abs(prcomp_results$rotation[, pc]), decreasing = TRUE), 3))
@@ -145,6 +143,15 @@ Pca <- R6::R6Class(
                 return(annotated_rotations)
             })(paste("PC", 1:ncol(prcomp_results$rotation), sep = ""))
             # ---
+            prcomp_results$rotation <- data.table::as.data.table(
+                prcomp_results$rotation,
+                keep.rownames = "feature"
+            )
+
+            prcomp_results$x <- data.table::as.data.table(
+                prcomp_results$x,
+                keep.rownames = "sample"
+            )
 
             self$prcomp_results <- prcomp_results
             private$refine_prcomp()
@@ -211,7 +218,6 @@ Pca <- R6::R6Class(
             return(self$scree)
         },
         plot_scatter = function(
-            comparison = NULL,
             point_default_colour = "grey",
             point_size = 3,
             point_alpha = 1,
@@ -226,12 +232,16 @@ Pca <- R6::R6Class(
                 show = TRUE,
                 truncate = 30
             ),
-            title = if (!is.null(comparison)) stringr::str_interp('${comparison$comparison_name}: principal components 1 and 2') else "Principal components 1 and 2",
+            title = if (!is.null(self$comparison)) stringr::str_interp('${self$comparison$comparison_name}: principal components 1 and 2') else "Principal components 1 and 2",
             subtitle = stringr::str_interp('${nrow(self$prcomp_results$x)} samples, ${ncol(self$prcomp_results$rotation)} principal components, calculated from ${nrow(self$prcomp_results$rotation)} features'),
             caption = if (top_contributors$show) stringr::str_interp('Top contributors to variance:\nPC1: ${paste0(stringr::str_trunc(names(self$top_rotations$PC1), top_contributors$truncate), collapse = ", ")}\nPC2: ${paste0(stringr::str_trunc(names(self$top_rotations$PC2), top_contributors$truncate), collapse = ", ")}') else NULL,
             ...
         ) {
-            pc <- data.table::data.table(self$prcomp_results$x, keep.rownames = "sample")
+            pc <- data.table::data.table(
+                self$prcomp_results$x, keep.rownames = "sample"
+            )
+
+            comparison <- self$comparison
 
             if (!is.null(comparison)) {
                 private$check_comparison(comparison)
