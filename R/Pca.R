@@ -100,12 +100,12 @@ Pca <- R6::R6Class(
         ) {
             private$check_data(data)
 
-            if (!is.null(comparisons)) {
-                private$check_comparisons(comparisons)
+            if (!is.null(comparison)) {
+                private$check_comparison(comparison)
             }
 
             self$data <- private$prepare_data(data)
-            self$comparisons <- comparisons
+            self$comparison <- comparison
         },
         prcomp = function(comparison = NULL, ...) {
             data <- data.table::copy(self$data)
