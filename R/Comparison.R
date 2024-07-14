@@ -1,6 +1,5 @@
 #' Comparison Class
 #'
-
 #' An R6 class that represents a comparison between two groups of samples.
 #' This class contains the comparison name, the group order, and the comparison table.
 #' It includes methods to initialise, print, and validate the data.
@@ -28,7 +27,7 @@ Comparison <- R6::R6Class(
         comparison_name = NA_character_,
         group_order = c(NA_character_, NA_character_),
         comparison_table = data.table::data.table(),
-
+        #' @description
         #' Create a new Comparison object.
         #'
         #' @param comparison_name A character string representing the name of the comparison. 
@@ -88,9 +87,7 @@ Comparison <- R6::R6Class(
 
             private$validate()
         },
-
         #' Print a summary of the Comparison object.
-        #'
         #' @return None. This method is called for its side effect of printing to the console.
         print = function() {
             cat("Comparison R6 object\n")
@@ -102,10 +99,8 @@ Comparison <- R6::R6Class(
         }
     ),
     private = list(
-
         #' Validate the Comparison object.
         validate = function() {
-            # print out comparison name everytime so in live code know which caused error
             if (length(self$comparison_name) != 1) {
                 rlang::abort(stringr::str_interp('${self$comparison_name}: "comparison_name" must be of type character length 1.'))
             }
