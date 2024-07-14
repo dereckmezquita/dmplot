@@ -1,6 +1,6 @@
 #' Comparison Class
 #'
-#' @description
+
 #' An R6 class that represents a comparison between two groups of samples.
 #' This class contains the comparison name, the group order, and the comparison table.
 #' It includes methods to initialise, print, and validate the data.
@@ -10,19 +10,6 @@
 #'        The first element is treated as the "control" group, and the second as the "test" group.
 #' @field comparison_table A data.table that contains the group, sample, and condition information for the comparison.
 #' 
-#' @section Usage:
-#' ```r
-#' comparison <- Comparison$new(
-#'   comparison_name = "Treatment vs Control",
-#'   group_order = c("Control", "Treatment"),
-#'   comparison_table = data.table::data.table(
-#'     group = c("Control", "Control", "Treatment", "Treatment"),
-#'     sample = c("Sample1", "Sample2", "Sample3", "Sample4")
-#'   )
-#' )
-#' print(comparison)  # Print the Comparison object
-#' ```
-#'
 #' @examples
 #' comparison <- Comparison$new(
 #'   comparison_name = "Treatment vs Control",
@@ -41,7 +28,7 @@ Comparison <- R6::R6Class(
         comparison_name = NA_character_,
         group_order = c(NA_character_, NA_character_),
         comparison_table = data.table::data.table(),
-        #' @description
+
         #' Create a new Comparison object.
         #'
         #' @param comparison_name A character string representing the name of the comparison. 
@@ -53,8 +40,6 @@ Comparison <- R6::R6Class(
         #'        the clinical group to which each sample belongs, and the "sample" column lists the 
         #'        names/IDs of the samples. The groups in this table should match the names specified 
         #'        in `group_order`.
-        #'
-        #' @return A new `Comparison` object.
         initialize = function(
             comparison_name,
             group_order,
@@ -103,7 +88,7 @@ Comparison <- R6::R6Class(
 
             private$validate()
         },
-        #' @description
+
         #' Print a summary of the Comparison object.
         #'
         #' @return None. This method is called for its side effect of printing to the console.
@@ -117,13 +102,8 @@ Comparison <- R6::R6Class(
         }
     ),
     private = list(
-        #' @description
+
         #' Validate the Comparison object.
-        #'
-        #' This method checks the validity of the comparison_name, group_order, and comparison_table.
-        #' It throws errors or warnings if any of the checks fail.
-        #'
-        #' @return None. This method is called for its side effect of validating the object.
         validate = function() {
             # print out comparison name everytime so in live code know which caused error
             if (length(self$comparison_name) != 1) {
