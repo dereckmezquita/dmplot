@@ -16,7 +16,9 @@ Imports:
     ggplot2 (>= 3.4.0),
     Rcpp (>= 1.0.12),
     data.table,
-    R6
+    R6,
+    stringr,
+    rlang
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

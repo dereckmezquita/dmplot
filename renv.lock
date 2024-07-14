@@ -182,6 +182,16 @@
       ],
       "Hash": "b21916dd77a27642b447374a5d30ecf3"
     },
+    "clipr": {
+      "Package": "clipr",
+      "Version": "0.8.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "utils"
+      ],
+      "Hash": "3f038e5ac7f41d4ac41ce658c85e3042"
+    },
     "colorspace": {
       "Package": "colorspace",
       "Version": "2.1-0",
@@ -205,6 +215,20 @@
         "R"
       ],
       "Hash": "5a295d7d963cc5035284dcdbaf334f4e"
+    },
+    "credentials": {
+      "Package": "credentials",
+      "Version": "2.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "askpass",
+        "curl",
+        "jsonlite",
+        "openssl",
+        "sys"
+      ],
+      "Hash": "c7844b32098dcbd1c59cbd8dddb4ecc6"
     },
     "curl": {
       "Package": "curl",
@@ -342,6 +366,21 @@
       ],
       "Hash": "15e9634c0fcd294799e9b2e929ed1b86"
     },
+    "gert": {
+      "Package": "gert",
+      "Version": "2.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "askpass",
+        "credentials",
+        "openssl",
+        "rstudioapi",
+        "sys",
+        "zip"
+      ],
+      "Hash": "f70d3fe2d9e7654213a946963d1591eb"
+    },
     "ggplot2": {
       "Package": "ggplot2",
       "Version": "3.5.1",
@@ -382,6 +421,34 @@
         "withr"
       ],
       "Hash": "cc3361e234c4a5050e29697d675764aa"
+    },
+    "gh": {
+      "Package": "gh",
+      "Version": "1.4.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "gitcreds",
+        "glue",
+        "httr2",
+        "ini",
+        "jsonlite",
+        "lifecycle",
+        "rlang"
+      ],
+      "Hash": "fbbbc48eba7a6626a08bb365e44b563b"
+    },
+    "gitcreds": {
+      "Package": "gitcreds",
+      "Version": "0.1.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "ab08ac61f3e1be454ae21911eb8bc2fe"
     },
     "glue": {
       "Package": "glue",
@@ -464,6 +531,34 @@
         "openssl"
       ],
       "Hash": "ac107251d9d9fd72f0ca8049988f1d7f"
+    },
+    "httr2": {
+      "Package": "httr2",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "R6",
+        "cli",
+        "curl",
+        "glue",
+        "lifecycle",
+        "magrittr",
+        "openssl",
+        "rappdirs",
+        "rlang",
+        "vctrs",
+        "withr"
+      ],
+      "Hash": "03d741c92fda96d98c3a3f22494e3b4a"
+    },
+    "ini": {
+      "Package": "ini",
+      "Version": "0.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "6154ec2223172bce8162d4153cda21f7"
     },
     "isoband": {
       "Package": "isoband",
@@ -842,6 +937,23 @@
       ],
       "Hash": "27f9502e1cdbfa195f94e03b0f517484"
     },
+    "rprojroot": {
+      "Package": "rprojroot",
+      "Version": "2.0.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R"
+      ],
+      "Hash": "4c8415e0ec1e29f3f4f6fc108bef0144"
+    },
+    "rstudioapi": {
+      "Package": "rstudioapi",
+      "Version": "0.16.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "96710351d642b70e8f02ddeb237c46a7"
+    },
     "sass": {
       "Package": "sass",
       "Version": "0.4.9",
@@ -978,6 +1090,37 @@
       ],
       "Hash": "d44e2fcd2e4e076f0aac540208559d1d"
     },
+    "usethis": {
+      "Package": "usethis",
+      "Version": "2.2.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Requirements": [
+        "R",
+        "cli",
+        "clipr",
+        "crayon",
+        "curl",
+        "desc",
+        "fs",
+        "gert",
+        "gh",
+        "glue",
+        "jsonlite",
+        "lifecycle",
+        "purrr",
+        "rappdirs",
+        "rlang",
+        "rprojroot",
+        "rstudioapi",
+        "stats",
+        "utils",
+        "whisker",
+        "withr",
+        "yaml"
+      ],
+      "Hash": "d524fd42c517035027f866064417d7e6"
+    },
     "utf8": {
       "Package": "utf8",
       "Version": "1.2.4",
@@ -1074,6 +1217,13 @@
       "Source": "Repository",
       "Repository": "CRAN",
       "Hash": "9cb28d11799d93c953f852083d55ee9e"
+    },
+    "zip": {
+      "Package": "zip",
+      "Version": "2.3.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "fcc4bd8e6da2d2011eb64a5e5cc685ab"
     },
     "zoo": {
       "Package": "zoo",
