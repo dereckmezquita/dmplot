@@ -4,49 +4,36 @@
 \alias{Comparison}
 \title{Comparison Class}
 \description{
-The `Comparison` class represents a comparison between two groups of samples. It includes methods to initialize, print, and validate the data.
+Comparison Class
+
+Comparison Class
 }
 \details{
-An R6 class that represents a comparison between two groups of samples. 
+An R6 class that represents a comparison between two groups of samples.
 This class contains the comparison name, the group order, and the comparison table.
+It includes methods to initialise, print, and validate the data.
 }
-\section{Initialisation}{
-
-```
-Comparison$new(
-  comparison_name = "My comparison",
-  group_order = c("Control group", "Test group"),
-  comparison_table = data.table::data.table(
-       group = c("Control group", "Control group", "Test group", "Test group"),
-       sample = c("Sample1", "Sample2", "Sample3", "Sample4")
-   )
-)
-```
-}
-
-\section{Usage}{
-
-```
+\examples{
 comparison <- Comparison$new(
-  comparison_name = "My comparison",
-  group_order = c("Control group", "Test group"),
+  comparison_name = "Treatment vs Control",
+  group_order = c("Control", "Treatment"),
   comparison_table = data.table::data.table(
-       group = c("Control group", "Control group", "Test group", "Test group"),
-       sample = c("Sample1", "Sample2", "Sample3", "Sample4")
-   )
+    group = c("Control", "Control", "Treatment", "Treatment"),
+    sample = c("Sample1", "Sample2", "Sample3", "Sample4")
+  )
 )
-comparison$print()  # Print the Comparison object
-```
-}
+print(comparison)
 
+}
 \section{Public fields}{
 \if{html}{\out{<div class="r6-fields">}}
 \describe{
 \item{\code{comparison_name}}{Character. The name of the comparison.}
 
-\item{\code{group_order}}{Character vector. The order of groups for the comparison, with length 2. The first element will be treated as the "control" group, and the second as the "test" group.}
+\item{\code{group_order}}{Character vector. The order of groups for the comparison, with length 2. 
+The first element is treated as the "control" group, and the second as the "test" group.}
 
-\item{\code{comparison_table}}{A data.table that contains the group and sample information for the comparison.}
+\item{\code{comparison_table}}{A data.table that contains the group, sample, and condition information for the comparison.}
 }
 \if{html}{\out{</div>}}
 }
@@ -62,6 +49,7 @@ comparison$print()  # Print the Comparison object
 \if{html}{\out{<a id="method-Comparison-new"></a>}}
 \if{latex}{\out{\hypertarget{method-Comparison-new}{}}}
 \subsection{Method \code{new()}}{
+Create a new Comparison object.
 \subsection{Usage}{
 \if{html}{\out{<div class="r">}}\preformatted{Comparison$new(comparison_name, group_order, comparison_table)}\if{html}{\out{</div>}}
 }
@@ -69,11 +57,18 @@ comparison$print()  # Print the Comparison object
 \subsection{Arguments}{
 \if{html}{\out{<div class="arguments">}}
 \describe{
-\item{\code{comparison_name}}{A character string representing the name of the comparison. Must be of length 1 and not exceed 100 characters.}
+\item{\code{comparison_name}}{A character string representing the name of the comparison. 
+Must be of length 1 and not exceed 100 characters.}
 
-\item{\code{group_order}}{A character vector specifying the order of groups for the comparison. Must be of length 2.}
+\item{\code{group_order}}{A character vector specifying the order of groups for the comparison. 
+Must be of length 2.}
 
-\item{\code{comparison_table}}{A data.table that contains group and sample information for the comparison. This table is crucial for tracking which samples belong to which clinical group. It is used to distinguish samples for the purposes of experimental analysis. It should have two columns, named "group" and "sample". The "group" column identifies the clinical group to which each sample belongs, and the "sample" column lists the names/IDs of the samples. The groups in this table should match the names specified in `group_order`.}
+\item{\code{comparison_table}}{A data.table that contains group and sample information for the comparison. 
+       It should have two columns, named "group" and "sample". The "group" column identifies 
+       the clinical group to which each sample belongs, and the "sample" column lists the 
+       names/IDs of the samples. The groups in this table should match the names specified 
+       in `group_order`.
+Print a summary of the Comparison object.}
 }
 \if{html}{\out{</div>}}
 }
@@ -86,6 +81,10 @@ comparison$print()  # Print the Comparison object
 \if{html}{\out{<div class="r">}}\preformatted{Comparison$print()}\if{html}{\out{</div>}}
 }
 
+\subsection{Returns}{
+None. This method is called for its side effect of printing to the console.
+Validate the Comparison object.
+}
 }
 \if{html}{\out{<hr>}}
 \if{html}{\out{<a id="method-Comparison-clone"></a>}}

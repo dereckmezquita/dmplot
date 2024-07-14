@@ -6,16 +6,9 @@ data <- feature_counts[GeneBiotype == "protein_coding", ]
 
 colnames(data)[1] <- "feature"
 
-comp_table <- dt$fread(
-"group	sample
-A	T64552
-A	T64553
-A	T64554
-A	T64555
-B	T64546
-B	T64548
-B	T64549
-B	T64550"
+comp_table <- data.frame(
+    group = c("A", "A", "A", "A", "B", "B", "B", "B"),
+    sample = c("T64552", "T64553", "T64554", "T64555", "T64546", "T64548", "T64549", "T64550")
 )
 
 comp <- Comparison$new(
