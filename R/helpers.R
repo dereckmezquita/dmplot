@@ -25,7 +25,8 @@ collapse <- function(x) {
 #' printCapture(df)
 #' # Returns a string representation of the data frame
 printCapture <- function(obj) {
-    return(paste(utils::capture.output(print(as.data.frame(obj))), collapse = "\n"))
+    print_cap <- utils::capture.output(print(as.data.frame(obj)))
+    return(paste(print_cap, collapse = "\n"))
 }
 
 #' Find coordinates of a specific value in an object
@@ -70,7 +71,9 @@ valueCoordinates <- function(obj, value = NA) {
     r <- unname(r[!is.na(r)])
     c <- unname(c[!is.na(c)])
 
-    return(data.frame(column = unlist(c), row = unlist(r)))
+    results <- data.table::data.table(column = unlist(c), row = unlist(r))
+
+    return(results[])
 }
 
 #' Convert a data.table to a data.frame
