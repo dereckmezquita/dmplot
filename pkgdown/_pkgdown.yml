@@ -15,14 +15,20 @@ navbar:
     articles:
       text: Articles
       menu:
-      - text: "Getting Started with the dmplot Framework"
-        href: articles/getting-started-with-the-dmplot-framwork.html
+      - text: "Getting Started with the dmplot framework for finance"
+        href: articles/fin_getting-started-with-the-dmplot-framwork-for-finance.html
       - text: "Intro to Financial Indicators with dmplot"
-        href: articles/intro-to-financial-indicators-with-dmplot.html
+        href: articles/fin_intro-to-financial-indicators-with-dmplot.html
       - text: "C++ high-performance technical indicators"
-        href: articles/cpp-high-performance-technical-indicators.html
+        href: articles/fin_cpp-high-performance-technical-indicators.html
       - text: "Introduction to Monte Carlo Simulations"
-        href: articles/intro-to-monte-carlo-simulations.html
+        href: articles/fin_intro-to-monte-carlo-simulations.html
+      - text: "Review differential expression analysis (DEA) and volcano plots"
+        href: articles/bio_review-differential-expression-analysis-volcano-plots.html
+      - text: "The Comparison class for statistics"
+        href: articles/stat_the-comparison-class-for-statistics.html
+      - text: "Review of Principal Component Analysis (PCA)"
+        href: articles/stat_review-principal-component-analysis.html
     donate:
       text: Donate
       href: articles/donate.html

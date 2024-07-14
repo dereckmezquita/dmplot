@@ -1,0 +1,172 @@
+---
+title: "Getting started with the dmplot framework"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with the dmplot framework}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    fig.width = 12,
+    fig.height = 10,
+    dpi = 150,
+    collapse = TRUE,
+    comment = "#>"
+)
+
+options(
+    "datatable.print.topn" = 3,
+    "datatable.print.nrows" = 50,
+    "datatable.print.class" = TRUE,
+    "datatable.print.trunc.cols" = TRUE
+)
+```
+
+## Introduction
+
+In this vignette I explain the conventions of `dmplot` and the design choices - this will guide you in working with data and effectively leveraging `dmplot` and the `ggplot2` framework to derive insight from your analyses.
+
+`dmplot` is not limited to financial data, indeed it's conventions and design choices are applicable to any time series data. However, the package does indeed have a focus on financial data analysis and visualisation.
+
+### Licensing
+
+The `dmplot` package is released under the MIT license, allowing free use and modification. Users must:
+
+1. Cite the original author (see [LICENSE](https://dereckmezquita.github.io/dmplot/LICENSE-text.html) for details).
+2. Include the license in any redistribution.
+
+## Setup
+
+Let's install the necessary libraries.
+
+I often use the following packages:
+
+- `data.table` for working with large datasets.
+- [`dmplot`](https://github.com/dereckmezquita/dmplot) for plotting financial and time series datasets.
+- [`kucoin`](https://github.com/dereckmezquita/kucoin) for interacting with the KuCoin API - getting cryptocurrency financial data.
+- `ggplot2` for plotting.
+- `box` for loading modules in R.
+
+I strongly recommend using `data.table` for any work in finance. This is indeed one of the primary reasons why `data.table` was created - to work with large datasets efficiently. For installing `data.table` on `M1` MacOS consult this guide for building from source: [gist.github.com/dereckmezquita/ed860601138a46cf591a1bdcc95db0a2](https://gist.github.com/dereckmezquita/ed860601138a46cf591a1bdcc95db0a2)
+
+```{r install-libraries, eval=FALSE}
+install.packages("data.table", type = "source")
+install.packages("TTR")
+install.packages("ggplot2")
+install.packages("box")
+
+remotes::install_github("dereckmezquita/dmplot")
+remotes::install_github("dereckmezquita/kucoin")
+```
+
+Now, let's load the required libraries:
+
+```{r load_libraries}
+box::use(kucoin)
+box::use(dt = data.table)
+```
+
+## `dmplot` and "Tidy Data" for Financial Data Analysis and Visualization
+
+The `dmplot` package provides a toolkit for plotting financial and time series datasets in the `ggplot2` framework. It includes functions for plotting candlestick charts, moving averages, Bollinger Bands, MACD, RSI, and Stochastic Oscillator.
+
+In order to best leverage `ggplot2` to, and thus visualise our financial analyses we must adhere to the "tidy data" convention. Whereby each column is a variable, each row is an observation, and each cell is a single value. This is the format that `dmplot` expects.
+
+Thus, any calculated indicators should be added as new columns to the dataset and this is what `dmplot` expects. 
+
+I offer two points of guidance:
+
+1. Use the `data.table`.
+1. Functions must return a named `list` of values.
+
+The reason for the first point is that `data.table` is a powerful package for working with large datasets and is highly efficient. The second point is that if you return a named `list` of values you can easily use such function within `data.table` to create new columns.
+
+```{r list-functions-demo}
+petal_ratios <- function(petal_length, petal_width, sepal_length, sepal_width) {
+    petal_ratio <- petal_length / petal_width
+    sepal_ratio <- sepal_length / sepal_width
+    return(list(petal_ratio = petal_ratio, sepal_ratio = sepal_ratio))
+}
+
+iris2 <- dt$as.data.table(iris)
+
+head(iris2)
+
+iris2[,
+    c("petal_ratio", "sepal_ratio") := petal_ratios(
+        Petal.Length,
+        Petal.Width,
+        Sepal.Length,
+        Sepal.Width
+    )
+]
+
+head(iris2)
+```
+
+As you can see sticking to this convention allows us to easily and efficiently leverage the `data.table` framework to calculate new columns and thus new indicators.
+
+## Loading Sample Data
+
+We'll use the same sample data as in the README:
+
+```r
+ticker <- "BTC/USDT"
+
+data <- get_market_data(
+    symbols = ticker,
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
+    frequency = "1 hour"
+)
+```
+
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+ data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
+]
+```
+
+```{r print-data}
+head(data)
+```
+
+
+## Calculating Financial Indicators
+
+I provide a host of functions for calculating financial indicators in the `dmplot` package. These functions are designed to be used within the `data.table` framework and return a named `list` of values.
+
+However, if you find the need use outside functions you can easily wrap them in a function which returns a named `list` of values.
+
+Here we demonstrate with `TTT::EMA` and `TTT::BBands`:
+
+```{r wrapping-ema-bbands}
+box::use(TTR[EMA, BBands])
+box::use(dmplot[ bb ])
+
+# redifine our function to return a list
+ema <- function(x, n, wilder = TRUE) {
+    return(as.list(as.data.frame(EMA(x, n = n, wilder = wilder))))
+}
+
+# calculate the short and long moving averages
+data[, ema_short := ema(close, n = 10, wilder = TRUE)]
+data[, ema_long := ema(close, n = 50, wilder = TRUE)]
+
+# calculate the bollinger bands
+data[,
+    c("bb_lower", "bb_mavg", "bb_upper", "bb_pct") := bb(
+        close, n = 10,
+        sd = 2
+    )
+]
+
+head(data)
+```

@@ -1,0 +1,102 @@
+---
+title: "The Comparison class for statistics"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{The Comparison class for statistics}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include=FALSE}
+knitr::opts_chunk$set(
+    warning = FALSE,
+    message = FALSE,
+    fig.align = "center",
+    fig.width = 12,
+    fig.height = 10,
+    dpi = 150,
+    collapse = TRUE,
+    comment = "#>"
+)
+
+options(
+    "datatable.print.topn" = 3,
+    "datatable.print.nrows" = 50,
+    "datatable.print.class" = TRUE,
+    "datatable.print.trunc.cols" = TRUE
+)
+```
+
+## Introduction
+
+The `Comparison` class is a fundamental component of our package, designed to facilitate the analysis of grouped data across various domains, including bioinformatics, finance, and general statistical applications. This vignette will provide a comprehensive overview of the `Comparison` class, its purpose, and how to effectively use it in your analyses.
+
+## What is the Comparison Class?
+
+The `Comparison` class is an R6 class that represents a comparison between two groups of samples. It encapsulates the essential information needed to perform comparative analyses, including:
+
+1. The name of the comparison
+2. The order of groups being compared
+3. A table containing sample information for each group
+
+This structure allows for clear organization of experimental designs and streamlines subsequent analyses.
+
+## Why is the Comparison Class Important?
+
+The `Comparison` class serves several crucial purposes:
+
+1. **Experimental Design**: It provides a structured way to define the groups in your experiment, which is crucial for many statistical tests (e.g., t-tests, ANOVA).
+1. **Hypothesis Testing**: By explicitly defining the groups and their order, it clarifies the null and alternative hypotheses in your statistical tests.
+1. **Reproducibility**: Encapsulating all relevant information about a comparison enhances the reproducibility of statistical analyses.
+1. **Flexibility**: It can be used in various statistical contexts, from simple two-group comparisons to more complex experimental designs.
+1. **Integration**: The class is designed to work seamlessly with other statistical components of the package, facilitating complex analyses.
+
+In essence the `Comparison` class is a formal representation of the experimental design, providing a structured way to define and work with comparisons in statistical analyses.
+
+## Creating a Comparison Object for Statistical Analysis
+
+To create a `Comparison` object, you need to provide three key pieces of information:
+
+1. `comparison_name`: A string that describes the comparison.
+2. `group_order`: A vector of two group names, specifying the order of comparison.
+3. `comparison_table`: A data.table containing the sample information.
+
+Here's a basic example:
+
+```{r create-comparison}
+box::use(dt = data.table)
+box::use(dmplot[ Comparison ])
+
+comparison <- Comparison$new(
+    comparison_name = "Treatment over Control",
+    group_order = c("Control", "Treatment"),
+    comparison_table = dt$data.table(
+        group = c("Control", "Control", "Treatment", "Treatment"),
+        sample = c("Sample1", "Sample2", "Sample3", "Sample4")
+    )
+)
+```
+
+I want you to pay close attention the language used above when describing a comparison. We always use the word "over" instead of "vs" to describe the comparison. This is because "over" is more descriptive and explicit in conveying which group is the control or baseline group; mathematically speaking the control is the denominator in the comparison.
+
+In this example, we're setting up a comparison between a "Treatment" group and a "Control" group, with two samples in each group.
+
+Once created, a `Comparison` object contains several important pieces of information:
+
+```{r print-comparison}
+print(comparison)
+```
+
+Note that the `Comparison` class automatically adds a `condition` column to the comparison table, designating the first group in `group_order` as "control" and the second as "test". This is crucial for many statistical tests where one group is considered the baseline or control condition.
+
+## Best Practices for Statistical Applications
+
+1. **Clear Hypotheses**: Use the `comparison_name` to clearly state your statistical hypothesis.
+2. **Group Order**: In two-group comparisons, typically set the control or baseline group as the first in `group_order`.
+3. **Sample Size**: Ensure balanced sample sizes when possible for robust statistical comparisons.
+4. **Data Assumptions**: Remember that the `Comparison` class doesn't check for the assumptions of your statistical tests (e.g., normality for t-tests). Always verify these separately.
+5. **Multiple Testing**: When performing multiple comparisons, consider corrections for multiple testing (e.g., Bonferroni correction).
+
+## Conclusion
+
+The `Comparison` class provides a robust and flexible framework for defining and working with statistical comparisons across various domains. By encapsulating the key elements of a comparison - its name, group order, and sample information - it simplifies the process of conducting statistical analyses and promotes reproducible research practices.

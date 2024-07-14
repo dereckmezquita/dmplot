@@ -10,11 +10,16 @@ status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://
 <!-- badges: end -->
 
 `R` framework written in high-performance `C++` and `ggplot2` for
-financial and time series data analysis.
+financial, bioinformatics, and time series data analysis.
 
 The package provides algorithms, functions, `ggplot2` layers and most
-importantly a framework for working with and analysing financial and
-time series data.
+importantly a framework for working with and analysing financial,
+bioinformatics, and time series data.
+
+In short this package is a condensation and accumulation of all of all
+the knowledge I’ve gathered over the years spurred on by personal
+curiosity and framed by the need for order with a comprehensive
+framework.
 
 ## Installation
 
@@ -34,7 +39,7 @@ box::use(ggplot2)
 box::use(dmplot)
 ```
 
-## Getting started
+## Getting started - Finance
 
 ### Get financial data
 
@@ -48,20 +53,22 @@ ticker <- "BTC/USDT"
 
 data <- get_market_data(
     symbols = ticker,
-    from = "2024-07-01 10:36:50 EST", # lubridate::now() - lubridate::days(7),
-    to = "2024-07-08 10:36:53 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
 
+``` r
 head(data)
-#>      symbol            datetime    open    high     low   close    volume
-#>      <char>              <POSc>   <num>   <num>   <num>   <num>     <num>
-#> 1: BTC/USDT 2024-07-01 10:00:00 62942.7 62978.1 62779.0 62851.0  52.82884
-#> 2: BTC/USDT 2024-07-01 11:00:00 62850.9 62862.5 62599.7 62663.7  81.03310
-#> 3: BTC/USDT 2024-07-01 12:00:00 62663.8 62914.7 62643.8 62880.5  69.31822
-#> 4: BTC/USDT 2024-07-01 13:00:00 62880.6 63084.0 62520.6 62687.4 125.46135
-#> 5: BTC/USDT 2024-07-01 14:00:00 62687.5 62941.5 62605.0 62822.6 111.57547
-#> 6: BTC/USDT 2024-07-01 15:00:00 62818.8 63147.5 62817.9 63126.9  79.18494
+#>      symbol            datetime    open    high     low   close   volume
+#>      <char>              <POSc>   <num>   <num>   <num>   <num>    <num>
+#> 1: BTC/USDT 2024-07-06 05:00:00 56057.9 56485.8 56025.2 56363.1 79.48139
+#> 2: BTC/USDT 2024-07-06 06:00:00 56363.1 56573.3 56346.6 56413.8 41.94569
+#> 3: BTC/USDT 2024-07-06 07:00:00 56413.7 56672.4 56402.5 56602.2 98.02022
+#> 4: BTC/USDT 2024-07-06 08:00:00 56602.2 56655.3 56508.8 56555.8 49.06419
+#> 5: BTC/USDT 2024-07-06 09:00:00 56555.9 56767.0 56441.6 56759.9 42.89421
+#> 6: BTC/USDT 2024-07-06 10:00:00 56757.4 56887.1 56645.3 56786.6 45.64148
 #> 1 variable(s) not shown: [turnover <num>]
 ```
 
@@ -136,12 +143,12 @@ data2[,
 tail(data2[, .(datetime, close, ema_short, ema_long, bb_lower, bb_mavg, bb_upper)])
 #>               datetime   close ema_short ema_long bb_lower  bb_mavg bb_upper
 #>                 <POSc>   <num>     <num>    <num>    <num>    <num>    <num>
-#> 1: 2024-07-08 05:00:00 55479.1  56208.32 57477.51 54344.97 55769.94 57194.91
-#> 2: 2024-07-08 06:00:00 55629.8  56150.47 57440.56 54589.01 55606.22 56623.43
-#> 3: 2024-07-08 07:00:00 55843.9  56119.81 57408.62 54726.81 55531.58 56336.35
-#> 4: 2024-07-08 08:00:00 57773.6  56285.19 57415.92 54157.92 55669.65 57181.38
-#> 5: 2024-07-08 09:00:00 57514.7  56408.14 57417.90 53958.81 55835.80 57712.79
-#> 6: 2024-07-08 10:00:00 56817.6  56449.09 57405.89 54113.75 56006.43 57899.11
+#> 1: 2024-07-13 00:00:00 57835.5  57705.34 57599.07 57373.50 57904.35 58435.20
+#> 2: 2024-07-13 01:00:00 57879.7  57722.77 57604.68 57381.80 57870.93 58360.06
+#> 3: 2024-07-13 02:00:00 57942.8  57744.78 57611.44 57388.49 57853.82 58319.15
+#> 4: 2024-07-13 03:00:00 57818.5  57752.15 57615.58 57402.41 57819.27 58236.13
+#> 5: 2024-07-13 04:00:00 57779.8  57754.91 57618.87 57501.74 57767.08 58032.42
+#> 6: 2024-07-13 05:00:00 57931.7  57772.59 57625.12 57548.42 57801.30 58054.18
 ```
 
 Because of the `dmplot` framework we can build our analyses and plots in
@@ -197,14 +204,14 @@ data2[, c("macd", "macd_signal") := dmplot$macd(close, s = 12, l = 26, k = 9)]
 data2[, macd_diff := macd - macd_signal]
 
 tail(data2[, .(datetime, close, macd, macd_signal, macd_diff)])
-#>               datetime   close       macd macd_signal   macd_diff
-#>                 <POSc>   <num>      <num>       <num>       <num>
-#> 1: 2024-07-08 05:00:00 55479.1 -0.9768488  -0.7276772 -0.24917161
-#> 2: 2024-07-08 06:00:00 55629.8 -0.9398049  -0.7701027 -0.16970222
-#> 3: 2024-07-08 07:00:00 55843.9 -0.8695678  -0.7899957 -0.07957204
-#> 4: 2024-07-08 08:00:00 57773.6 -0.5298231  -0.7379612  0.20813814
-#> 5: 2024-07-08 09:00:00 57514.7 -0.2950758  -0.6493841  0.35430831
-#> 6: 2024-07-08 10:00:00 56817.6 -0.2066996  -0.5608472  0.35414763
+#>               datetime   close      macd macd_signal   macd_diff
+#>                 <POSc>   <num>     <num>       <num>       <num>
+#> 1: 2024-07-13 00:00:00 57835.5 0.1416409   0.1010757 0.040565139
+#> 2: 2024-07-13 01:00:00 57879.7 0.1474963   0.1103599 0.037136437
+#> 3: 2024-07-13 02:00:00 57942.8 0.1591054   0.1201090 0.038996427
+#> 4: 2024-07-13 03:00:00 57818.5 0.1492232   0.1259318 0.023291387
+#> 5: 2024-07-13 04:00:00 57779.8 0.1344384   0.1276331 0.006805272
+#> 6: 2024-07-13 05:00:00 57931.7 0.1422855   0.1305636 0.011721911
 ```
 
 ``` r
@@ -283,7 +290,124 @@ monte$plot_prices_and_predictions()
 
 <img src="./man/figures/README-monte-carlo-simulation-3.png" style="display: block; margin: auto;" />
 
-### Benchmarking `dmplot`’s high-performance C++ technical indicators
+## Getting started - Bioinformatics
+
+`dmplot` offers a host of functions for working with bioinformatics
+data. Here we demonstrate how to use the `dmplot::Volcano()` `R6` class
+to plot a volcano plot.
+
+`dmplot` imposes a convention and standard for the data it expects, in
+exchange it offers ease of use and efficiency in plotting and analysing
+data.
+
+### Volcano plot
+
+A volcano plot can be generated in 3 easy steps.
+
+``` r
+# 1. load the data
+data(diff_expr_res, package = "dmplot")
+
+head(diff_expr_res)
+#>       feature     log2FC  p_value      fdr
+#>        <char>      <num>    <num>    <num>
+#> 1: nCvahjxZZe -4.4653827 1.84e-12 2.95e-08
+#> 2: xokTmQulss -4.1254298 2.77e-10 2.23e-06
+#> 3: EsqEEnrrMA -0.7639582 6.92e-10 3.70e-06
+#> 4: MesqnUNFSM -1.3692713 1.79e-09 7.20e-06
+#> 5: vHRmtdhRnW -0.6481394 3.48e-09 1.12e-05
+#> 6: HHvlskYCEL -3.1067641 9.15e-09 2.45e-05
+
+# 2. create the Volcano object
+volc <- dmplot$Volcano$new(diff_expr_res)
+
+# 3. plot the volcano plot
+volc$plot_volcano()
+```
+
+<img src="./man/figures/README-volcano-plot-1.png" style="display: block; margin: auto;" />
+
+### Principal Component Analysis (PCA)
+
+Here we demonstrate how to use the `dmplot::Pca()` `R6` class to plot a
+PCA plot. This is a demonstration using the `feature_counts` dataset
+from the `dmplot` package but can be used with any sort of
+high-dimensional data as long as you follow `dmplot` convention.
+
+``` r
+# Load required packages
+box::use(dmplot[Pca, Comparison])
+
+data(feature_counts, package = "dmplot")
+
+# The data should be a data.table with features as rows and samples as columns
+# The first column must be named "feature" and contain the feature names
+feature_counts <- feature_counts[GeneBiotype == "protein_coding", ]
+colnames(feature_counts)[1] <- "feature"
+
+# Create a comparison table
+comp_table <- data.frame(
+   group = c("A", "A", "A", "A", "B", "B", "B", "B"),
+   sample = c("T64552", "T64553", "T64554", "T64555", "T64546", "T64548", "T64549", "T64550")
+)
+
+# Create a Comparison object
+comp <- Comparison$new(
+    comparison_name = "A_over_B",
+    group_order = c("B", "A"),
+    comparison_table = comp_table
+)
+
+# Create a Pca object with the comparison
+pca_obj <- Pca$new(feature_counts, comp)
+
+pca_obj$prcomp()
+```
+
+Now we can access the results and easily create a PCA plots.
+
+``` r
+pca_obj$prcomp_results
+#> Standard deviations (1, .., p=8):
+#> [1] 1.138674e+06 8.773857e+04 6.518402e+04 4.366182e+04 2.366213e+04
+#> [6] 2.021359e+04 1.856779e+04 1.625334e-09
+#> 
+#> Rotation (n x k) = (21936 x 9):
+#>                   feature           PC1           PC2           PC3
+#>                    <char>         <num>         <num>         <num>
+#>     1: ENSMUSG00000051845 -7.096769e-06 -3.435085e-06 -1.311560e-05
+#>     2: ENSMUSG00000025374  2.507594e-04  2.327624e-04 -2.263580e-03
+#>     3: ENSMUSG00000025609  4.829978e-04  5.629973e-04 -1.712018e-04
+#>    ---                                                             
+#> 21934: ENSMUSG00000063958  1.452822e-07 -1.861195e-06 -1.868383e-06
+#> 21935: ENSMUSG00000096294 -3.440474e-07 -2.470131e-06 -1.668852e-06
+#> 21936: ENSMUSG00000095261 -2.224891e-07  5.361425e-07  8.268138e-07
+#> 5 variable(s) not shown: [PC4 <num>, PC5 <num>, PC6 <num>, PC7 <num>, PC8 <num>]
+pca_obj$prcomp_refined
+#>        PC pct_var_explained        T64555        T64550        T64554
+#>    <fctr>             <num>         <num>         <num>         <num>
+#> 1:    PC1             98.84 -1.095036e+06  1.318588e+06 -1.009661e+06
+#> 2:    PC2              0.59 -4.006736e+04 -1.002931e+05  1.444540e+04
+#> 3:    PC3              0.32  2.585091e+04 -5.557073e+04  1.229583e+04
+#> 4:    PC4              0.15 -6.332709e+04  1.082834e+04  2.228724e+04
+#> 5:    PC5              0.04 -3.031154e+04 -1.626517e+04  3.658489e+04
+#> 6:    PC6              0.03  1.610595e+04  1.165766e+04  3.180771e+04
+#> 7:    PC7              0.03  1.252223e+04 -2.548565e+04 -7.162936e+03
+#> 8:    PC8              0.00 -4.360735e-09  1.863639e-09 -1.485024e-09
+#> 5 variable(s) not shown: [T64546 <num>, T64548 <num>, T64553 <num>, T64549 <num>, T64552 <num>]
+
+pca_obj$plot_scree()
+```
+
+<img src="./man/figures/README-pca-plot-1.png" style="display: block; margin: auto;" />
+
+``` r
+pca_obj$plot_scatter()
+```
+
+<img src="./man/figures/README-pca-plot-2.png" style="display: block; margin: auto;" />
+
+## Benchmarking `dmplot`’s high-performance C++ technical indicators
 
 Here we do a simple demonstration and benchmark of `dmplot`’s Bolinger
 Bands implementation vs the `TTR` package. Note that despite using a
@@ -294,24 +418,25 @@ significantly slower than `dmplot`’s C++ implementation.
 box::use(microbenchmark[ microbenchmark ])
 box::use(TTR[ BBands ])
 
+data(btc_1_year_hourly, package = "dmplot")
+
 ttr_bb_wrapped <- function(close, n = 2, sd = 2) {
     return(as.list(as.data.frame(BBands(close, n = n, sd = sd))))
 }
 
-benchmark_reps <- 10L
+benchmark_reps <- 20L
 time_interval <- 5L
 standard_dev <- 2L
 
-single_micro <- microbenchmark(
-    ttr_bb_naked = BBands(data$close, n = time_interval, sd = standard_dev),
-    ttr_bb_wrapped = ttr_bb_wrapped(data$close, n = time_interval, sd = standard_dev),
-    dmplot_bb = dmplot$bb(data$close, n = time_interval, sd = standard_dev),
+micro <- microbenchmark(
+    ttr_bb_naked = BBands(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
+    ttr_bb_wrapped = ttr_bb_wrapped(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
+    dmplot_bb = dmplot$bb(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
 
     times = benchmark_reps
 )
 
-
-ggplot2$autoplot(single_micro) +
+ggplot2$autoplot(micro) +
     dmplot$theme_dereck_dark() +
     ggplot2$geom_violin(ggplot2$aes(fill = expr), linewidth = 0.25) +
     ggplot2$scale_fill_manual(
@@ -324,3 +449,13 @@ ggplot2$autoplot(single_micro) +
 ```
 
 <img src="./man/figures/README-benchmark-bollinger-bands-1.png" style="display: block; margin: auto;" />
+
+``` r
+
+print(micro)
+#> Unit: microseconds
+#>            expr     min      lq     mean  median       uq      max neval
+#>    ttr_bb_naked 534.640 576.583 595.2441 596.509 604.4425  667.890    20
+#>  ttr_bb_wrapped 704.134 723.404 819.9221 736.196 764.5270 1993.994    20
+#>       dmplot_bb  86.182  96.842 211.4596 108.445 133.0860 2066.195    20
+```

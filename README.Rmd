@@ -30,9 +30,11 @@ options(
 [![Travis build status](https://travis-ci.org/dereckmezquita/kucoin.svg?branch=master)](https://travis-ci.org/dereckmezquita/kucoin)
 <!-- badges: end -->
 
-`R` framework written in high-performance `C++` and `ggplot2` for financial and time series data analysis.
+`R` framework written in high-performance `C++` and `ggplot2` for financial, bioinformatics, and time series data analysis.
 
-The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial and time series data.
+The package provides algorithms, functions, `ggplot2` layers and most importantly a framework for working with and analysing financial, bioinformatics, and time series data.
+
+In short this package is a condensation and accumulation of all of all the knowledge I've gathered over the years spurred on by personal curiosity and framed by the need for order with a comprehensive framework.
 
 ## Installation
 
@@ -52,22 +54,32 @@ box::use(ggplot2)
 box::use(dmplot)
 ```
 
-## Getting started
+## Getting started - Finance
 
 ### Get financial data
 
 [`kucoin`](https://github.com/dereckmezquita/kucoin) is a package for interacting with the [kucoin.com API](https://www.kucoin.com) api. You can use any source of financial data as long as you pass the variables to the `ggplot2` stat correctly.
 
-```{r get-financial-data}
+```r
 ticker <- "BTC/USDT"
 
 data <- get_market_data(
     symbols = ticker,
-    from = "2024-07-01 10:36:50 EST", # lubridate::now() - lubridate::days(7),
-    to = "2024-07-08 10:36:53 EST", # lubridate::now(),
+    from = lubridate::now() - lubridate::days(7),
+    to = lubridate::now(),
     frequency = "1 hour"
 )
+```
 
+```{r load-data, include=FALSE}
+ticker <- "BTC/USDT"
+data(btc_1_year_hourly, package = "dmplot")
+data <- btc_1_year_hourly[
+    btc_1_year_hourly$datetime >= max(btc_1_year_hourly$datetime) - lubridate::days(7),
+]
+```
+
+```{r print-data}
 head(data)
 ```
 
@@ -238,7 +250,74 @@ monte$plot_distribution()
 monte$plot_prices_and_predictions()
 ```
 
-### Benchmarking `dmplot`'s high-performance C++ technical indicators
+## Getting started - Bioinformatics
+
+`dmplot` offers a host of functions for working with bioinformatics data. Here we demonstrate how to use the `dmplot::Volcano()` `R6` class to plot a volcano plot.
+
+`dmplot` imposes a convention and standard for the data it expects, in exchange it offers ease of use and efficiency in plotting and analysing data.
+
+### Volcano plot
+
+A volcano plot can be generated in 3 easy steps.
+
+```{r volcano-plot}
+# 1. load the data
+data(diff_expr_res, package = "dmplot")
+
+head(diff_expr_res)
+
+# 2. create the Volcano object
+volc <- dmplot$Volcano$new(diff_expr_res)
+
+# 3. plot the volcano plot
+volc$plot_volcano()
+```
+
+### Principal Component Analysis (PCA)
+
+Here we demonstrate how to use the `dmplot::Pca()` `R6` class to plot a PCA plot. This is a demonstration using the `feature_counts` dataset from the `dmplot` package but can be used with any sort of high-dimensional data as long as you follow `dmplot` convention.
+
+```{r pca-analysis}
+# Load required packages
+box::use(dmplot[Pca, Comparison])
+
+data(feature_counts, package = "dmplot")
+
+# The data should be a data.table with features as rows and samples as columns
+# The first column must be named "feature" and contain the feature names
+feature_counts <- feature_counts[GeneBiotype == "protein_coding", ]
+colnames(feature_counts)[1] <- "feature"
+
+# Create a comparison table
+comp_table <- data.frame(
+   group = c("A", "A", "A", "A", "B", "B", "B", "B"),
+   sample = c("T64552", "T64553", "T64554", "T64555", "T64546", "T64548", "T64549", "T64550")
+)
+
+# Create a Comparison object
+comp <- Comparison$new(
+    comparison_name = "A_over_B",
+    group_order = c("B", "A"),
+    comparison_table = comp_table
+)
+
+# Create a Pca object with the comparison
+pca_obj <- Pca$new(feature_counts, comp)
+
+pca_obj$prcomp()
+```
+
+Now we can access the results and easily create a PCA plots.
+
+```{r pca-plot}
+pca_obj$prcomp_results
+pca_obj$prcomp_refined
+
+pca_obj$plot_scree()
+pca_obj$plot_scatter()
+```
+
+## Benchmarking `dmplot`'s high-performance C++ technical indicators
 
 Here we do a simple demonstration and benchmark of `dmplot`'s Bolinger Bands implementation vs the `TTR` package. Note that despite using a version not wrapped to return a `list` the `TTR` implementation is still significantly slower than `dmplot`'s C++ implementation.
 
@@ -246,24 +325,25 @@ Here we do a simple demonstration and benchmark of `dmplot`'s Bolinger Bands imp
 box::use(microbenchmark[ microbenchmark ])
 box::use(TTR[ BBands ])
 
+data(btc_1_year_hourly, package = "dmplot")
+
 ttr_bb_wrapped <- function(close, n = 2, sd = 2) {
     return(as.list(as.data.frame(BBands(close, n = n, sd = sd))))
 }
 
-benchmark_reps <- 10L
+benchmark_reps <- 20L
 time_interval <- 5L
 standard_dev <- 2L
 
-single_micro <- microbenchmark(
-    ttr_bb_naked = BBands(data$close, n = time_interval, sd = standard_dev),
-    ttr_bb_wrapped = ttr_bb_wrapped(data$close, n = time_interval, sd = standard_dev),
-    dmplot_bb = dmplot$bb(data$close, n = time_interval, sd = standard_dev),
+micro <- microbenchmark(
+    ttr_bb_naked = BBands(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
+    ttr_bb_wrapped = ttr_bb_wrapped(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
+    dmplot_bb = dmplot$bb(btc_1_year_hourly$close, n = time_interval, sd = standard_dev),
 
     times = benchmark_reps
 )
 
-
-ggplot2$autoplot(single_micro) +
+ggplot2$autoplot(micro) +
     dmplot$theme_dereck_dark() +
     ggplot2$geom_violin(ggplot2$aes(fill = expr), linewidth = 0.25) +
     ggplot2$scale_fill_manual(
@@ -273,4 +353,6 @@ ggplot2$autoplot(single_micro) +
         title = "dmpplot vs TTR BBands"
     ) +
     ggplot2$theme(legend.position = "none")
+
+print(micro)
 ```

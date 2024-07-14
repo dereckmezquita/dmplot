@@ -1,6 +1,9 @@
-docs/
+# dev
 deprecated/
-.DS_Store
+*.ignore
+
+# build
+docs/
 *html
 .vscode/
 
@@ -54,3 +57,6 @@ vignettes/*.pdf
 
 # R Environment Variables
 .Renviron
+
+# machine
+.DS_Store

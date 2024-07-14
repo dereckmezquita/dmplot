@@ -24,7 +24,7 @@ MonteCarlo <- R6::R6Class(
     private = list(
         validate_data = \() {
             if (!inherits(self$data, "data.table")) {
-                rlang::abort("data must be a data.table")
+                stop("data must be a data.table")
             }
             required_cols <- c(
                 "symbol", "datetime", "open", "high",
@@ -32,7 +32,7 @@ MonteCarlo <- R6::R6Class(
             )
 
             if (!all(required_cols %in% colnames(self$data))) {
-                rlang::abort("data must contain the following columns: ", paste(required_cols, collapse = ", "))
+                stop("data must contain the following columns: ", paste(required_cols, collapse = ", "))
             }
         },
         prepare = \(log_historical = FALSE) {
@@ -134,7 +134,7 @@ MonteCarlo <- R6::R6Class(
         #' @return A ggplot object showing the simulated price paths.
         plot_prices = \() {
             if (is.null(self$simulation_results) || is.null(self$end_prices)) {
-                rlang::abort("Must run simulation first")
+                stop("Must run simulation first")
             }
 
             self$simulation_results |>
@@ -154,7 +154,7 @@ MonteCarlo <- R6::R6Class(
         #' @return A ggplot object showing the distribution of final prices.
         plot_distribution = \() {
             if (is.null(self$simulation_results) || is.null(self$end_prices)) {
-                rlang::abort("Must run simulation first")
+                stop("Must run simulation first")
             }
 
             self$end_prices |>
@@ -180,7 +180,7 @@ MonteCarlo <- R6::R6Class(
         #' @return A ggplot object showing historical and simulated prices.
         plot_prices_and_predictions = \() {
             if (is.null(self$simulation_results) || is.null(self$end_prices)) {
-                rlang::abort("Must run simulation first")
+                stop("Must run simulation first")
             }
 
             scale_period <- ""
