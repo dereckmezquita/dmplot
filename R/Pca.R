@@ -101,100 +101,6 @@
 #' @export
 Pca <- R6::R6Class(
     "Pca",
-    private = list(
-        #' @description
-        #' Filter samples based on a comparison object
-        #' @param data The input data
-        #' @param comparison A Comparison object
-        #' @return data.table filtered data
-        filter_comparison_samples = function(data, comparison) {
-            selected_samples <- colnames(data) %in% comparison$comparison_table$sample
-            selected_samples[1] <- TRUE # keep GeneID/feature col
-
-            return(data[, ..selected_samples][])
-        },
-        #' Refine PCA results for easier interpretation
-        refine_prcomp = function() {
-            # PCs to variance explained as percentage - df PC to var%
-            var_explained <- data.table::data.table(
-                PC = paste0("PC", 1:length(self$prcomp_results$sdev)), # ID PCs
-                pct_var_explained = (\(pca_var) {
-                    # warn if pca_var is 0s
-                    if (all(pca_var == 0)) {
-                        rlang::warn("All variance is 0. Check your data.")
-                    }
-
-                    # calculate percent variance
-                    return(round(pca_var / sum(pca_var) * 100, 2))
-                })(self$prcomp_results$sdev ^ 2) # Note: sdev ^ 2 = variance
-            )
-
-            refined <- merge(
-                var_explained,
-                data.table::transpose(
-                    self$prcomp_results$x,
-                    keep.names = "PC",
-                    make.names = "sample"
-                ),
-                by = "PC",
-                all = FALSE,
-                sort = FALSE
-            )
-
-            # must be a factor so order ggplot2
-            refined[, PC := factor(PC, PC)]
-
-            self$prcomp_refined <- refined
-        },
-        #' Prepare data for PCA by dropping non-numerical columns
-        #' @param data The input data
-        #' @return data.table prepared data for numerical values
-        prepare_data = function(data) {
-            data <- data.table::copy(data)
-            # drop non-numerical columns
-            not_num <- sapply(data, \(col) {
-                return(!is.numeric(col))
-            })
-            if (any(not_num[-1])) {
-                rlang::warn("Dropping non-numeric columns from data.")
-                selected_col <- c("feature", colnames(data)[!not_num])
-                data <- data[, ..selected_col]
-            }
-
-            return(data[])
-        },
-        check_data = function(data) {
-            if (!inherits(data, c("data.table", "data.frame"))) {
-                rlang::abort("data must be of class Data.")
-            }
-
-            if (!is.character(data[[1]])) {
-                rlang::abort("The first column must be type character, these are feature names.")
-            }
-
-            if (colnames(data)[1] != "feature") {
-                rlang::abort("The first column must be named 'feature'.")
-            }
-
-            check_na <- valueCoordinates(data, value = NA)
-            if (!is.empty(check_na)) {
-                check_na_print <- printCapture(check_na)
-                rlang::warn(stringr::str_interp('NA values found in data please review your data: ${check_na_print}'))
-            }
-        },
-        check_comparison = function(comparison) {
-            # comparison must be of class comparison or it can be NULL
-            if (!inherits(comparison, "Comparison")) {
-                rlang::abort("comparison must be a Comparison object.")
-            }
-        },
-        validate = function() {
-            private$check_data(self$data)
-            if (!is.null(self$comparison)) {
-                private$check_comparison(self$comparison)
-            }
-        }
-    ),
     public = list(
         data = NULL,
         comparison = NULL,
@@ -205,12 +111,9 @@ Pca <- R6::R6Class(
         scree = NULL,
         #' @description
         #' Create a new Pca object
-        #' @param data A data.table or data.frame with features as rows and samples as columns
-        #' @param comparison An optional Comparison object for group comparisons, defaults to NULL
-        initialize = function(
-            data,
-            comparison = NULL
-        ) {
+        #' @param data A data.table containing the input data for PCA. The first column must be named "feature".
+        #' @param comparison An optional Comparison object for group comparisons
+        initialize = function(data, comparison = NULL) {
             data <- data.table::copy(data)
 
             private$check_data(data)
@@ -390,6 +293,94 @@ Pca <- R6::R6Class(
                 ggplot2::theme(legend.position = "bottom")
 
             return(self$scatter)
+        }
+    ),
+    private = list(
+        #' Filter samples based on a comparison object
+        filter_comparison_samples = function(data, comparison) {
+            selected_samples <- colnames(data) %in% comparison$comparison_table$sample
+            selected_samples[1] <- TRUE # keep GeneID/feature col
+
+            return(data[, ..selected_samples][])
+        },
+        #' Refine PCA results for easier interpretation
+        refine_prcomp = function() {
+            # PCs to variance explained as percentage - df PC to var%
+            var_explained <- data.table::data.table(
+                PC = paste0("PC", 1:length(self$prcomp_results$sdev)), # ID PCs
+                pct_var_explained = (\(pca_var) {
+                    # warn if pca_var is 0s
+                    if (all(pca_var == 0)) {
+                        rlang::warn("All variance is 0. Check your data.")
+                    }
+
+                    # calculate percent variance
+                    return(round(pca_var / sum(pca_var) * 100, 2))
+                })(self$prcomp_results$sdev ^ 2) # Note: sdev ^ 2 = variance
+            )
+
+            refined <- merge(
+                var_explained,
+                data.table::transpose(
+                    self$prcomp_results$x,
+                    keep.names = "PC",
+                    make.names = "sample"
+                ),
+                by = "PC",
+                all = FALSE,
+                sort = FALSE
+            )
+
+            # must be a factor so order ggplot2
+            refined[, PC := factor(PC, PC)]
+
+            self$prcomp_refined <- refined
+        },
+        #' Prepare data for PCA by dropping non-numerical columns
+        prepare_data = function(data) {
+            data <- data.table::copy(data)
+            # drop non-numerical columns
+            not_num <- sapply(data, \(col) {
+                return(!is.numeric(col))
+            })
+            if (any(not_num[-1])) {
+                rlang::warn("Dropping non-numeric columns from data.")
+                selected_col <- c("feature", colnames(data)[!not_num])
+                data <- data[, ..selected_col]
+            }
+
+            return(data[])
+        },
+        check_data = function(data) {
+            if (!inherits(data, c("data.table", "data.frame"))) {
+                rlang::abort("data must be of class Data.")
+            }
+
+            if (!is.character(data[[1]])) {
+                rlang::abort("The first column must be type character, these are feature names.")
+            }
+
+            if (colnames(data)[1] != "feature") {
+                rlang::abort("The first column must be named 'feature'.")
+            }
+
+            check_na <- valueCoordinates(data, value = NA)
+            if (!is.empty(check_na)) {
+                check_na_print <- printCapture(check_na)
+                rlang::warn(stringr::str_interp('NA values found in data please review your data: ${check_na_print}'))
+            }
+        },
+        check_comparison = function(comparison) {
+            # comparison must be of class comparison or it can be NULL
+            if (!inherits(comparison, "Comparison")) {
+                rlang::abort("comparison must be a Comparison object.")
+            }
+        },
+        validate = function() {
+            private$check_data(self$data)
+            if (!is.null(self$comparison)) {
+                private$check_comparison(self$comparison)
+            }
         }
     )
 )
