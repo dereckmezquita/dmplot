@@ -54,46 +54,41 @@ Now what does orthogonal mean? In this context, it means that the principal comp
 
 PCA involves several mathematical steps:
 
-1. **Standardisation**:
-   PCA begins with a dataset of n-dimensions. In our implementation, genes are dimensions and samples are observations. The data is standardised, transforming each dimension to have a mean of 0 and a standard deviation of 1. This step is crucial because PCA is sensitive to the relative scaling of the original variables.
+1. **Standardisation**: PCA begins with a dataset of n-dimensions. In our implementation, genes are dimensions and samples are observations. The data is standardised, transforming each dimension to have a mean of 0 and a standard deviation of 1. This step is crucial because PCA is sensitive to the relative scaling of the original variables.
 
-   Mathematically, for each feature x, we compute:
-   
-   $$
-   x_standardised = (x - μ) / σ
-   $$
-   
-   where μ is the mean and σ is the standard deviation of the feature.
+Mathematically, for each feature x, we compute:
 
-2. **Covariance Matrix Computation**:
-   A covariance matrix is computed. This matrix indicates the covariance (shared variance) between each pair of dimensions. The covariance between different dimensions is used to understand the correlation structure of the original dimensions.
+$$
+x_{standardised} = (x - μ) / σ
+$$
 
-   For a dataset X with m features, the covariance matrix C is computed as:
-   
-   $$
-   C = (1 / (n-1)) * (X^T * X)
-   $$
-   
-   where n is the number of observations and X^T is the transpose of X.
+where μ is the mean and σ is the standard deviation of the feature.
 
-3. **Eigendecomposition**:
-   The covariance matrix is then decomposed into its eigenvectors and eigenvalues. Each eigenvector represents a principal component, which is a linear combination of the original dimensions. The associated eigenvalue represents the amount of variance explained by the principal component.
+2. **Covariance Matrix Computation**: A covariance matrix is computed. This matrix indicates the covariance (shared variance) between each pair of dimensions. The covariance between different dimensions is used to understand the correlation structure of the original dimensions.
 
-   We solve the equation:
-   
-   $$
-   C * v = λ * v
-   $$
-   
-   where v is an eigenvector and λ is the corresponding eigenvalue.
+For a dataset X with m features, the covariance matrix C is computed as:
 
-   The eigenvectors are ordered by their corresponding eigenvalues, so the first principal component (PC1) explains the most variance, followed by PC2, and so on.
+$$
+C = (1 / (n-1)) * (X^T * X)
+$$
 
-4. **Selection of Principal Components**:
-   Depending on the goal of the analysis, some or all of the principal components can be selected for further analysis. The 'elbow method' is commonly used, where you plot the explained variance by each principal component and look for an 'elbow' in the plot as a cut-off point.
+where n is the number of observations and X^T is the transpose of X.
 
-5. **Interpretation**:
-   The 'top rotations' in the context of PCA refer to the features (genes) that contribute most to each principal component. The 'rotation' matrix gives the loadings of each feature onto each PC. By identifying features with large absolute loadings, we can understand what features drive the separation in the data along the principal components.
+3. **Eigendecomposition**: The covariance matrix is then decomposed into its eigenvectors and eigenvalues. Each eigenvector represents a principal component, which is a linear combination of the original dimensions. The associated eigenvalue represents the amount of variance explained by the principal component.
+
+We solve the equation:
+
+$$
+C * v = λ * v
+$$
+
+where v is an eigenvector and λ is the corresponding eigenvalue.
+
+The eigenvectors are ordered by their corresponding eigenvalues, so the first principal component (PC1) explains the most variance, followed by PC2, and so on.
+
+4. **Selection of Principal Components**: Depending on the goal of the analysis, some or all of the principal components can be selected for further analysis. The 'elbow method' is commonly used, where you plot the explained variance by each principal component and look for an 'elbow' in the plot as a cut-off point.
+
+5. **Interpretation**: The 'top rotations' in the context of PCA refer to the features (genes) that contribute most to each principal component. The 'rotation' matrix gives the loadings of each feature onto each PC. By identifying features with large absolute loadings, we can understand what features drive the separation in the data along the principal components.
 
 ## Using the Pca Class
 
@@ -162,7 +157,7 @@ pca_obj2$prcomp_results
 # View the refined PCA results
 pca_obj2$prcomp_refined
 # View the top contributors to each PC
-pca_obj2$top_rotations
+as.data.frame(pca_obj2$top_rotations)
 ```
 
 ### Visualising PCA Results
