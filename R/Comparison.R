@@ -10,7 +10,7 @@
 #' @description
 #' The `Comparison` class represents a comparison between two groups of samples. It includes methods to initialize, print, and validate the data.
 #'
-#' @section Initialization:
+#' @section Initialisation:
 #' ```
 #' Comparison$new(
 #'   comparison_name = "My comparison",
