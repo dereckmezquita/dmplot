@@ -240,6 +240,14 @@ Pca <- R6::R6Class(
             subtitle = stringr::str_interp('${nrow(self$prcomp_results$x)} samples, ${ncol(self$prcomp_results$rotation)} principal components, calculated from ${nrow(self$prcomp_results$rotation)} features'),
             caption = if (top_contributors$show) stringr::str_interp('Top contributors to variance:\nPC1: ${paste0(stringr::str_trunc(names(self$top_rotations$PC1), top_contributors$truncate), collapse = ", ")}\nPC2: ${paste0(stringr::str_trunc(names(self$top_rotations$PC2), top_contributors$truncate), collapse = ", ")}') else NULL
         ) {
+            private$validate_scatter_args(
+                point_default_colour,
+                point_size,
+                point_alpha,
+                point_labels,
+                top_contributors
+            )
+
             pc <- data.table::data.table(
                 self$prcomp_results$x, keep.rownames = "sample"
             )
@@ -263,7 +271,7 @@ Pca <- R6::R6Class(
                 pc[, highlight := point_default_colour]
             }
 
-            self$scatter <- ggplot2::ggplot(
+            plot <- ggplot2::ggplot(
                     pc,
                     ggplot2::aes(
                         x = PC1,
@@ -271,16 +279,19 @@ Pca <- R6::R6Class(
                         colour = highlight
                     )
                 ) +
-                ggplot2::geom_point(size = point_size, alpha = point_alpha) +
-                {if (point_labels$show) {
-                    suppressWarnings(ggrepel::geom_text_repel(
-                        ggplot2::aes(label = sample),
-                        size = point_labels$size,
-                        max.overlaps = point_labels$max_overlaps,
-                        alpha = point_labels$alpha,
-                        fontface = point_labels$font_face
-                    ))
-                }} +
+                ggplot2::geom_point(size = point_size, alpha = point_alpha)
+
+            if (point_labels$show) {
+                plot <- plot + ggrepel::geom_text_repel(
+                    ggplot2::aes(label = sample),
+                    size = point_labels$size,
+                    max.overlaps = point_labels$max_overlaps,
+                    alpha = point_labels$alpha,
+                    fontface = point_labels$font_face
+                )
+            }
+
+            plot <- plot +
                 ggplot2::scale_colour_identity() +
                 ggplot2::labs(
                     title = title,
@@ -292,7 +303,8 @@ Pca <- R6::R6Class(
                 ) +
                 ggplot2::theme(legend.position = "bottom")
 
-            return(self$scatter)
+            self$scatter <- plot
+            return(plot)
         }
     ),
     private = list(
@@ -380,6 +392,50 @@ Pca <- R6::R6Class(
             private$check_data(self$data)
             if (!is.null(self$comparison)) {
                 private$check_comparison(self$comparison)
+            }
+        },
+        validate_scatter_args = function(
+            point_default_colour,
+            point_size,
+            point_alpha,
+            point_labels,
+            top_contributors
+        ) {
+            if (!is.character(point_default_colour) || length(point_default_colour) != 1) {
+                stop("point_default_colour must be a single character string")
+            }
+            if (!is.numeric(point_size) || length(point_size) != 1) {
+                stop("point_size must be a single numeric value")
+            }
+            if (!is.numeric(point_alpha) || length(point_alpha) != 1 || point_alpha < 0 || point_alpha > 1) {
+                stop("point_alpha must be a single numeric value between 0 and 1")
+            }
+            if (!is.list(point_labels) || !all(c("show", "size", "max_overlaps", "alpha", "font_face") %in% names(point_labels))) {
+                stop("point_labels must be a list with elements: show, size, max_overlaps, alpha, font_face")
+            }
+            if (!is.logical(point_labels$show) || length(point_labels$show) != 1) {
+                stop("point_labels$show must be a single logical value")
+            }
+            if (!is.numeric(point_labels$size) || length(point_labels$size) != 1) {
+                stop("point_labels$size must be a single numeric value")
+            }
+            if (!is.numeric(point_labels$max_overlaps) || length(point_labels$max_overlaps) != 1) {
+                stop("point_labels$max_overlaps must be a single numeric value")
+            }
+            if (!is.numeric(point_labels$alpha) || length(point_labels$alpha) != 1 || point_labels$alpha < 0 || point_labels$alpha > 1) {
+                stop("point_labels$alpha must be a single numeric value between 0 and 1")
+            }
+            if (!is.character(point_labels$font_face) || length(point_labels$font_face) != 1) {
+                stop("point_labels$font_face must be a single character string")
+            }
+            if (!is.list(top_contributors) || !all(c("show", "truncate") %in% names(top_contributors))) {
+                stop("top_contributors must be a list with elements: show, truncate")
+            }
+            if (!is.logical(top_contributors$show) || length(top_contributors$show) != 1) {
+                stop("top_contributors$show must be a single logical value")
+            }
+            if (!is.numeric(top_contributors$truncate) || length(top_contributors$truncate) != 1) {
+                stop("top_contributors$truncate must be a single numeric value")
             }
         }
     )

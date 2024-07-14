@@ -124,6 +124,8 @@ To execute the calculations use `Pca$prcomp()`:
 
 ```{r run-generic-pca}
 pca_obj$prcomp()
+
+print(pca_obj)
 ```
 
 If you want to compare groups within your data, you can provide a `Comparison` object. Providing a `Comparison` object will automatically filter your data to only include the samples in the comparison and create plots that highlight samples by group.
@@ -195,14 +197,14 @@ Both `plot_scree()` and `plot_scatter()` methods accept various parameters for c
 
 ```{r plot-arguments}
 scatter_plot <- pca_obj$plot_scatter(
-    point_size = 4,
-    point_alpha = 0.8,
-    point_labels = list(show = TRUE, size = 3),
-    top_contributors = list(show = TRUE, truncate = 20),
-    title = "My Custom PCA Plot"
+   point_size = 4,
+   point_alpha = 0.8,
+   point_labels = list(show = TRUE, size = 3, alpha = 0.75, font_face = "bold", max_overlaps = 10),
+   top_contributors = list(show = TRUE, truncate = 20),
+   title = "My Custom PCA Plot"
 )
 
-scatter_plot
+print(scatter_plot)
 ```
 
 The plotting arguments are provided for ease of use but one can nonetheless use the `ggplot2` object to customise the plot further.
