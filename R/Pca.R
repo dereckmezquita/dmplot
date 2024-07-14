@@ -206,6 +206,7 @@ Pca <- R6::R6Class(
                     y = "Percent variation",
                     caption = stringr::str_interp('Top ${num_pc} PCs included')
                 ) +
+                theme_dereck_dark() +
                 ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 90))
 
             return(self$scree)
@@ -301,6 +302,7 @@ Pca <- R6::R6Class(
                     colour = if (!is.null(comparison)) "Group" else NA,
                     caption = caption
                 ) +
+                theme_dereck_dark() +
                 ggplot2::theme(legend.position = "bottom")
 
             self$scatter <- plot
