@@ -34,6 +34,9 @@
     <loc>https://dereckmezquita.github.io/dmplot/index.html</loc>
   </url>
   <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/Comparison.html</loc>
+  </url>
+  <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/MonteCarlo.html</loc>
   </url>
   <url>
@@ -47,6 +50,9 @@
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/cite_package.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/collapse.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/diff_expr_res.html</loc>
@@ -67,6 +73,30 @@
     <loc>https://dereckmezquita.github.io/dmplot/reference/index.html</loc>
   </url>
   <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.character.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.data.frame.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.default.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.factor.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.list.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.matrix.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/is.empty.vector.html</loc>
+  </url>
+  <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/macd.html</loc>
   </url>
   <url>
@@ -74,6 +104,9 @@
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/monte_carlo.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/printCapture.html</loc>
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/roc.html</loc>
@@ -104,5 +137,11 @@
   </url>
   <url>
     <loc>https://dereckmezquita.github.io/dmplot/reference/theme_dereck_light.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/to.data.frame.html</loc>
+  </url>
+  <url>
+    <loc>https://dereckmezquita.github.io/dmplot/reference/valueCoordinates.html</loc>
   </url>
 </urlset>
