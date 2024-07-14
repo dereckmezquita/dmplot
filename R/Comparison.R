@@ -1,42 +1,38 @@
 #' Comparison Class
 #'
-#' An R6 class that represents a comparison between two groups of samples. 
+#' @description
+#' An R6 class that represents a comparison between two groups of samples.
 #' This class contains the comparison name, the group order, and the comparison table.
+#' It includes methods to initialise, print, and validate the data.
 #'
 #' @field comparison_name Character. The name of the comparison.
-#' @field group_order Character vector. The order of groups for the comparison, with length 2. The first element will be treated as the "control" group, and the second as the "test" group.
-#' @field comparison_table A data.table that contains the group and sample information for the comparison.
-#'
-#' @description
-#' The `Comparison` class represents a comparison between two groups of samples. It includes methods to initialize, print, and validate the data.
-#'
-#' @section Initialisation:
-#' ```
-#' Comparison$new(
-#'   comparison_name = "My comparison",
-#'   group_order = c("Control group", "Test group"),
-#'   comparison_table = data.table::data.table(
-#'        group = c("Control group", "Control group", "Test group", "Test group"),
-#'        sample = c("Sample1", "Sample2", "Sample3", "Sample4")
-#'    )
-#' )
-#' ```
-#' @param comparison_name A character string representing the name of the comparison. Must be of length 1 and not exceed 100 characters.
-#' @param group_order A character vector specifying the order of groups for the comparison. Must be of length 2.
-#' @param comparison_table A data.table that contains group and sample information for the comparison. This table is crucial for tracking which samples belong to which clinical group. It is used to distinguish samples for the purposes of experimental analysis. It should have two columns, named "group" and "sample". The "group" column identifies the clinical group to which each sample belongs, and the "sample" column lists the names/IDs of the samples. The groups in this table should match the names specified in `group_order`.
-#'
+#' @field group_order Character vector. The order of groups for the comparison, with length 2. 
+#'        The first element is treated as the "control" group, and the second as the "test" group.
+#' @field comparison_table A data.table that contains the group, sample, and condition information for the comparison.
+#' 
 #' @section Usage:
-#' ```
+#' ```r
 #' comparison <- Comparison$new(
-#'   comparison_name = "My comparison",
-#'   group_order = c("Control group", "Test group"),
+#'   comparison_name = "Treatment vs Control",
+#'   group_order = c("Control", "Treatment"),
 #'   comparison_table = data.table::data.table(
-#'        group = c("Control group", "Control group", "Test group", "Test group"),
-#'        sample = c("Sample1", "Sample2", "Sample3", "Sample4")
-#'    )
+#'     group = c("Control", "Control", "Treatment", "Treatment"),
+#'     sample = c("Sample1", "Sample2", "Sample3", "Sample4")
+#'   )
 #' )
-#' comparison$print()  # Print the Comparison object
+#' print(comparison)  # Print the Comparison object
 #' ```
+#'
+#' @examples
+#' comparison <- Comparison$new(
+#'   comparison_name = "Treatment vs Control",
+#'   group_order = c("Control", "Treatment"),
+#'   comparison_table = data.table::data.table(
+#'     group = c("Control", "Control", "Treatment", "Treatment"),
+#'     sample = c("Sample1", "Sample2", "Sample3", "Sample4")
+#'   )
+#' )
+#' print(comparison)
 #'
 #' @export
 Comparison <- R6::R6Class(
@@ -45,6 +41,20 @@ Comparison <- R6::R6Class(
         comparison_name = NA_character_,
         group_order = c(NA_character_, NA_character_),
         comparison_table = data.table::data.table(),
+        #' @description
+        #' Create a new Comparison object.
+        #'
+        #' @param comparison_name A character string representing the name of the comparison. 
+        #'        Must be of length 1 and not exceed 100 characters.
+        #' @param group_order A character vector specifying the order of groups for the comparison. 
+        #'        Must be of length 2.
+        #' @param comparison_table A data.table that contains group and sample information for the comparison. 
+        #'        It should have two columns, named "group" and "sample". The "group" column identifies 
+        #'        the clinical group to which each sample belongs, and the "sample" column lists the 
+        #'        names/IDs of the samples. The groups in this table should match the names specified 
+        #'        in `group_order`.
+        #'
+        #' @return A new `Comparison` object.
         initialize = function(
             comparison_name,
             group_order,
@@ -93,6 +103,10 @@ Comparison <- R6::R6Class(
 
             private$validate()
         },
+        #' @description
+        #' Print a summary of the Comparison object.
+        #'
+        #' @return None. This method is called for its side effect of printing to the console.
         print = function() {
             cat("Comparison R6 object\n")
             cat("-----------------\n")
@@ -103,6 +117,13 @@ Comparison <- R6::R6Class(
         }
     ),
     private = list(
+        #' @description
+        #' Validate the Comparison object.
+        #'
+        #' This method checks the validity of the comparison_name, group_order, and comparison_table.
+        #' It throws errors or warnings if any of the checks fail.
+        #'
+        #' @return None. This method is called for its side effect of validating the object.
         validate = function() {
             # print out comparison name everytime so in live code know which caused error
             if (length(self$comparison_name) != 1) {
@@ -141,11 +162,3 @@ Comparison <- R6::R6Class(
         }
     )
 )
-# Comparison$new(
-#     comparison_name = "yeet",
-#     group_order = c("ctrl", "test"),
-#     comparison_table = data.table::data.table(
-#         group = c("ctrl", "ctrl", "test", "test"),
-#         sample = c("s1", "s2", "s3", "s4")
-#      )
-# )
