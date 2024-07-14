@@ -27,6 +27,9 @@ comp <- Comparison$new(
 pca_obj <- Pca$new(data, comp)
 pca_obj$prcomp()
 
-pca_obj$plot_scree()
+pca_obj$data
+pca_obj$prcomp_results
+pca_obj$prcomp_refined
 
-pca_obj$plot_scatter(comp)
+pca_obj$plot_scree()
+pca_obj$plot_scatter()
