@@ -1,6 +1,5 @@
-#' Principal Component Analysis (PCA) Class
-#'
-#' The `Pca` class implements Principal Component Analysis, a dimensionality reduction
+#' @title Principal Component Analysis (PCA) Class
+#' @description The `Pca` class implements Principal Component Analysis, a dimensionality reduction
 #' technique widely used in data analysis and visualisation. This class provides methods
 #' for performing PCA on a dataset, visualising the results, and interpreting the output.
 #'
@@ -45,7 +44,6 @@
 #' to visualisation of results. It's designed to work with any kind of high-dimensional
 #' numerical data, as long as the data is in a tabular format with features as rows and
 #' samples as columns. The first column must be named "feature" and contain the feature names.
-#' 
 #'
 #' @field data The input data for PCA, typically a data.table with features as rows and samples as columns
 #' @field comparison An optional Comparison object for group comparisons
@@ -54,7 +52,7 @@
 #' @field top_rotations Top contributors (features) to each principal component
 #' @field scatter The scatter plot of the first two principal components
 #' @field scree The scree plot showing variance explained by each PC
-#' 
+#'
 #' @examples
 #' # Load required packages
 #' box::use(dmplot[Pca, Comparison])
@@ -104,10 +102,11 @@
 Pca <- R6::R6Class(
     "Pca",
     private = list(
+        #' @description
         #' Filter samples based on a comparison object
         #' @param data The input data
         #' @param comparison A Comparison object
-        #' @return Filtered data
+        #' @return data.table filtered data
         filter_comparison_samples = function(data, comparison) {
             selected_samples <- colnames(data) %in% comparison$comparison_table$sample
             selected_samples[1] <- TRUE # keep GeneID/feature col
@@ -149,7 +148,7 @@ Pca <- R6::R6Class(
         },
         #' Prepare data for PCA by dropping non-numerical columns
         #' @param data The input data
-        #' @return Prepared data
+        #' @return data.table prepared data for numerical values
         prepare_data = function(data) {
             data <- data.table::copy(data)
             # drop non-numerical columns
@@ -204,9 +203,10 @@ Pca <- R6::R6Class(
         top_rotations = NULL,
         scatter = NULL,
         scree = NULL,
-        #' @param data A data.table or data.frame containing the data for PCA. The first column should be feature names, the data should be numeric and not contain missing values
-        #' @param comparison An optional Comparison object for group comparisons
-        #' @return A new Pca object
+        #' @description
+        #' Create a new Pca object
+        #' @param data A data.table or data.frame with features as rows and samples as columns
+        #' @param comparison An optional Comparison object for group comparisons, defaults to NULL
         initialize = function(
             data,
             comparison = NULL
@@ -227,14 +227,10 @@ Pca <- R6::R6Class(
             self$data <- private$prepare_data(data)
             self$comparison <- comparison
         },
-        #' Perform Principal Component Analysis
+        #' @description
+        #' Perform Principal Component Analysis on the data
         #' @param ... Additional arguments passed to stats::prcomp
-        #'
-        #' This method performs the core PCA computation using R's built-in stats::prcomp function.
-        #' It processes the data, computes the principal components, and stores the results.
-        #' The method also calculates the top rotations, which are the features contributing
-        #' most to each principal component. This information is crucial for interpreting
-        #' the biological significance of the PCA results in gene expression studies.
+        #' @return NULL (results stored in Pca$prcomp_results, Pca$prcomp_refined)
         prcomp = function(...) {
             data <- data.table::copy(self$data)
 
@@ -277,8 +273,9 @@ Pca <- R6::R6Class(
             self$prcomp_results <- prcomp_results
             private$refine_prcomp()
         },
+        #' @description
         #' Print a summary of the PCA results
-        #' @return Invisible NULL
+        #' @return NULL (prints to console)
         print = function() {
             cat("PCA object:\n")
             cat("-------------------------------\n")
@@ -289,11 +286,9 @@ Pca <- R6::R6Class(
                 print(self$prcomp_refined[, .(PC, pct_var_explained)], digits = 4)
             }
         },
-        #' Create a scree plot of the PCA results
-        #' The scree plot visualises the percentage of variance explained by each principal
-        #' component. It's a crucial tool for deciding how many PCs to retain for further
-        #' analysis. The 'elbow' in the scree plot often indicates a good cut-off point.
-        #' @param num_pc Number of principal components to include in the plot (default: 50)
+        #' @description
+        #' Generate a scree plot of the PCA results
+        #' @param num_pc Number of principal components to include in the plot
         #' @return A ggplot2 object representing the scree plot
         plot_scree = function(num_pc = 50) {
             self$scree <- ggplot2::ggplot(
@@ -312,20 +307,16 @@ Pca <- R6::R6Class(
 
             return(self$scree)
         },
-        #' Create a scatter plot of the first two principal components
-        #' The first two components are the primary visualisation tool for
-        #' PCA results. It allows for the identification of patterns,
-        #' clusters, and outliers in the data.
-        #' 
-        #' When used with a Comparison object, it can highlight group differences.
-        #' @param point_default_colour Default colour for points (default: "grey")
-        #' @param point_size Size of points (default: 3)
-        #' @param point_alpha Alpha transparency of points (default: 1)
-        #' @param point_labels List of options for point labels
-        #' @param top_contributors List of options for displaying top contributors
-        #' @param title Plot title
-        #' @param subtitle Plot subtitle
-        #' @param caption Plot caption
+        #' @description
+        #' Generate a scatter plot of the first two principal components
+        #' @param point_default_colour Default colour for points when no comparison is provided
+        #' @param point_size Size of the points in the scatter plot
+        #' @param point_alpha Alpha (transparency) of the points
+        #' @param point_labels List of parameters for point labels
+        #' @param top_contributors List of parameters for displaying top contributors
+        #' @param title Title of the plot
+        #' @param subtitle Subtitle of the plot
+        #' @param caption Caption of the plot
         #' @return A ggplot2 object representing the scatter plot
         plot_scatter = function(
             point_default_colour = "grey",
